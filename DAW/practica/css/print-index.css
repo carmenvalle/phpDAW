@@ -1,0 +1,310 @@
+/* ==== ESTILO PARA IMPRESIÓN ==== */
+
+/* Ajustes generales */
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Tipografía para impresión */
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  background-color: white;
+  color: black;
+}
+
+/* Cabecera - mantener diseño pero simplificado */
+header {
+  background-color: white !important;
+  color: #4a1c00 !important;
+  border-bottom: 2pt solid #4a1c00;
+  padding: 15pt 0;
+  margin-bottom: 20pt;
+}
+
+header h1 {
+  font-size: 20pt;
+  color: #4a1c00 !important;
+}
+
+header h2 {
+  font-size: 14pt;
+  color: #4a1c00 !important;
+}
+
+/* Ocultar navegación (no es útil en papel) */
+nav {
+  display: none !important;
+}
+
+/* Main content */
+main {
+  max-width: 100%;
+  background-color: white !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Títulos - mantener jerarquía visual */
+h2 {
+  font-size: 16pt;
+  color: #4a1c00 !important;
+  margin-top: 20pt;
+  margin-bottom: 10pt;
+  border-bottom: 1pt solid #ab875f;
+  padding-bottom: 5pt;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 14pt;
+  color: #4a1c00 !important;
+  margin-top: 15pt;
+  margin-bottom: 8pt;
+  page-break-after: avoid;
+}
+
+/* Párrafos */
+p {
+  margin-bottom: 8pt;
+  orphans: 3;
+  widows: 3;
+}
+
+/* Enlaces: subrayados y mostrar URL importantes */
+a {
+  color: #4a1c00 !important;
+  text-decoration: underline;
+}
+
+/* Solo mostrar URLs externas relevantes */
+main a[href^="http"]:after {
+  content: " (" attr(href) ")";
+  font-size: 9pt;
+  font-style: italic;
+  color: #666 !important;
+}
+
+/* No mostrar URL para enlaces internos */
+a[href^="#"]:after,
+a[href^="javascript:"]:after,
+nav a:after {
+  content: "";
+}
+
+/* Imágenes importantes - mantenerlas */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+  page-break-inside: avoid;
+}
+
+/* Ocultar imagen de perfil */
+.perfil-foto {
+  display: none !important;
+}
+
+.btn{
+  display: none !important;
+}
+
+/* Listas normales */
+ul, ol {
+  margin-left: 20pt;
+  margin-bottom: 10pt;
+}
+
+li {
+  margin-bottom: 5pt;
+}
+
+/* Listas de anuncios - sin viñetas y centrado */
+.anuncios ul {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.anuncios ul li {
+  margin-bottom: 15pt;
+  padding: 0 !important;
+}
+
+.anuncios ul li::before {
+  content: none !important;
+}
+
+/* Tarjetas de anuncios - centrado y visual */
+.anuncios article {
+  border: 2pt solid #ab875f;
+  background-color: #fefaf5 !important;
+  padding: 15pt;
+  margin: 0 auto 15pt auto;
+  max-width: 90%;
+  page-break-inside: avoid;
+  text-align: center;
+}
+
+.anuncios article h3 {
+  margin-top: 10pt;
+  margin-bottom: 8pt;
+  color: #4a1c00 !important;
+  text-align: center;
+}
+
+.anuncios article p {
+  text-align: center;
+  color: #333 !important;
+  margin-top: 8pt;
+}
+
+.anuncios article img {
+  border: 1pt solid #d8bf9f;
+  display: block;
+  margin: 0 auto 10pt auto;
+  max-width: 250pt;
+}
+
+.anuncios article a {
+  text-decoration: none;
+}
+
+/* Tablas - mantener bordes suaves */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15pt;
+  page-break-inside: avoid;
+  border: 1pt solid #ab875f;
+}
+
+table th,
+table td {
+  border: 1pt solid #d8bf9f;
+  padding: 5pt;
+  text-align: left;
+}
+
+table thead {
+  background-color: #f5ebe0 !important;
+  font-weight: bold;
+  color: #4a1c00 !important;
+}
+
+/* Formularios: mostrar datos completados como justificante */
+button,
+input[type="submit"],
+input[type="button"] {
+  display: none !important;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+  border: none !important;
+  border-bottom: 1pt dotted #ab875f !important;
+  padding: 2pt 5pt !important;
+  background: white !important;
+  color: black !important;
+}
+
+fieldset {
+  border: 1pt solid #ab875f;
+  background-color: #fefaf5 !important;
+  padding: 10pt;
+  margin-bottom: 15pt;
+  page-break-inside: avoid;
+}
+
+fieldset legend {
+  font-weight: bold;
+  color: #4a1c00 !important;
+  padding: 0 5pt;
+  background-color: white !important;
+}
+
+/* Mensajes y confirmaciones - mantener formato */
+.mensaje-confirmacion {
+  background-color: #f5ebe0 !important;
+  color: #4a1c00 !important;
+  border: 2pt solid #4a1c00 !important;
+  padding: 10pt;
+  margin-bottom: 15pt;
+  page-break-inside: avoid;
+}
+
+.coste-total {
+  background-color: #fefaf5 !important;
+  border: 1pt solid #ab875f !important;
+  padding: 10pt;
+  text-align: center;
+  font-size: 14pt;
+  font-weight: bold;
+  margin-bottom: 15pt;
+}
+
+/* Footer simplificado */
+footer {
+  background-color: white !important;
+  color: #4a1c00 !important;
+  border-top: 2pt solid #4a1c00;
+  padding-top: 10pt;
+  margin-top: 30pt;
+  font-size: 10pt;
+  text-align: center;
+}
+
+/* Ocultar elementos innecesarios */
+.no-print,
+nav,
+.perfil {
+  display: none !important;
+}
+
+/* Aside de tarifas - SI mostrar (es información importante) */
+aside {
+  display: block !important;
+  background-color: #fefaf5 !important;
+  border: 1pt solid #ab875f;
+  padding: 10pt;
+  margin-bottom: 15pt;
+  page-break-inside: avoid;
+}
+
+aside h2 {
+  font-size: 14pt;
+  border-bottom: 1pt solid #ab875f;
+}
+
+/* Reglas de página */
+@page {
+  margin: 2cm;
+  size: A4 portrait;
+}
+
+/* Evitar saltos de página inapropiados */
+h2, h3, h4, h5, h6 {
+  page-break-after: avoid;
+}
+
+ul, ol, img, table, article, fieldset {
+  page-break-inside: avoid;
+}
+
+/* Fecha de impresión */
+body::after {
+  content: "Documento impreso el " attr(data-fecha);
+  display: block;
+  text-align: center;
+  font-size: 9pt;
+  font-style: italic;
+  color: #666 !important;
+  margin-top: 20pt;
+  page-break-before: avoid;
+}

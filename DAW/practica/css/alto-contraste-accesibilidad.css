@@ -1,0 +1,355 @@
+/* ================================
+   ESTILO ACCESIBLE DE ALTO CONTRASTE CON ACCESIBILIDAD Y LETRA GRANDE
+   ================================ */
+
+/* ==== VARIABLES DE CONTRASTE ==== */
+:root {
+  --color-principal: #b14140;
+  /* rojo medio para cabecera y botones */
+  --color-secundario: #ffd27f;
+  /* dorado claro para títulos y legend */
+  --color-acento: #ff6f3c;
+  /* naranja brillante para destacados */
+  --color-hover: #ffbc80;
+  /* hover visible y legible */
+  --color-fondo: #fee6f6;
+  /* fondo general claro */
+  --color-texto: #5c5c64;
+  /* texto principal oscuro */
+  --color-field: #fee6f6;
+  /* texto de los campos */
+  --color-blanco: #ffffff;
+  /* blanco puro */
+  --color-form: #fff0e0;
+  /* fondo de los artículos para contraste */
+
+  --radio-borde: 6px;
+  --fuente-base: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --tamano-base: 20px;
+  --tamano-label: 1.3rem;
+  --linea-base: 1.9;
+}
+
+/* ==== RESET BÁSICO ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==== BODY ==== */
+body {
+  background-color: var(--color-form);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-size: var(--tamano-base);
+  line-height: var(--linea-base);
+}
+
+/* ==== ENLACES ==== */
+a {
+  color: var(--color-principal);
+  text-decoration: underline;
+  font-size: 1.2rem;
+}
+
+a:hover,
+a:focus {
+  color: var(--color-acento);
+  outline: 2px solid var(--color-principal);
+  background-color: var(--color-fondo);
+}
+
+/* ==== CABECERA ==== */
+header {
+  background: var(--color-principal);
+  color: var(--color-blanco);
+  padding: 1.2rem 0;
+  text-align: center;
+  border-bottom: 3px solid var(--color-acento);
+}
+
+header h1 {
+  font-size: 2.6rem;
+  margin-bottom: 0.6rem;
+}
+
+header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-secundario);
+}
+
+/* ==== NAVEGACIÓN ==== */
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: var(--color-secundario);
+  padding: 0.6rem 1rem;
+  gap: 2rem;
+}
+
+nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-blanco);
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-principal);
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+  background-color: var(--color-acento);
+  color: var(--color-blanco);
+}
+
+nav ul li a strong {
+  font-size: 1.3rem;
+}
+
+nav ul li a .material-symbols-outlined,
+nav ul li a i {
+  font-size: 28px;
+}
+
+/* ==== MAIN ==== */
+main {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: var(--color-secundario);
+  color: var(--color-texto);
+  border: 2px solid var(--color-principal);
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+
+/* ==== TITULOS ==== */
+main h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1.2rem;
+}
+
+legend,
+main h2 {
+  color: var(--color-principal);
+  font-weight: bold;
+}
+
+main h3,
+.anuncios h3 {
+  color: var(--color-principal);
+  border-bottom: 2px solid var(--color-acento);
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ==== TEXTOS ==== */
+main p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+main ul li {
+  font-size: 1.2rem;
+}
+
+/* ==== FORMULARIOS ==== */
+form {
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
+  background-color: var(--color-blanco);
+  border: 2px solid var(--color-acento);
+  border-radius: 8px;
+}
+
+form p {
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+}
+
+form label {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+form p label:has(input[type="radio"]),
+form p label:has(input[type="checkbox"]) {
+  display: inline;
+  font-size: 1.3rem;
+}
+
+fieldset legend {
+  font-size: 1.4rem;
+  padding: 0.3rem 0.8rem;
+}
+
+/* ==== INPUTS Y SELECTS ==== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="color"],
+textarea,
+select {
+  font-size: 1.3rem;
+  padding: 0.8rem;
+  width: 100%;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  border-radius: var(--radio-borde);
+  border: 2px solid var(--color-acento);
+  background-color: var(--color-blanco);
+  color: var(--color-principal);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.7rem;
+  accent-color: var(--color-principal);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 3px solid var(--color-principal);
+  background-color: var(--color-fondo);
+  color: var(--color-principal);
+}
+
+/* ==== BOTONES ==== */
+button,
+.btn {
+  display: inline-block;
+  background-color: var(--color-principal);
+  color: var(--color-blanco);
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  font-weight: 700;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover,
+.btn:hover {
+  background-color: var(--color-acento);
+  color: var(--color-blanco);
+}
+
+button strong,
+.btn strong {
+  font-size: 1.4rem;
+}
+
+/* ==== TABLAS ==== */
+table {
+  font-size: 1.2rem;
+}
+
+table th {
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+
+table td {
+  font-size: 1.2rem;
+  padding: 0.9rem;
+}
+
+/* ==== ASIDE ==== */
+aside {
+  font-size: 1.2rem;
+}
+
+aside h2 {
+  font-size: 1.8rem;
+}
+
+/* ==== ANUNCIOS ==== */
+.anuncios h2 {
+  font-size: 2.4rem;
+}
+
+.anuncios article {
+  background-color: var(--color-form);
+  border: 2px solid var(--color-acento);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.anuncios article h3 {
+  font-size: 1.8rem;
+}
+
+.anuncios article p {
+  font-size: 1.3rem;
+}
+
+.anuncios article a {
+  font-size: 1.2rem;
+}
+
+.anuncios img {
+  width: 100%;
+  max-width: 250px;
+  display: block;
+  margin: 0 auto 1rem auto;
+  border: 3px solid var(--color-principal);
+}
+
+/* ==== MENSAJES ==== */
+.mensaje-confirmacion {
+  font-size: 1.4rem;
+  padding: 2rem;
+}
+
+.coste-total {
+  font-size: 1.5rem;
+}
+
+.coste-total strong {
+  font-size: 1.8rem;
+}
+
+/* ==== MENÚ DE PERFIL ==== */
+section ul li a {
+  font-size: 1.3rem;
+  padding: 2.5rem;
+}
+
+section ul li a .material-symbols-outlined,
+section ul li a i {
+  font-size: 56px;
+}
+
+/* ==== PIE DE PÁGINA ==== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--color-principal);
+  color: var(--color-blanco);
+  font-size: 1.2rem;
+  border-top: 3px solid var(--color-acento);
+}
+
+footer p {
+  margin: 0.4rem 0;
+  font-size: 1.2rem;
+}

@@ -1,0 +1,286 @@
+/* ==== MODO OSCURO / MODO NOCHE - VERSIÓN GRANATE ==== */
+
+/* Variables del modo oscuro */
+:root {
+  --oscuro-fondo: #2a1515;
+  --oscuro-primary: #4d2020;
+  --oscuro-secondary: #5d2a2a;
+  --oscuro-tertiary: #3d2020;
+  --oscuro-field: #4d2828;
+  --oscuro-hover: #7d3a3a;
+  --oscuro-hover-light: #9d4a4a;
+  --oscuro-border: #7d3a3a;
+  --oscuro-border-light: #9d5a5a;
+
+  --oscuro-text: #e8e8e8;
+  --oscuro-text-light: #f0d5b8;
+  --oscuro-text-accent: #e8b87f;
+  --oscuro-text-highlight: #ffd5a0;
+  --oscuro-text-secondary: #e0e0e0;
+
+  --oscuro-acento: #c9956b;
+  --oscuro-acento-light: #d4a574;
+}
+
+/* Colores base */
+body {
+  background-color: var(--oscuro-fondo);
+  color: var(--oscuro-text);
+}
+
+/* Cabecera */
+header {
+  background: var(--oscuro-primary);
+  color: var(--oscuro-text-light);
+}
+
+/* Navegación */
+nav ul {
+  background-color: var(--oscuro-secondary);
+}
+
+nav ul li a {
+  color: var(--oscuro-text-light);
+}
+
+nav ul li a:hover {
+  background-color: var(--oscuro-hover);
+  color: #fff;
+}
+
+/* Foto de perfil */
+.perfil-foto {
+  border-color: var(--oscuro-acento-light);
+}
+
+/* Main y secciones */
+main {
+  background-color: var(--oscuro-tertiary);
+  color: var(--oscuro-text);
+}
+
+section {
+  background-color: var(--oscuro-tertiary);
+}
+
+/* Títulos */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--oscuro-text-light);
+}
+
+main h2,
+section h2 {
+  color: var(--oscuro-text-light);
+  border-bottom-color: var(--oscuro-acento);
+}
+
+main h3,
+section h3 {
+  color: var(--oscuro-text-light);
+  border-bottom-color: var(--oscuro-acento);
+}
+
+section h2::after {
+  background-color: var(--oscuro-acento-light);
+}
+
+/* Enlaces */
+a {
+  color: var(--oscuro-text-accent);
+}
+
+a:hover {
+  color: var(--oscuro-text-light);
+}
+
+/* Botones */
+button,
+.btn {
+  background-color: var(--oscuro-hover);
+  color: var(--oscuro-text-light);
+}
+
+button:hover,
+.btn:hover {
+  background-color: var(--oscuro-hover-light);
+  color: #fff;
+}
+
+/* Formularios */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="color"],
+textarea,
+select {
+  background-color: var(--oscuro-field);
+  color: var(--oscuro-text);
+  border-color: var(--oscuro-border);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background-color: #5d3030;
+  border-color: var(--oscuro-acento);
+}
+
+form {
+  background-color: var(--oscuro-tertiary);
+  border-color: var(--oscuro-border);
+}
+
+fieldset {
+  background-color: var(--oscuro-field);
+  border-color: var(--oscuro-border);
+  background: var(--oscuro-field);
+}
+
+fieldset legend {
+  background-color: var(--oscuro-hover);
+  color: var(--oscuro-text-light);
+}
+
+fieldset p{
+  background-color: var(--oscuro-hover);
+  color: var(--oscuro-text-light);
+}
+
+/* Tarjetas de anuncios */
+section.anuncios article {
+  background-color: #5d3535 !important;
+  border-color: var(--oscuro-border-light) !important;
+}
+
+section.anuncios article a {
+  color: #5d3535 !important;
+}
+
+section.anuncios article h3 {
+  color: var(--oscuro-text-highlight) !important;
+}
+
+section.anuncios article p {
+  color: var(--oscuro-text-secondary) !important;
+}
+
+/* Articles normales */
+article {
+  background-color: var(--oscuro-field);
+  border-color: var(--oscuro-border);
+}
+
+article h3 {
+  color: var(--oscuro-text-light);
+}
+
+/* Tabla de tarifas */
+table {
+  background-color: var(--oscuro-field);
+}
+
+table thead {
+  background-color: var(--oscuro-hover);
+  color: var(--oscuro-text-light);
+}
+
+table tbody tr {
+  border-bottom-color: var(--oscuro-border);
+}
+
+table tbody tr:hover {
+  background-color: #5d3030;
+}
+
+table td {
+  color: var(--oscuro-text);
+}
+
+table td:last-child {
+  color: var(--oscuro-text-light);
+}
+
+/* Aside */
+aside {
+  background-color: var(--oscuro-field);
+  border-color: var(--oscuro-border);
+}
+
+aside h2 {
+  color: var(--oscuro-text-light);
+  border-bottom-color: var(--oscuro-acento);
+}
+
+/* Footer */
+footer {
+  background-color: var(--oscuro-primary);
+  color: var(--oscuro-text-light);
+}
+
+/* Mensajes y confirmaciones */
+.mensaje-confirmacion {
+  background: linear-gradient(135deg, var(--oscuro-hover) 0%, var(--oscuro-hover-light) 100%);
+  color: #fff;
+}
+
+.coste-total {
+  background-color: var(--oscuro-field);
+  border-color: var(--oscuro-border);
+  color: var(--oscuro-text);
+}
+
+.coste-total strong {
+  color: var(--oscuro-text-light);
+}
+
+/* Menú de perfil (tarjetas) */
+section ul li a {
+  background-color: var(--oscuro-field);
+  border-color: var(--oscuro-border);
+  color: var(--oscuro-text-light);
+}
+
+section ul li a:hover {
+  background-color: var(--oscuro-hover);
+  color: #fff;
+  border-color: var(--oscuro-acento);
+}
+
+main p strong {
+  color: var(--oscuro-text-light) !important;
+  font-weight: 600;
+}
+
+form label {
+  color: var(--oscuro-text-light);
+}
+
+.tipo-mensaje {
+  background-color: var(--oscuro-field) !important;
+  color: var(--oscuro-text-light) !important;
+}
+
+article p {
+  color: var(--oscuro-text-secondary) !important;
+}
+
+.sexo {
+  background-color: var(--oscuro-field) !important;
+}
+
+.sexo label {
+  color: var(--oscuro-text-light) !important;
+}
+
+#foto {
+  background-color: var(--oscuro-primary);
+  color: var(--oscuro-text-light);
+}

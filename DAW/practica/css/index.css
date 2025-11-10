@@ -1,0 +1,277 @@
+/* ==== ESTILOS ESPECÍFICOS PARA INDEX.HTML ==== */
+
+/* ==== FORMULARIOS MÁS PEQUEÑOS ==== */
+form {
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 1rem;
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+fieldset {
+    padding: 1rem;
+    border: 1px solid var(--color-secundario);
+    border-radius: var(--radio-borde);
+}
+
+fieldset legend {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 2px solid var(--color-secundario);
+    border-radius: var(--radio-borde);
+    font-family: var(--fuente-base);
+    font-size: 0.95rem;
+    background-color: var(--color-fondo);
+    color: var(--color-principal);
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--color-principal);
+    background-color: var(--color-field);
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ==== SECCIÓN DE ÚLTIMOS ANUNCIOS ==== */
+.anuncios {
+  margin: 3rem auto;
+  max-width: 1000px;
+}
+
+/* ==== LISTA DE ANUNCIOS ==== */
+.anuncios ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 0;
+}
+
+.anuncios ul li {
+  padding: 0;
+}
+
+/* ==== ÚLTIMOS ANUNCIOS VISITADOS (panel) ====
+   Elegante grid compacto de 4 tarjetas con miniaturas uniformes */
+.lista-visitados {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 0;
+  margin: 0.5rem 0 1.5rem 0;
+}
+.lista-visitados li {
+  margin: 0;
+}
+.lista-visitados article {
+  background: var(--color-blanco);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  padding: 0.6rem;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.lista-visitados article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+.lista-visitados a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+.anuncios.visitados .lista-visitados img,
+.lista-visitados article img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.lista-visitados h3 {
+  font-size: 0.95rem;
+  margin: 0.2rem 0 0.25rem 0;
+  color: var(--color-principal);
+}
+.lista-visitados p {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .lista-visitados {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .lista-visitados {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .lista-visitados {
+    grid-template-columns: 1fr;
+  }
+}
+
+.anuncios ul li::before {
+  content: none;
+}
+
+/* ==== ARTÍCULOS (TARJETAS DE ANUNCIOS) ==== */
+.anuncios article {
+  background-color: var(--color-blanco);
+  border: 2px solid var(--color-secundario);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.anuncios article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.anuncios article a {
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.anuncios article img {
+  /* Miniaturas uniformes dentro de las tarjetas de anuncio */
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin: 0.5rem auto;
+  display: block;
+}
+
+.anuncios article h3 {
+  color: var(--color-principal);
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  border: none;
+  padding: 0;
+}
+
+.anuncios article p {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+}
+
+.campo-error {
+    border-color: #350a06;
+    background-color: #ffe6e6;
+}
+
+.error-campo {
+    display: block;
+    color: #350a06;
+    font-size: 0.875rem;
+    margin-top: 0.2rem;
+}
+
+/* Mensajes flash (notificaciones temporales) */
+.flash {
+  max-width: 1000px;
+  margin: 0.5rem auto 1.25rem auto;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flash--error {
+  background: #fff5f5;
+  border: 1px solid #f0b4b4;
+  color: #6a0b00;
+}
+.flash__text {
+  font-size: 1rem;
+  line-height: 1.2;
+  margin-right: 1rem;
+}
+.flash__close {
+  background: rgba(106,11,0,0.06);
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6a0b00;
+  padding: 0; /* centrar el contenido en el círculo */
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.flash__close:focus { outline: 2px solid rgba(106,11,0,0.15); border-radius:4px; }
+
+/* ===== Estilos para el saludo del usuario en la zona privada ===== */
+.saludo {
+  margin-bottom: 1rem;
+}
+.saludo__box {
+  background: #f5f7ff;
+  border-left: 4px solid var(--color-principal);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+.saludo__prefix {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-secundario);
+}
+.saludo__user {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-acento);
+}
+.saludo__dot {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-acento);
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 768px) {
+  /* Anuncios en 1 columna en móviles */
+  .anuncios ul {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  /* En móvil preferimos que la imagen ocupe el ancho de la tarjeta */
+  .anuncios article img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: 0 0 0.5rem 0;
+  }
+}

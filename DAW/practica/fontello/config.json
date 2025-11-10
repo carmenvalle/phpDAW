@@ -1,0 +1,106 @@
+{
+  "name": "",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "b9cd6e266f74ac97272b2fabbfbd0b85",
+      "css": "registro",
+      "code": 59392,
+      "src": "typicons"
+    },
+    {
+      "uid": "b90868gfogj970a1g0dnot6hm5r4uj55",
+      "css": "comment",
+      "code": 59400,
+      "src": "typicons"
+    },
+    {
+      "uid": "jqzwo6i8oicjbn049sh2856d8anrqoli",
+      "css": "edit",
+      "code": 59405,
+      "src": "typicons"
+    },
+    {
+      "uid": "4a74a0f87d4089efe7aba1825bff4193",
+      "css": "copyright",
+      "code": 61945,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "8ed4884bf9b840729eef8f0bbd2b1dbb",
+      "css": "login",
+      "code": 59402,
+      "src": "typicons"
+    },
+    {
+      "uid": "040e72500c863813088c9f9c9415f8e9",
+      "css": "subir",
+      "code": 59397,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "e45e9f27ce40ba9837cc984076d98067",
+      "css": "search",
+      "code": 59395,
+      "src": "elusive"
+    },
+    {
+      "uid": "ead4c82d04d7758db0f076584893a8c1",
+      "css": "calendar",
+      "code": 61747,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "w3nzesrlbezu6f30q7ytyq919p6gdlb6",
+      "css": "home",
+      "code": 59393,
+      "src": "typicons"
+    },
+    {
+      "uid": "07f0832c07f3d9713fffb06c8bffa027",
+      "css": "anuncio",
+      "code": 62160,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "d0e62145dbf40f30e47b3819b8b43a8f",
+      "css": "crear-anuncio",
+      "code": 62162,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "1189604bf305b6b03a74685ce60e6632",
+      "css": "form",
+      "code": 59394,
+      "src": "entypo"
+    },
+    {
+      "uid": "cba6018f5de17c76f70b7d2c06037e5a",
+      "css": "mensaje",
+      "code": 59396,
+      "src": "websymbols"
+    },
+    {
+      "uid": "2d76f2c8d13be40694ecadfea7fb83c3",
+      "css": "baja",
+      "code": 59399,
+      "src": "entypo"
+    },
+    {
+      "uid": "2355991b4045d64b08fb82988109c0ee",
+      "css": "info",
+      "code": 59401,
+      "src": "elusive"
+    },
+    {
+      "uid": "381da2c2f7fd51f8de877c044d7f439d",
+      "css": "foto",
+      "code": 59407,
+      "src": "fontawesome"
+    }
+  ]
+}

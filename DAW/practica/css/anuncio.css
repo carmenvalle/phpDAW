@@ -1,0 +1,186 @@
+/* ==== ESTILOS ESPECÍFICOS PARA DETALLE DE ANUNCIO ==== */
+
+/* ==== CONTENEDOR PRINCIPAL ==== */
+main {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background-color: var(--color-field);
+  border: 2px solid var(--color-secundario);
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ==== TÍTULOS ==== */
+main > h2 {
+  color: var(--color-principal);
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--color-acento);
+  padding-bottom: 0.3rem;
+}
+
+main h3 {
+  color: var(--color-principal);
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 2px solid var(--color-acento);
+  padding-bottom: 0.3rem;
+}
+
+/* ==== IMÁGENES ==== */
+main > img {
+  display: block;
+  margin: 0.8rem auto 1rem;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+main p img {
+  display: inline-block;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+main p img:hover {
+  transform: scale(1.05);
+}
+
+/* ==== TEXTO ==== */
+main p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0.4rem 0;
+}
+
+main p strong {
+  color: var(--color-principal);
+  font-weight: 600;
+}
+
+/* ==== LISTA ==== */
+main ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.4rem 0 1rem;
+}
+
+main ul li {
+  padding-left: 1rem;
+  position: relative;
+  margin: 0.3rem 0;
+}
+
+main ul li::before {
+  content: "▪";
+  color: var(--color-acento);
+  position: absolute;
+  left: 0;
+  font-size: 1rem;
+}
+
+/* ==== BOTÓN ==== */
+main p a {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1.5rem;
+  background-color: var(--color-principal);
+  color: var(--color-secundario);
+  padding: 0.8rem 0;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+main p a:hover {
+  background-color: var(--color-secundario);
+  color: var(--color-principal);
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 768px) {
+  main {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  main > h2 {
+    font-size: 1.3rem;
+  }
+
+  main h3 {
+    font-size: 1.1rem;
+  }
+
+  main p,
+  main li {
+    font-size: 0.85rem;
+  }
+
+  main p img {
+    width: 90px;
+  }
+}
+
+/* ==== MINIATURAS (alineadas) ==== */
+.miniaturas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+.miniaturas .miniatura {
+  width: 150px;
+  height: 150px; /* forzar tamaño uniforme */
+  object-fit: cover; /* recortar para mantener proporción y rellenar caja */
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.18s ease;
+}
+.miniaturas .miniatura:hover {
+  transform: scale(1.03);
+}
+
+/* colocar miniaturas al lado de la foto principal en pantallas anchas */
+@media (min-width: 769px) {
+  .fotos {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 1rem;
+    align-items: start;
+  }
+  .fotos .foto-principal {
+    width: 100%;
+    height: auto;
+    max-height: 480px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
+/* ==== H1 ESTÉTICO PARA DETALLE DE ANUNCIO ==== */
+.anuncio-detalle h1 {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--color-principal);
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.4rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.anuncio-detalle h1::after {
+  content: "";
+  display: block;
+  width: 90px;
+  height: 4px;
+  background: var(--color-acento);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}

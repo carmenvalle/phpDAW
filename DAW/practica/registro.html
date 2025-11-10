@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Silvia Balmaseda y Carmen Valle">
+    <meta name="description" content="Formulario de registro - PI Pisos e Inmuebles">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fontello/css/fontello.css">
+    <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/registro.css">
+    
+    <link rel="alternate stylesheet" href="css/modo_oscuro.css" title="Modo oscuro">
+
+    <link rel="alternate stylesheet" href="css/alto-contraste.css" title="Alto contraste">
+    <link rel="alternate stylesheet" href="css/accesibilidad.css" title="Letra grande">
+    <link rel="alternate stylesheet" href="css/alto-contraste-accesibilidad.css" title="Alto contraste y accesibilidad">
+
+    <title>Registro - PI Pisos & Inmuebles</title>
+</head>
+
+<body>
+
+    <header id="inicio">
+        <h1>PI - Pisos &amp; Inmuebles</h1>
+        <h2>REGISTRO NUEVO USUARIO</h2>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">
+                <i class="icon-home"></i>
+                <strong>INICIO</strong>
+                </a></li>
+            <li><a href="registro.html">
+                <i class="icon-registro"></i>
+                <strong>REGISTRO</strong>
+                </a></li>
+            <li><a href="index_logueado.html">
+                <i class="icon-login"></i>
+                <strong>INICIAR SESIÓN</strong>
+                </a></li>
+            <li><a href="busqueda.html">
+                <i class="icon-search"></i>
+                <strong>BÚSQUEDA</strong>
+                </a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>FORMULARIO DE REGISTRO</h2>
+            <form id="formRegistro" action="index_logueado.html" method="post" enctype="multipart/form-data">
+                <p>
+                    <label for="usuario"><strong>Nombre de usuario:</strong></label>
+                    <input type="text" id="usuario" name="usuario">
+                </p>
+                <p>
+                    <label for="password"><strong>Contraseña:</strong></label>
+                    <input type="text" id="password" name="contrasena">
+                </p>
+                <p>
+                    <label for="password2"><strong>Repetir contraseña:</strong></label>
+                    <input type="text" id="password2" name="repetir">
+                </p>
+                <p>
+                    <label for="email"><strong>Correo electrónico:</strong></label>
+                    <input type="text" id="email" name="email">
+                </p>
+                <p class="sexo">
+                    <strong>Sexo: </strong>
+                </p>
+                <p>
+                    <label for="nacimiento"><strong>Fecha de nacimiento:</strong></label>
+                    <input id="nacimiento" name="nacimiento" placeholder="dd/mm/aaaa">
+                </p>
+                <p>
+                    <label for="ciudad"><strong>Ciudad de residencia:</strong></label>
+                    <input type="text" id="ciudad" name="ciudad">
+                </p>
+                <p>
+                    <label for="pais"><strong>País de residencia:</strong></label>
+                    <select id="pais" name="pais">
+
+                    </select>
+                </p>
+                <p>
+                    <label for="foto"><strong>Foto de perfil:</strong></label>
+                    <input id="foto" name="foto" accept="image/*">
+                </p>
+                <p>
+                    <button><strong>REGISTRARSE</strong></button>
+                </p>
+            </form>
+        </section>
+
+        <section>
+            <a href="#inicio" class="btn"><strong>SALTAR AL PRINCIPIO</strong></a>
+        </section>
+    </main>
+
+    <footer>
+        <p><i class="icon-copyright"></i>2025 PI - Pisos &amp; Inmuebles.</p>
+        <p>
+        Autores: Silvia Balmaseda y Carmen Valle
+        <a href="accesibilidad.html" title="Declaración de accesibilidad" style="color: inherit; text-decoration: underline;">
+            <i class="icon-info" style="font-size: 1rem;"></i>
+        </a>   
+        </p>
+    </footer>
+
+    <script src="js/registro.js"></script>
+</body>
+
+</html>

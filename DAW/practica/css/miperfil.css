@@ -1,0 +1,85 @@
+/* ==== ESTILOS ESPECÍFICOS PARA MIPERFIL.HTML ==== */
+
+section {
+    padding: 2rem;
+}
+
+section h2 {
+    text-align: center;
+    color: var(--color-principal);
+    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+section ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 0;
+}
+
+section ul li {
+    padding: 0;
+}
+
+section ul li::before {
+    content: none;
+}
+
+section ul li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-blanco);
+    border: 3px solid var(--color-secundario);
+    border-radius: 12px;
+    padding: 2rem;
+    height: 200px;
+    text-align: center;
+    color: var(--color-principal);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+section ul li a:hover {
+    background-color: var(--color-principal);
+    color: var(--color-secundario);
+    border-color: var(--color-principal);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+section ul li a .material-symbols-outlined {
+    font-size: 48px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+section ul li a:hover .material-symbols-outlined {
+    transform: scale(1.15);
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 992px) {
+    section ul {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    section ul {
+        grid-template-columns: 1fr;
+    }
+
+    section ul li a {
+        min-height: 150px;
+        padding: 1.5rem;
+    }
+}

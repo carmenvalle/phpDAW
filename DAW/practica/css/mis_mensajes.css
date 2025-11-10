@@ -1,0 +1,80 @@
+/* ==== ESTILOS ESPECÍFICOS PARA “MIS MENSAJES” ==== */
+
+main {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* ==== TÍTULOS DE SECCIÓN ==== */
+main h3 {
+  color: var(--color-principal);
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid var(--color-acento);
+  padding-bottom: 0.4rem;
+  text-align: center;
+}
+
+/* ==== SECCIONES ==== */
+section {
+  background-color: var(--color-field); /* Si quieres, puedes crear variable --color-section-bg */
+  border: 2px solid var(--color-secundario);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); /* Se puede crear variable --sombra-light si deseas */
+}
+
+article {
+  background-color:var(--color-blanco); /* Podría ser var(--color-fondo) si quieres consistencia */
+  border: 2px solid var(--color-secundario);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.15);
+}
+
+article p {
+  font-size: 0.95rem;
+  color: var(--color-texto);
+  line-height: 1.5;
+  margin: 0.4rem 0;
+  text-align: justify;
+}
+
+article p strong {
+  color: var(--color-principal);
+  font-weight: 600;
+}
+
+/* ==== ÚLTIMA LÍNEA (FECHA) ==== */
+article p:last-of-type {
+  font-weight: 600;
+  color: var(--color-hover);
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 992px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 1rem;
+  }
+
+  section {
+    padding: 1.5rem;
+  }
+}

@@ -1,0 +1,244 @@
+/* ================================
+   ESTILO ACCESIBLE DE ALTO CONTRASTE AJUSTADO
+   ================================ */
+
+/* ==== VARIABLES DE CONTRASTE ==== */
+:root {
+  --color-principal: #b14140;
+  /* rojo medio para cabecera y botones */
+  --color-secundario: #ffd27f;
+  /* dorado claro para títulos y legend */
+  --color-acento: #ff6f3c;
+  /* naranja brillante para destacados */
+  --color-hover: #ffbc80;
+  /* hover visible y legible */
+  --color-fondo: #fee6f6;
+  /* fondo general claro */
+  --color-texto: #5c5c64;
+  /* texto principal oscuro */
+  --color-field: #fee6f6;
+  /* texto de los campos */
+  --color-blanco: #ffffff;
+  /* blanco puro */
+  --color-form: #fff0e0;
+  /* fondo de los artículos para contraste */
+
+  --radio-borde: 6px;
+  --fuente-base: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --tamano-base: 18px;
+  --tamano-label: 1.1rem;
+  --linea-base: 1.8;
+}
+
+/* ==== RESET BÁSICO ==== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==== BODY ==== */
+body {
+  background-color: var(--color-form);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-size: var(--tamano-base);
+  line-height: var(--linea-base);
+}
+
+/* ==== ENLACES ==== */
+a {
+  color: var(--color-principal);
+  text-decoration: underline;
+}
+
+a:hover,
+a:focus {
+  color: var(--color-acento);
+  outline: 2px solid var(--color-principal);
+  background-color: var(--color-fondo);
+}
+
+/* ==== CABECERA ==== */
+header {
+  background: var(--color-principal);
+  color: var(--color-blanco);
+  padding: 1.2rem 0;
+  text-align: center;
+  border-bottom: 3px solid var(--color-acento);
+}
+
+header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.4rem;
+}
+
+header h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-secundario);
+}
+
+/* ==== NAVEGACIÓN ==== */
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: var(--color-secundario);
+  padding: 0.6rem 1rem;
+  gap: 2rem;
+}
+
+nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-blanco);
+  font-weight: 700;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-principal);
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+  background-color: var(--color-acento);
+  color: var(--color-blanco);
+}
+
+/* ==== MAIN ==== */
+main {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: var(--color-secundario);
+  color: var(--color-texto);
+  border: 2px solid var(--color-principal);
+  border-radius: 8px;
+}
+
+/* ==== TITULOS Y LEGEND ==== */
+legend,
+main h2 {
+  color: var(--color-principal);
+  font-weight: bold;
+}
+
+main h3,
+.anuncios h3 {
+  color: var(--color-principal);
+  border-bottom: 2px solid var(--color-acento);
+  padding-bottom: 0.5rem;
+  margin: 2rem 0 1rem 0;
+}
+
+/* ==== FORMULARIOS ==== */
+form {
+  width: 90%;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: var(--color-blanco);
+  border: 2px solid var(--color-acento);
+  border-radius: 8px;
+}
+
+/* ==== FIELDSET ==== */
+form fieldset {
+  background-color: var(--color-form);
+  /* fondo coordinado con la página */
+  border: 2px solid var(--color-acento);
+  border-radius: var(--radio-borde);
+  padding: 1rem;
+}
+
+/* ==== LEGEND DENTRO DEL FIELDSET ==== */
+form fieldset legend {
+  color: var(--color-principal);
+  font-weight: bold;
+}
+
+/* ==== INPUTS ==== */
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  border-radius: var(--radio-borde);
+  border: 2px solid var(--color-acento);
+  background-color: var(--color-blanco);
+  color: var(--color-principal);
+  font-size: var(--tamano-label);
+}
+
+/* Radios: solo círculo relleno al seleccionar */
+input[type="radio"] {
+  width: auto;
+  height: auto;
+  margin-right: 0.5rem;
+  border: none;
+  background-color: transparent;
+  accent-color: var(--color-principal);
+  -webkit-appearance: radio;
+  appearance: radio;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-principal);
+  background-color: var(--color-fondo);
+}
+
+/* ==== BOTONES ==== */
+button,
+.btn {
+  display: inline-block;
+  background-color: var(--color-principal);
+  color: var(--color-blanco);
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover,
+.btn:hover {
+  background-color: var(--color-acento);
+  color: var(--color-blanco);
+}
+
+/* ==== ANUNCIOS ==== */
+.anuncios article {
+  background-color: var(--color-form);
+  border: 2px solid var(--color-acento);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.anuncios img {
+  width: 100%;
+  max-width: 250px;
+  display: block;
+  margin: 0 auto 1rem auto;
+  border: 3px solid var(--color-principal);
+}
+
+/* ==== PIE DE PÁGINA ==== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--color-principal);
+  color: var(--color-blanco);
+  font-size: 1rem;
+  border-top: 3px solid var(--color-acento);
+}
+
+footer p {
+  margin: 0.3rem 0;
+}

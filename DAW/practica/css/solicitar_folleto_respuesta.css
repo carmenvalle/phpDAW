@@ -1,0 +1,103 @@
+/* ==== ESTILOS ESPECÍFICOS PARA RESPUESTA FOLLETO ==== */
+
+main {
+    max-width: 80%;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.mensaje-confirmacion {
+    background: linear-gradient(135deg, var(--color-principal) 0%, #6b2d00 100%);
+    color: var(--color-secundario);
+    padding: 1.5rem;
+    border-radius: var(--radio-borde);
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(74, 28, 0, 0.3);
+}
+
+.coste-total {
+    background-color: var(--color-field); /* Podrías crear variable --color-section-bg */
+    border: 2px solid var(--color-acento);
+    border-radius: var(--radio-borde);
+    padding: 1.2rem;
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.coste-total strong {
+    color: var(--color-principal);
+    font-size: 1.6rem;
+}
+
+section h2 {
+    color: var(--color-principal);
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid var(--color-acento);
+    padding-bottom: 0.5rem;
+}
+
+fieldset {
+    background: linear-gradient(to bottom, var(--color-fondo) 0%, var(--color-field) 100%);
+    border: 2px solid var(--color-secundario);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+fieldset legend {
+    background-color: var(--color-principal);
+    color: var(--color-secundario);
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radio-borde);
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+fieldset p {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--color-fondo);
+    border-radius: var(--radio-borde);
+    border-left: 4px solid var(--color-acento);
+    transition: all 0.2s ease;
+}
+
+fieldset p:hover {
+    background-color: var(--color-field);
+    border-left-color: var(--color-principal);
+}
+
+fieldset p strong {
+    color: var(--color-principal);
+    margin-right: 1rem;
+}
+
+input[type="color"]:disabled {
+    width: 50px;
+    height: 30px;
+    border: 2px solid var(--color-acento);
+    border-radius: 4px;
+    margin-left: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 1rem;
+    }
+
+    .mensaje-confirmacion {
+        font-size: 1.1rem;
+    }
+
+    fieldset {
+        padding: 1rem;
+    }
+}

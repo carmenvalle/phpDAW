@@ -1,0 +1,109 @@
+/* ==== ESTILOS ESPECÍFICOS PARA BÚSQUEDA ==== */
+
+main {
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: var(--color-field);
+}
+
+section {
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+section h2 {
+  color: var(--color-principal);
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid var(--color-acento);
+  padding-bottom: 0.5rem;
+}
+
+form {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+form p {
+  margin-bottom: 1.2rem;
+}
+
+form label {
+  display: block;
+  color: var(--color-principal);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Radio buttons en línea */
+form p label input[type="radio"] {
+  margin-right: 0.2rem;
+  margin-left: 0.5rem;
+}
+
+form p label:has(input[type="radio"]) {
+  display: inline;
+  font-weight: 400;
+}
+
+/* Todos los inputs iguales */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 0.7rem;
+  border: 2px solid var(--color-secundario);
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  background-color: var(--color-blanco);
+  margin-bottom: 0.8rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-principal);
+  background-color: #f9f9f9;
+}
+
+/* Para los inputs de rango (precio y fecha) */
+input[type="number"],
+input[type="date"] {
+  width: 49%;
+  margin-bottom: 0;
+}
+
+/* Botón */
+form p:last-child {
+  text-align: center;
+}
+
+main p a {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1.5rem;
+  background-color: var(--color-principal);
+  color: var(--color-secundario);
+  padding: 0.8rem 0;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+main p a:hover {
+  background-color: var(--color-secundario);
+  color: var(--color-principal);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  main {
+    margin: 1rem;
+  }
+}

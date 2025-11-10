@@ -1,0 +1,237 @@
+/* ================================
+   ACCESIBILIDAD: LETRA GRANDE
+   ================================ */
+
+/* ==== VARIABLES ==== */
+:root {
+  --fuente-base: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --tamano-base: 20px;
+  --linea-base: 1.9;
+}
+
+/* ==== BODY ==== */
+body {
+  font-family: var(--fuente-base);
+  font-size: var(--tamano-base);
+  line-height: var(--linea-base);
+}
+
+/* ==== CABECERA ==== */
+header h1 {
+  font-size: 2.6rem;
+  margin-bottom: 0.6rem;
+}
+
+header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+/* ==== NAVEGACIÓN ==== */
+nav ul li a {
+  font-size: 1.3rem;
+  padding: 0.7rem 1.2rem;
+}
+
+nav ul li a strong {
+  font-size: 1.3rem;
+}
+
+nav ul li a .material-symbols-outlined,
+nav ul li a i {
+  font-size: 28px;
+}
+
+/* ==== MAIN ==== */
+main {
+  font-size: 1.2rem;
+}
+
+main h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1.2rem;
+}
+
+main h3 {
+  font-size: 2rem;
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+main p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+main ul li {
+  font-size: 1.2rem;
+}
+
+/* ==== SECCIONES ==== */
+section h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1.5rem;
+}
+
+section h3 {
+  font-size: 2rem;
+}
+
+section p {
+  font-size: 1.2rem;
+}
+
+/* ==== ANUNCIOS ==== */
+.anuncios h2 {
+  font-size: 2.4rem;
+}
+
+.anuncios article {
+  font-size: 1.2rem;
+}
+
+.anuncios article h3 {
+  font-size: 1.8rem;
+}
+
+.anuncios article p {
+  font-size: 1.3rem;
+}
+
+.anuncios article a {
+  font-size: 1.2rem;
+}
+
+/* ==== FORMULARIOS ==== */
+form {
+  font-size: 1.2rem;
+}
+
+form p {
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+}
+
+form label {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Labels con radio/checkbox */
+form p label:has(input[type="radio"]),
+form p label:has(input[type="checkbox"]) {
+  display: inline;
+  font-size: 1.3rem;
+}
+
+fieldset legend {
+  font-size: 1.4rem;
+  padding: 0.3rem 0.8rem;
+}
+
+/* ==== INPUTS Y SELECTS ==== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+input[type="color"],
+textarea,
+select {
+  font-size: 1.3rem;
+  padding: 0.8rem;
+}
+
+/* Radios y checkboxes más grandes */
+input[type="radio"],
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.7rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline-width: 3px;
+}
+
+/* ==== BOTONES ==== */
+button,
+.btn {
+  font-size: 1.4rem;
+  padding: 1rem 1.5rem;
+}
+
+button strong,
+.btn strong {
+  font-size: 1.4rem;
+}
+
+/* ==== TABLAS ==== */
+table {
+  font-size: 1.2rem;
+}
+
+table th {
+  font-size: 1.3rem;
+  padding: 1rem;
+}
+
+table td {
+  font-size: 1.2rem;
+  padding: 0.9rem;
+}
+
+/* ==== ASIDE ==== */
+aside {
+  font-size: 1.2rem;
+}
+
+aside h2 {
+  font-size: 1.8rem;
+}
+
+/* ==== ENLACES ==== */
+a {
+  font-size: 1.2rem;
+}
+
+/* ==== MENSAJES ==== */
+.mensaje-confirmacion {
+  font-size: 1.4rem;
+  padding: 2rem;
+}
+
+.coste-total {
+  font-size: 1.5rem;
+}
+
+.coste-total strong {
+  font-size: 1.8rem;
+}
+
+/* ==== MENÚ DE PERFIL (tarjetas) ==== */
+section ul li a {
+  font-size: 1.3rem;
+  padding: 2.5rem;
+}
+
+section ul li a .material-symbols-outlined,
+section ul li a i {
+  font-size: 56px;
+}
+
+/* ==== PIE DE PÁGINA ==== */
+footer {
+  font-size: 1.2rem;
+}
+
+footer p {
+  margin: 0.4rem 0;
+  font-size: 1.2rem;
+}

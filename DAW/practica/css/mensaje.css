@@ -1,0 +1,102 @@
+/* ==== ESTILOS ESPECÍFICOS PARA MENSAJE ==== */
+
+main {
+    margin: 3rem auto;
+}
+
+section {
+    padding-left: 2rem;
+    padding-bottom: 2rem;
+    padding-right: 2rem;
+    margin: 0 auto;
+}
+
+section h3 {
+    color: var(--color-principal);
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid var(--color-acento);
+    padding-bottom: 0.5rem;
+}
+
+form {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Textarea */
+textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 0.7rem;
+    border: 2px solid var(--color-secundario);
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    background-color:var(--color-blanco);
+    resize: vertical;
+    margin-bottom: 1.5rem;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--color-principal);
+    background-color: #f9f9f9;
+}
+
+/* Radio buttons */
+form p:first-of-type {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--color-field);
+    border-radius: 6px;
+    border-left: 4px solid var(--color-acento);
+    color: var(--color-principal);
+    font-weight: 600;
+}
+
+form p label {
+    display: block;
+    font-weight: 400;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+/* Botón centrado */
+main p a {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1.5rem;
+  background-color: var(--color-principal);
+  color: var(--color-secundario);
+  padding: 0.8rem 0;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+main p a:hover {
+  background-color: var(--color-secundario);
+  color: var(--color-principal);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    main {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    section {
+        max-width: 100%;
+    }
+}
