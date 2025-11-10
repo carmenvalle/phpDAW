@@ -1,5 +1,6 @@
 <?php
-$title = "PI - Pisos & Inmuebles";
+//comentario de prueba
+$title = "PI - Pisos & Inmueblees";
 $cssPagina = "folleto.css";
 require_once("cabecera.inc");
 require_once(__DIR__ . '/privado.inc');
