@@ -182,8 +182,17 @@ require_once("inicioLog.inc");
             </section>
 
             <aside class="acciones">
-                <a href="anyadir_foto.php?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
-                <a href="mis_anuncios.php" class="btn">Volver a mis anuncios</a>
+                <?php
+                // Mostrar 'Añadir foto' solo si el usuario autenticado es el propietario del anuncio
+                $usuarioLog = $_SESSION['usuario'] ?? null;
+                $propietario = $anuncio['usuario'] ?? null;
+                if ($usuarioLog && $propietario && $usuarioLog === $propietario): ?>
+                    <a href="anyadir_foto.php?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
+                    <a href="mis_anuncios.php" class="btn">Volver a mis anuncios</a>
+                <?php else: ?>
+                    <a href="mensaje.php?anuncio=<?= $id ?>" class="btn">Enviar mensaje al anunciante</a>
+                    <a href="index.php" class="btn">Volver al inicio</a>
+                <?php endif; ?>
             </aside>
         </section>
     </section>
