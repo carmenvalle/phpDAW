@@ -14,7 +14,7 @@ $titulo = trim($_POST['titulo'] ?? '');
 $ciudad = trim($_POST['ciudad'] ?? '');
 $pais = trim($_POST['pais'] ?? '');
 $precio = isset($_POST['precio']) && $_POST['precio'] !== '' ? floatval($_POST['precio']) : null;
-$fecha_publicacion = $_POST['fecha_publicacion'] ?? null;
+$fecha_publicacion = null; // no se toma desde el formulario; se usará NOW() en la inserción
 $texto = trim($_POST['descripcion'] ?? '');
 $superficie = isset($_POST['superficie']) && $_POST['superficie'] !== '' ? floatval($_POST['superficie']) : null;
 $habitaciones = isset($_POST['habitaciones']) && $_POST['habitaciones'] !== '' ? intval($_POST['habitaciones']) : null;
@@ -80,8 +80,7 @@ if (ctype_digit((string)$pais)) {
     if ($r) $IdPais = $r['IdPais'];
 }
 
-// Insertar anuncio
-$stmt = $conexion->prepare('INSERT INTO Anuncios (TAnuncio, TVivienda, FPrincipal, Alternativo, Titulo, Precio, Texto, Ciudad, Pais, Superficie, NHabitaciones, NBanyos, Planta, Anyo, Usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+$stmt = $conexion->prepare('INSERT INTO Anuncios (TAnuncio, TVivienda, FPrincipal, Alternativo, Titulo, Precio, Texto, Ciudad, Pais, Superficie, NHabitaciones, NBanyos, Planta, Anyo, FRegistro, Usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)');
 $alternativo = 'Imagen principal';
 $FPrincipal = null; // se actualizará tras subir fotos
 $stmt->execute([

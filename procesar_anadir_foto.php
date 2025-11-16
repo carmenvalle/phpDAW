@@ -3,6 +3,17 @@ session_start();
 
 $title = "PI - Procesar Añadir Foto";
 
+// Helper de logging para depuración de subidas
+if (!function_exists('log_addfoto')) {
+    function log_addfoto($msg) {
+        $dir = __DIR__ . '/logs';
+        if (!is_dir($dir)) @mkdir($dir, 0755, true);
+        $file = $dir . '/addfoto.log';
+        $line = date('[Y-m-d H:i:s] ') . $msg . PHP_EOL;
+        @file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
+    }
+}
+
 // Requerir conexión
 if (!file_exists(__DIR__ . '/includes/conexion.php')) {
     $_SESSION['flash']['error'] = 'Error interno: falta la conexión a la base de datos.';
@@ -22,6 +33,8 @@ $usuario = $_SESSION['usuario'];
 
 // Validar id del anuncio
 if (!isset($_POST['id_anuncio']) || !ctype_digit((string)$_POST['id_anuncio'])) {
+    $msg = 'Anuncio inválido. POST keys: ' . implode(',', array_keys($_POST));
+    log_addfoto($msg);
     $_SESSION['flash']['error'] = 'Anuncio inválido.';
     header('Location: anyadir_foto.php');
     exit();
@@ -49,12 +62,19 @@ try {
     }
 
     // Validar archivo
-    if (empty($_FILES['foto']) || $_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
+    if (empty($_FILES['foto'])) {
+        log_addfoto("No se recibió el campo 'foto' en \\$_FILES. Keys: " . implode(',', array_keys($_FILES)));
         $_SESSION['flash']['error'] = 'Falta el archivo o hubo un error en la subida.';
         header('Location: anyadir_foto.php?id=' . $idAnuncio);
         exit();
     }
     $file = $_FILES['foto'];
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        log_addfoto("Upload error code: " . (int)$file['error'] . " name=" . ($file['name'] ?? '') );
+        $_SESSION['flash']['error'] = 'Falta el archivo o hubo un error en la subida (código ' . (int)$file['error'] . ').';
+        header('Location: anyadir_foto.php?id=' . $idAnuncio);
+        exit();
+    }
     // Limitar tamaño a 2MB
     if ($file['size'] > 2 * 1024 * 1024) {
         $_SESSION['flash']['error'] = 'El archivo excede el tamaño máximo (2MB).';
@@ -65,6 +85,7 @@ try {
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime = $finfo->file($file['tmp_name']);
     if (strpos($mime, 'image/') !== 0) {
+        log_addfoto("Mime inválido: $mime para archivo " . ($file['name'] ?? '')); 
         $_SESSION['flash']['error'] = 'El archivo subido no es una imagen válida.';
         header('Location: anyadir_foto.php?id=' . $idAnuncio);
         exit();
@@ -78,6 +99,7 @@ try {
     if (!is_dir($dir)) mkdir($dir, 0755, true);
     $dest = $dir . $nombreFoto;
     if (!move_uploaded_file($file['tmp_name'], $dest)) {
+        log_addfoto('move_uploaded_file falló. tmp=' . ($file['tmp_name'] ?? '') . ' dest=' . $dest);
         $_SESSION['flash']['error'] = 'No se pudo guardar la imagen en el servidor.';
         header('Location: anyadir_foto.php?id=' . $idAnuncio);
         exit();
