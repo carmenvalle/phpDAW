@@ -43,6 +43,7 @@ if (isset($conexion)) {
                 <input type="text" id="usuario" name="usuario" value="<?php echo htmlspecialchars($old['usuario'] ?? ''); ?>">
             </p>
             <?php if (in_array('usuario', $errors)): ?><span class="error-campo">El nombre de usuario es obligatorio.</span><?php endif; ?>
+            <?php if (in_array('usuario_rules', $errors)): ?><span class="error-campo">El nombre de usuario debe tener entre 3 y 15 caracteres, sólo letras y números, y no puede comenzar por un número.</span><?php endif; ?>
 
             <p class="<?php echo in_array('contrasena', $errors) ? 'campo-error' : ''; ?>">
                 <label for="password"><strong>Contraseña:</strong></label>
