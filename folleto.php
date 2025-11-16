@@ -152,8 +152,32 @@ require_once("inicioLog.inc");
                 <label for="anuncio">Selecciona el anuncio (*):</label>
                 <select id="anuncio" name="anuncio">
                     <option value="">-- Selecciona tu anuncio --</option>
-                    <option value="anuncio1">Anuncio 1</option>
-                    <option value="anuncio2">Anuncio 2</option>
+                    <?php
+                    // Cargar anuncios publicados por el usuario conectado
+                    $userId = $_SESSION['id'] ?? null;
+                    if ($userId && file_exists(__DIR__ . '/includes/conexion.php')) {
+                        require_once __DIR__ . '/includes/conexion.php';
+                        try {
+                            $stmt = $conexion->prepare('SELECT IdAnuncio, Titulo FROM Anuncios WHERE Usuario = ? ORDER BY FRegistro DESC');
+                            $stmt->execute([(int)$userId]);
+                            $misAnuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        } catch (Exception $e) {
+                            $misAnuncios = [];
+                        }
+                    } else {
+                        $misAnuncios = [];
+                    }
+
+                    if (!empty($misAnuncios)) {
+                        foreach ($misAnuncios as $a) {
+                            $idA = (int)$a['IdAnuncio'];
+                            $titulo = htmlspecialchars($a['Titulo'] ?? "(sin título)");
+                            echo "<option value='$idA'>$titulo</option>";
+                        }
+                    } else {
+                        echo "<option value=''>No tienes anuncios publicados</option>";
+                    }
+                    ?>
                 </select>
             </p>
 

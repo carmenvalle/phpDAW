@@ -38,7 +38,8 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
 if (isset($conexion)) {
     try {
         $stmt = $conexion->prepare(
-            "SELECT IdUsuario, NomUsuario, Clave, Estilo FROM Usuarios WHERE NomUsuario = ? LIMIT 1"
+            // Incluir `Foto` para poder mostrar el avatar al iniciar sesión
+            "SELECT IdUsuario, NomUsuario, Clave, Estilo, Foto FROM Usuarios WHERE NomUsuario = ? LIMIT 1"
         );
         $stmt->execute([$userName]);
         $datos = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -49,7 +50,7 @@ if (isset($conexion)) {
             // usar 'estilo' y mantener 'style' para compatibilidad
             $_SESSION["estilo"] = $datos['Estilo'] ?? null;
             $_SESSION['style'] = $datos['Estilo'] ?? 'default';
-            // Foto de perfil (si existe en la BD, resolver ruta preferente)
+            // Foto de perfil
             require_once __DIR__ . '/includes/precio.php';
             if (!empty($datos['Foto'])) {
                 $_SESSION['foto'] = resolve_image_url($datos['Foto']);

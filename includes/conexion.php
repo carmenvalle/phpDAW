@@ -2,7 +2,7 @@
 $servidor = "localhost";
 $usuario = "root";
 $clave = "";
-$basedatos = "DAW";
+$basedatos = "pibd";
 $puerto = "3306";
 try {
     $dsn = "mysql:host=$servidor;dbname=$basedatos;charset=utf8mb4";

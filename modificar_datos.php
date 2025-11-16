@@ -1,4 +1,4 @@
-<?php
+
 <?php
 $title = "PI - Modificar datos";
 $cssPagina = "registro.css";
