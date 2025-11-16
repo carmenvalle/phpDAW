@@ -22,16 +22,27 @@
   if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
   }
-  if (isset($_SESSION['style']) && $_SESSION['style'] !== 'default') {
-    $map = [
-      'modo_oscuro' => 'modo_oscuro.css',
-      'letra_grande' => 'accesibilidad.css',
-      'alto_contraste' => 'alto-contraste.css',
-      'contraste_letra' => 'alto-contraste-accesibilidad.css'
-    ];
-    $s = $_SESSION['style'];
-    if (isset($map[$s])) {
-      echo '<link rel="stylesheet" href="DAW/practica/css/' . $map[$s] . '" media="screen">';
+  // Whitelist: clave => fichero CSS. Mantener sincronía con configurar.php
+  $theme_map = [
+    'default' => '',
+    'modo_oscuro' => 'modo_oscuro.css',
+    'letra_grande' => 'accesibilidad.css',
+    'alto_contraste' => 'alto-contraste.css',
+    'contraste_letra' => 'alto-contraste-accesibilidad.css'
+  ];
+
+  // Determinar selección: prioridad sesión, luego cookie
+  $selected_key = null;
+  if (!empty($_SESSION['style']) && array_key_exists($_SESSION['style'], $theme_map)) {
+    $selected_key = $_SESSION['style'];
+  } elseif (!empty($_COOKIE['style']) && array_key_exists($_COOKIE['style'], $theme_map)) {
+    $selected_key = $_COOKIE['style'];
+  }
+
+  if ($selected_key && $selected_key !== 'default') {
+    $cssfile = $theme_map[$selected_key];
+    if ($cssfile) {
+      echo '<link rel="stylesheet" href="DAW/practica/css/' . htmlspecialchars($cssfile, ENT_QUOTES, 'UTF-8') . '" media="screen">';
     }
   }
   ?>

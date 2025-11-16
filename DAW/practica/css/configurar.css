@@ -1,0 +1,29 @@
+main {
+  width: 60%;
+  margin: auto;
+  text-align: center;
+}
+
+.lista-estilos {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  display: inline-block;
+}
+
+.lista-estilos li {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+.btn-guardar {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.volver {
+  display: block;
+  margin-top: 20px;
+}
