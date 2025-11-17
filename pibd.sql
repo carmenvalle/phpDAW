@@ -49,6 +49,7 @@ CREATE TABLE `anuncios` (
 
 -- --------------------------------------------------------
 
+-- Insertar anuncio
 --
 -- Estructura de tabla para la tabla `estilos`
 --
