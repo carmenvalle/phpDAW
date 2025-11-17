@@ -31,7 +31,7 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 		<?php if (!$user): ?>
 			<p>No se han podido cargar tus datos. Asegúrate de estar identificado.</p>
 		<?php else: ?>
-			<form action="actualizar_datos.php" method="post" enctype="multipart/form-data">
+			<form action="#" method="get" enctype="multipart/form-data" onsubmit="return false;" aria-disabled="true">
 				<p>
 					<label>Nombre de usuario: </label>
 					<input type="text" name="usuario" value="<?= htmlspecialchars($user['NomUsuario']) ?>" readonly>
@@ -88,7 +88,7 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 					<input type="file" name="foto" accept="image/*">
 				</p>
 				<p>
-					<button type="submit">Guardar cambios</button>
+					<button type="button" disabled aria-disabled="true">GUARDAR (DESHABILITADO)</button>
 				</p>
 			</form>
 		<?php endif; ?>
