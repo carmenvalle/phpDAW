@@ -39,6 +39,61 @@
     $selected_key = $_COOKIE['style'];
   }
 
+  // Si no hay coincidencia y el valor es numérico (IdEstilo), intentar mapearlo consultando la BD
+  if ($selected_key === null) {
+    $numeric = null;
+    if (!empty($_SESSION['style']) && ctype_digit((string)$_SESSION['style'])) $numeric = (int)$_SESSION['style'];
+    if ($numeric === null && !empty($_COOKIE['style']) && ctype_digit((string)$_COOKIE['style'])) $numeric = (int)$_COOKIE['style'];
+    if ($numeric !== null) {
+      // intentar recuperar el fichero asociado a ese IdEstilo
+      $fich = null;
+      if (file_exists(__DIR__ . '/includes/conexion.php')) {
+        try {
+          require_once __DIR__ . '/includes/conexion.php';
+          $st = $conexion->prepare('SELECT Fichero FROM Estilos WHERE IdEstilo = ? LIMIT 1');
+          $st->execute([$numeric]);
+          $r = $st->fetch(PDO::FETCH_ASSOC);
+          if ($r && !empty($r['Fichero'])) $fich = $r['Fichero'];
+        } catch (Exception $e) {
+          $fich = null;
+        }
+      }
+      if ($fich) {
+        // intentar obtener también el nombre de estilo y normalizarlo a clave
+        try {
+          $st2 = $conexion->prepare('SELECT Nombre FROM Estilos WHERE IdEstilo = ? LIMIT 1');
+          $st2->execute([$numeric]);
+          $r2 = $st2->fetch(PDO::FETCH_ASSOC);
+          if ($r2 && !empty($r2['Nombre'])) {
+            $cand = mb_strtolower($r2['Nombre']);
+            // normalizar: letras, numeros y guiones bajos
+            $cand = preg_replace('/[^\p{L}0-9]+/u', '_', $cand);
+            $cand = trim($cand, '_');
+            if (array_key_exists($cand, $theme_map)) {
+              $selected_key = $cand;
+            }
+          }
+        } catch (Exception $e) {
+          // ignore
+        }
+
+        if ($selected_key === null) {
+          // buscar la clave en $theme_map cuyo valor (fichero) coincida con el fichero
+          foreach ($theme_map as $k => $v) {
+            if ($v === '') continue;
+            // normalizar nombres: convertir '_' <-> '-' para intentar coincidencias
+            $vn = basename($v);
+            $fn = basename($fich);
+            if ($vn === $fn || str_replace('_','-',$vn) === str_replace('_','-',$fn) || str_replace('-','_',$vn) === str_replace('-','_',$fn)) {
+              $selected_key = $k;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
   if ($selected_key && $selected_key !== 'default') {
     $cssfile = $theme_map[$selected_key];
     if ($cssfile) {
