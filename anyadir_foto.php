@@ -52,7 +52,7 @@
             <p class="error"><?= htmlspecialchars($errorMensaje, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
 
-        <form action="#" method="get" enctype="multipart/form-data" onsubmit="return false;" aria-disabled="true">
+        <form action="procesar_anadir_foto.php" method="post" enctype="multipart/form-data">
 
             <p>
                 <label for="id_anuncio">Anuncio:</label>
@@ -87,7 +87,7 @@
             </p>
 
             <p>
-                <button type="button" class="btn" disabled aria-disabled="true">ENVÍO DESHABILITADO</button>
+                <button type="submit" class="btn">ENVIAR</button>
             </p>
         </form>
     </section>

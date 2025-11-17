@@ -67,7 +67,9 @@ CREATE TABLE `estilos` (
 INSERT INTO `estilos` (`IdEstilo`, `Nombre`, `Descripcion`, `Fichero`) VALUES
 (1, 'Normal', 'Estilo por defecto del sistema', 'general.css'),
 (2, 'Letra grande', 'Versión accesible con tamaño de letra aumentado', 'letra_grande.css'),
-(3, 'Alto contraste', 'Versión accesible de alto contraste', 'alto_contraste.css');
+(3, 'Alto contraste', 'Versión accesible de alto contraste', 'alto_contraste.css'),
+(4, 'Oscuro', 'Versión con colores oscuros para ambientes con poca luz', 'modo_oscuro.css'),
+(5, 'Accesible', 'Versión accesible con mejoras para lectores de pantalla', 'accesibilidad.css');
 
 -- --------------------------------------------------------
 
