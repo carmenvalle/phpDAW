@@ -52,7 +52,7 @@ require_once('inicioLog.inc');
         <button type="submit" class="btn-guardar" disabled>Guardar estilo</button>
     </form>
 
-    <p><a href="#" class="volver" onclick="return false;" aria-disabled="true">Volver al inicio</a></p>
+    <p><a href="index_logueado.php" class="volver" aria-disabled="true">Volver al inicio</a></p>
 </main>
 
 <?php require_once('pie.inc'); ?>
