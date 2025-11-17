@@ -98,6 +98,80 @@ require_once("cabecera.inc");
 require_once("inicioLog.inc");
 require_once __DIR__ . '/includes/conexion.php';
 require_once __DIR__ . '/includes/precio.php';
+
+// ------------------------------
+// Quick search parsing for `q`
+// Accepts phrases like: "local alquiler alicante" => vivienda, tipo anuncio, ciudad
+// Ignores small words: un, una, en, de
+// Token order assumed: vivienda, tipo_anuncio, ciudad
+// ------------------------------
+if (isset($_GET['q']) && trim((string)$_GET['q']) !== '') {
+    $qraw = mb_strtolower(trim((string)$_GET['q']));
+    // remove articles/prepositions: un, una, en, de
+    $qclean = preg_replace('/\b(un|una|en|de)\b/u', ' ', $qraw);
+    $qclean = preg_replace('/[^\p{L}\p{N} ]+/u', ' ', $qclean); // keep letters, numbers and spaces
+    $qclean = preg_replace('/\s+/u', ' ', $qclean);
+    $tokens = array_values(array_filter(array_map('trim', explode(' ', $qclean))));
+
+    if (!empty($tokens)) {
+        try {
+            // load master lists from DB for matching
+            $mapVivienda = [];
+            $stmt = $conexion->query('SELECT IdTVivienda, NomTVivienda FROM TiposViviendas');
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) $mapVivienda[mb_strtolower($r['NomTVivienda'])] = $r['IdTVivienda'];
+
+            $mapTAnuncio = [];
+            $stmt = $conexion->query('SELECT IdTAnuncio, NomTAnuncio FROM TiposAnuncios');
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) $mapTAnuncio[mb_strtolower($r['NomTAnuncio'])] = $r['IdTAnuncio'];
+
+            $mapPaises = [];
+            $stmt = $conexion->query('SELECT IdPaises AS IdPais, NomPais FROM Paises');
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) $mapPaises[mb_strtolower($r['NomPais'])] = $r['IdPais'];
+        } catch (Exception $e) {
+            $mapVivienda = $mapTAnuncio = $mapPaises = [];
+        }
+
+        // Interpret tokens in order
+        // token0 => vivienda (preferred)
+        // token1 => tipo_anuncio (preferred)
+        // token2+ => city (remaining tokens joined)
+        if (isset($tokens[0])) {
+            $t0 = $tokens[0];
+            if (isset($mapVivienda[$t0])) {
+                $old['vivienda'] = $mapVivienda[$t0];
+            } elseif (isset($mapTAnuncio[$t0])) {
+                $old['tipo_anuncio'] = $mapTAnuncio[$t0];
+            } else {
+                // fallback: treat as city name
+                $old['ciudad'] = $tokens[0];
+            }
+        }
+
+        if (isset($tokens[1])) {
+            $t1 = $tokens[1];
+            if (!empty($old['vivienda']) && isset($mapTAnuncio[$t1])) {
+                $old['tipo_anuncio'] = $mapTAnuncio[$t1];
+            } elseif (!isset($old['vivienda']) && isset($mapVivienda[$t1])) {
+                $old['vivienda'] = $mapVivienda[$t1];
+            } elseif (isset($mapTAnuncio[$t1])) {
+                $old['tipo_anuncio'] = $mapTAnuncio[$t1];
+            } else {
+                // fallback to city
+                $old['ciudad'] = $t1;
+            }
+        }
+
+        if (count($tokens) >= 3) {
+            $rest = array_slice($tokens, 2);
+            $city = implode(' ', $rest);
+            if (isset($mapPaises[mb_strtolower($city)])) {
+                $old['pais'] = $mapPaises[mb_strtolower($city)];
+            } else {
+                $old['ciudad'] = $city;
+            }
+        }
+    }
+}
 ?>
 
 <main>
