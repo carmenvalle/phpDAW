@@ -120,7 +120,8 @@ if (!empty($_FILES['imagenes']) && is_array($_FILES['imagenes']['name'])) {
         $ext = $allowed[$mime];
         try { $rand = bin2hex(random_bytes(6)); } catch (Exception $e) { $rand = uniqid(); }
         $name = time() . '_' . $rand . '.' . $ext;
-        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'DAW' . DIRECTORY_SEPARATOR . 'imagenes' . DIRECTORY_SEPARATOR;
+        // Guardar en la carpeta de práctica (misma que usan otras vistas)
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'DAW' . DIRECTORY_SEPARATOR . 'practica' . DIRECTORY_SEPARATOR . 'imagenes' . DIRECTORY_SEPARATOR;
         if (!is_dir($dir)) mkdir($dir, 0755, true);
         move_uploaded_file($tmp, $dir . $name);
         // insertar en Fotos

@@ -6,32 +6,6 @@ require_once(__DIR__ . '/privado.inc');
 require_once("inicioLog.inc");
 require_once(__DIR__ . '/includes/precio.php');
 
-// Insertar solicitud en la base de datos
-if (file_exists(__DIR__ . '/includes/conexion.php')) {
-    require_once __DIR__ . '/includes/conexion.php';
-    try {
-        $direccion = "$calle, $numero, $piso, $codigo_postal, $localidad, $provincia, $pais";
-        $stmt = $conexion->prepare("INSERT INTO Solicitudes (Anuncio, Texto, Nombre, Email, Direccion, Telefono, Color, Copias, Resolucion, Fecha, IColor, IPrecio, Coste) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $anuncio !== '' ? $anuncio : null,
-            $texto,
-            $nombre,
-            $correo,
-            $direccion,
-            $telefono,
-            $color_portada,
-            $copias,
-            $resolucion,
-            $fecha !== '' ? $fecha : null,
-            $isColor ? 1 : 0,
-            ($mostrar_precio === 'si') ? 1 : 0,
-            $precioTotal
-        ]);
-    } catch (Exception $e) {
-        // Silencioso: mostrar la respuesta pero no detener si la BD falla
-    }
-}
-
 // ===== RECOGER DATOS DEL FORMULARIO =====
 $nombre = $_POST["nombre"] ?? "";
 $correo = $_POST["correo"] ?? "";
@@ -58,6 +32,32 @@ $isColor = ($impresion_color === "color");
 $precioTotal = calcularPrecio($paginas, $isColor, $resolucion, $copias); 
 $precioUnitario = calcularPrecio($paginas, $isColor, $resolucion, 1); 
 $total_formateado = formatearPrecio($precioTotal);
+
+// Insertar solicitud en la base de datos (una vez recogidos los datos y calculado el precio)
+if (file_exists(__DIR__ . '/includes/conexion.php')) {
+    require_once __DIR__ . '/includes/conexion.php';
+    try {
+        $direccion = "$calle, $numero, $piso, $codigo_postal, $localidad, $provincia, $pais";
+        $stmt = $conexion->prepare("INSERT INTO Solicitudes (Anuncio, Texto, Nombre, Email, Direccion, Telefono, Color, Copias, Resolucion, Fecha, IColor, IPrecio, Coste) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $anuncio !== '' ? $anuncio : null,
+            $texto,
+            $nombre,
+            $correo,
+            $direccion,
+            $telefono,
+            $color_portada,
+            $copias,
+            $resolucion,
+            $fecha !== '' ? $fecha : null,
+            $isColor ? 1 : 0,
+            ($mostrar_precio === 'si') ? 1 : 0,
+            $precioTotal
+        ]);
+    } catch (Exception $e) {
+        // Silencioso: mostrar la respuesta pero no detener si la BD falla
+    }
+}
 ?>
 
 <main>

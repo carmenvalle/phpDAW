@@ -184,8 +184,10 @@ require_once("inicioLog.inc");
             <section>
                 <aside class="miniaturas">
                     <?php foreach ($anuncio['fotos'] as $index => $foto): ?>
-                        <img src="DAW/practica/imagenes/<?= htmlspecialchars($foto, ENT_QUOTES, 'UTF-8') ?>"
-                            alt="Miniatura <?= $index + 1 ?> del anuncio" class="miniatura" width="150" height="150">
+                        <a href="ver_foto.php?id=<?= $id ?>&foto=<?= urlencode($foto) ?>">
+                            <img src="DAW/practica/imagenes/<?= htmlspecialchars($foto) ?>"
+                                alt="Miniatura <?= $index+1 ?> del anuncio" class="miniatura" width="150" height="150">
+                        </a>
                     <?php endforeach; ?>
                 </aside>
             </section>
@@ -197,9 +199,11 @@ require_once("inicioLog.inc");
                 $propietario = $anuncio['usuario'] ?? null;
                 if ($usuarioLog && $propietario && $usuarioLog === $propietario): ?>
                     <a href="anyadir_foto.php?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
+                    <a href="ver_fotos.php?id=<?= $id ?>" class="btn btn-outline">Ver fotos</a>
                     <a href="mis_anuncios.php" class="btn">Volver a mis anuncios</a>
                 <?php else: ?>
                     <a href="mensaje.php?anuncio=<?= $id ?>" class="btn">Enviar mensaje al anunciante</a>
+                    <a href="ver_fotos.php?id=<?= $id ?>" class="btn btn-outline">Ver fotos</a>
                     <a href="index.php" class="btn">Volver al inicio</a>
                 <?php endif; ?>
             </aside>

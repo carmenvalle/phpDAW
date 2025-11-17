@@ -101,6 +101,12 @@
       "css": "foto",
       "code": 59407,
       "src": "fontawesome"
+    },
+    {
+      "uid": "e99461abfef3923546da8d745372c995",
+      "css": "cog",
+      "code": 59398,
+      "src": "fontawesome"
     }
   ]
 }

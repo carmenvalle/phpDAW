@@ -17,6 +17,10 @@
                 <i class="icon-search"></i>
                 <strong>BÚSQUEDA</strong>
             </a></li>
+        <li><a href="configurar.php">
+                <i class="icon-cog"></i>
+                <strong>CONFIGURAR</strong>
+            </a></li>
         <li class="perfil">
             <a href="miperfil.php">
                 <?php

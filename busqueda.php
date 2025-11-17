@@ -96,10 +96,23 @@ require_once("inicioLog.inc");
 
             <p class="anuncio <?php echo isset($errores['tipo_anuncio']) ? 'campo-error' : ''; ?>">
                 <strong>Tipo de anuncio:</strong><br>
-                <label><input type="radio" name="tipo_anuncio" value="venta"
-                    <?php if ($valores["tipo_anuncio"] === "venta") echo "checked"; ?>> Venta</label>
-                <label><input type="radio" name="tipo_anuncio" value="alquiler"
-                    <?php if ($valores["tipo_anuncio"] === "alquiler") echo "checked"; ?>> Alquiler</label>
+                <?php
+                
+                $tiposAnuncio = [];
+                try {
+                    if(!isset($conexion)) require_once __DIR__ . '/includes/conexion.php';
+                    $rs1 = $conexion->query('SELECT IdTAnuncio, NomTAnuncio FROM TiposAnuncios ORDER BY NomTAnuncio');
+                    $tiposAnuncio = $rs1->fetchAll(PDO::FETCH_ASSOC);
+                } catch (Exception $e) {
+                    $tiposAnuncio = [];
+                }
+                foreach ($tiposAnuncio as $ta) {
+                    $valor = $ta['IdTAnuncio'];
+                    $texto = htmlspecialchars($ta['NomTAnuncio']);
+                    $checked = ($valores["tipo_anuncio"] == $valor) ? "checked" : "";
+                    echo "<label><input type='radio' name='tipo_anuncio' value='$valor' $checked> $texto</label><br>";
+                }
+                ?>
             </p>
             <?php if (isset($errores["tipo_anuncio"])): ?>
                 <span class="error-campo"><?php echo $errores["tipo_anuncio"]; ?></span>
@@ -140,21 +153,21 @@ require_once("inicioLog.inc");
                 <select id="pais" name="pais">
                     <option value="">Seleccione un país</option>
                     <?php
-                                        // Cargar países desde la BD
-                                        $paisesDb = [];
-                                        try {
-                                            require_once __DIR__ . '/includes/conexion.php';
-                                            $rs = $conexion->query('SELECT IdPais, NomPais FROM Paises ORDER BY NomPais');
-                                            $paisesDb = $rs->fetchAll(PDO::FETCH_ASSOC);
-                                        } catch (Exception $e) {
-                                            $paisesDb = [];
-                                        }
-                                        foreach ($paisesDb as $p) {
-                                            $valor = $p['IdPais'];
-                                            $texto = htmlspecialchars($p['NomPais']);
-                                            $sel = ($valores["pais"] == $valor) ? "selected" : "";
-                                            echo "<option value='$valor' $sel>$texto</option>";
-                                        }
+                    // Cargar países desde la BD
+                    $paisesDb = [];
+                    try {
+                        require_once __DIR__ . '/includes/conexion.php';
+                        $rs = $conexion->query('SELECT IdPais, NomPais FROM Paises ORDER BY NomPais');
+                        $paisesDb = $rs->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (Exception $e) {
+                        $paisesDb = [];
+                    }
+                    foreach ($paisesDb as $p) {
+                        $valor = $p['IdPais'];
+                        $texto = htmlspecialchars($p['NomPais']);
+                        $sel = ($valores["pais"] == $valor) ? "selected" : "";
+                        echo "<option value='$valor' $sel>$texto</option>";
+                    }
                     ?>
                 </select>
             </p>
