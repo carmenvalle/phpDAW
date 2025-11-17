@@ -15,36 +15,14 @@ $estilos = [
     "contraste_letra" => "Alto contraste + accesibilidad"
 ];
 
-// Incluir conexión solo si vamos a necesitarla (opcional guardar en BD)
+// Incluir conexión solo si vamos a necesitarla
 if (file_exists(__DIR__ . '/includes/conexion.php')) {
     require_once __DIR__ . '/includes/conexion.php';
 }
 
-// Manejo de POST: validar clave y guardar en sesión + cookie
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['style'])) {
-    $sel = (string)$_POST['style'];
-    if (array_key_exists($sel, $estilos)) {
-        // Guardar en sesión (prioridad)
-        $_SESSION['style'] = $sel;
-        $_SESSION['estilo'] = $sel; // compatibilidad
-
-        // Guardar cookie (90 días). Esto debe ocurrir antes de imprimir HTML.
-        setcookie('style', $sel, time() + 90 * 24 * 60 * 60, '/');
-
-        // Si el usuario está logueado, opcionalmente guardar en BD
-        if (!empty($_SESSION['id']) && isset($conexion) && $conexion instanceof PDO) {
-            try {
-                $upd = $conexion->prepare('UPDATE Usuarios SET Estilo = ? WHERE IdUsuario = ?');
-                $upd->execute([$sel, (int)$_SESSION['id']]);
-            } catch (Exception $e) {
-                // No detener el flujo por fallo en BD
-            }
-        }
-
-        // Redirigir para evitar reenvío de formulario
-        header('Location: configurar.php');
-        exit();
-    }
+// Modo lectura: ignorar POST para que la página sea inofensiva
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Intencionalmente vacío: no ejecutar lógica que modifique sesión, cookies o BD.
 }
 
 // A partir de aquí, podemos incluir la cabecera y empezar a enviar HTML
@@ -56,14 +34,14 @@ require_once('inicioLog.inc');
     <h2>Configurar apariencia visual</h2>
     <p>Selecciona el estilo visual que prefieres para la web:</p>
 
-    <form action="configurar.php" method="post" class="form-estilos">
+    <form action="configurar.php" method="post" class="form-estilos" onsubmit="return false;" aria-disabled="true" role="form">
         <ul class="lista-estilos">
 
             <?php foreach ($estilos as $valor => $texto): ?>
                 <li>
                     <label>
                         <input type="radio" name="style" value="<?php echo htmlspecialchars($valor, ENT_QUOTES, 'UTF-8'); ?>"
-                            <?php echo (isset($_SESSION['style']) && $_SESSION['style'] === $valor) ? 'checked' : ''; ?>>
+                            <?php echo (isset($_SESSION['style']) && $_SESSION['style'] === $valor) ? 'checked' : ''; ?> disabled>
                         <?php echo htmlspecialchars($texto, ENT_QUOTES, 'UTF-8'); ?>
                     </label>
                 </li>
@@ -71,10 +49,10 @@ require_once('inicioLog.inc');
 
         </ul>
 
-        <button type="submit" class="btn-guardar">Guardar estilo</button>
+        <button type="submit" class="btn-guardar" disabled>Guardar estilo</button>
     </form>
 
-    <p><a href="index_logueado.php" class="volver">Volver al inicio</a></p>
+    <p><a href="#" class="volver" onclick="return false;" aria-disabled="true">Volver al inicio</a></p>
 </main>
 
 <?php require_once('pie.inc'); ?>
