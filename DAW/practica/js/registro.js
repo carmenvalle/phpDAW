@@ -47,6 +47,11 @@ function validarFormulario(event) {
         mostrarErrorCampo($("usuario"), "El usuario no puede comenzar con un número.");
         ok = false;
     }
+    // Sólo letras y números
+    if (!/^[A-Za-z0-9]+$/.test(usuario)) {
+        mostrarErrorCampo($("usuario"), "El nombre de usuario solo puede contener letras y números.");
+        ok = false;
+    }
 
     // Contraseña (mensajes específicos)
     const password = $("password").value;
@@ -62,6 +67,11 @@ function validarFormulario(event) {
     if (faltas.length > 0) {
         const msg = `La contraseña debe incluir al menos ${faltas.join(", ")}.`;
         mostrarErrorCampo($("password"), msg);
+        ok = false;
+    }
+    // Comprobar caracteres permitidos: solo letras, números, guion y guion bajo
+    if (!/^[A-Za-z0-9_-]+$/.test(password)) {
+        mostrarErrorCampo($("password"), "La contraseña solo puede contener letras, números, '-' y '_'.");
         ok = false;
     }
     if (password !== password2) {

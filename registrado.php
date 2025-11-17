@@ -16,7 +16,17 @@ $campos = ['usuario','contrasena','repetir','email','sexo','nacimiento','ciudad'
 foreach ($campos as $c) $old[$c] = trim($_POST[$c] ?? "");
 
 // Validaciones
-if ($old["usuario"] === "") $errors[] = "usuario";
+$user_input = $old["usuario"];
+if ($user_input === "") {
+    $errors[] = "usuario";
+} else {
+    $u_len = mb_strlen($user_input);
+    $starts_digit = preg_match('/^[0-9]/', $user_input);
+    $allowed_user = preg_match('/^[A-Za-z0-9]+$/', $user_input);
+    if ($u_len < 3 || $u_len > 15 || $starts_digit || !$allowed_user) {
+        $errors[] = 'usuario_rules';
+    }
+}
 if ($old["contrasena"] === "") $errors[] = "contrasena";
 else {
     $pw = $old["contrasena"];
@@ -27,7 +37,9 @@ else {
     $has_digit = preg_match('/\d/', $pw);
     $starts_digit = preg_match('/^[0-9]/', $pw);
     $has_space = preg_match('/\s/', $pw);
-    if ($pw_len < 6 || $pw_len > 15 || !$has_letter || !$has_digit || $starts_digit || $has_space) {
+    // Permitir solo letras ASCII, dígitos, guion y guion bajo
+    $allowed_chars = preg_match('/^[A-Za-z0-9_-]+$/', $pw);
+    if ($pw_len < 6 || $pw_len > 15 || !$has_letter || !$has_digit || $starts_digit || $has_space || !$allowed_chars) {
         $errors[] = 'contrasena_rules';
     }
 }

@@ -107,7 +107,7 @@ require_once __DIR__ . '/includes/precio.php';
         // Construir consulta dinámica
         $sql = "SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.FRegistro, a.Ciudad, p.NomPais, a.Precio
                 FROM Anuncios a
-                LEFT JOIN Paises p ON a.Pais = p.IdPais
+                                      LEFT JOIN Paises p ON a.Pais = p.IdPaises
                 WHERE 1";
         $params = [];
 

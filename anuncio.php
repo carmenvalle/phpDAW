@@ -68,7 +68,7 @@ if ($id > 0 && isset($conexion)) {
                                           tv.NomTVivienda AS tipoVivienda
                                      FROM Anuncios a
                                      LEFT JOIN Usuarios u ON a.Usuario = u.IdUsuario
-                                     LEFT JOIN Paises p ON a.Pais = p.IdPais
+                                    LEFT JOIN Paises p ON a.Pais = p.IdPaises
                                      LEFT JOIN TiposAnuncios ta ON a.TAnuncio = ta.IdTAnuncio
                                      LEFT JOIN TiposViviendas tv ON a.TVivienda = tv.IdTVivienda
                                      WHERE a.IdAnuncio = ? LIMIT 1");
@@ -157,7 +157,16 @@ require_once("inicioLog.inc");
             <aside class="detalles">
                 <p><strong>Tipo de anuncio:</strong> <?= htmlspecialchars($anuncio['tipoAnuncio'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p><strong>Tipo de vivienda:</strong> <?= htmlspecialchars($anuncio['tipoVivienda'], ENT_QUOTES, 'UTF-8') ?></p>
-                <p><strong>Precio:</strong> <span class="precio"><?= htmlspecialchars($anuncio['precio'], ENT_QUOTES, 'UTF-8') ?></span></p>
+                <p><strong>Precio:</strong> <span class="precio"><?php
+                    // Usar el formateador común si está disponible
+                    if (!function_exists('formatearPrecio')) require_once __DIR__ . '/includes/precio.php';
+                    $precio_val = $anuncio['precio'] ?? null;
+                    if ($precio_val !== null && is_numeric($precio_val) && function_exists('formatearPrecio')) {
+                        echo formatearPrecio((float)$precio_val);
+                    } else {
+                        echo htmlspecialchars($precio_val, ENT_QUOTES, 'UTF-8');
+                    }
+                ?></span></p>
                 <p><strong>Descripción:</strong> <?= nl2br(htmlspecialchars($anuncio['texto'], ENT_QUOTES, 'UTF-8')) ?></p>
                 <p><strong>Fecha de publicación:</strong> <?= htmlspecialchars($anuncio['fecha'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p><strong>Ciudad:</strong> <?= htmlspecialchars($anuncio['ciudad'], ENT_QUOTES, 'UTF-8') ?></p>
