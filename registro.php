@@ -37,7 +37,7 @@ if (isset($conexion)) {
 <main>
     <section>
         <h2>FORMULARIO DE REGISTRO</h2>
-        <form id="formRegistro" action="registrado.php" method="post" enctype="multipart/form-data" novalidate>
+        <form id="formRegistro" action="#" method="get" enctype="multipart/form-data" novalidate onsubmit="return false;" aria-disabled="true">
 
             <p class="<?php echo in_array('usuario', $errors) ? 'campo-error' : ''; ?>">
                 <label for="usuario"><strong>Nombre de usuario:</strong></label>
@@ -123,7 +123,7 @@ if (isset($conexion)) {
             </p>
 
             <p>
-                <button><strong>REGISTRARSE</strong></button>
+                <button type="button" disabled aria-disabled="true"><strong>REGISTRO DESHABILITADO</strong></button>
             </p>
 
         </form>

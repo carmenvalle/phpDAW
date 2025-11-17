@@ -27,10 +27,6 @@ if (isset($_SESSION['flash']['nuevo_anuncio_old'])) {
     }
     unset($_SESSION['flash']['nuevo_anuncio_old'], $_SESSION['flash']['nuevo_anuncio_errors']);
 } else {
-    // Poblar desde POST si está presente
-    foreach ($valores as $k => $_) {
-        if (isset($_POST[$k])) $valores[$k] = trim($_POST[$k]);
-    }
 }
 ?>
 
@@ -40,7 +36,7 @@ if (isset($_SESSION['flash']['nuevo_anuncio_old'])) {
     </section>
 
     <section>
-        <form id="formNuevoAnuncio" action="procesar_nuevo_anuncio.php" method="post" enctype="multipart/form-data">
+        <form id="formNuevoAnuncio" action="#" method="get" enctype="multipart/form-data" onsubmit="return false;" aria-disabled="true">
             <fieldset>
                 <legend>Tipo de anuncio</legend>
                 <?php
@@ -165,7 +161,7 @@ if (isset($_SESSION['flash']['nuevo_anuncio_old'])) {
             <!-- Usuario se toma de la sesión, no se solicita en el formulario -->
 
             <p>
-                <button type="submit">PUBLICAR ANUNCIO</button>
+                <button type="button" disabled aria-disabled="true">PUBLICAR (DESHABILITADO)</button>
             </p>
         </form>
     </section>
