@@ -157,7 +157,8 @@ require_once("inicioLog.inc");
                     $paisesDb = [];
                     try {
                         require_once __DIR__ . '/includes/conexion.php';
-                        $rs = $conexion->query('SELECT IdPais, NomPais FROM Paises ORDER BY NomPais');
+                        // IdPaises es el nombre real en la BD; devolver como IdPais para compatibilidad
+                        $rs = $conexion->query('SELECT IdPaises AS IdPais, NomPais FROM Paises ORDER BY NomPais');
                         $paisesDb = $rs->fetchAll(PDO::FETCH_ASSOC);
                     } catch (Exception $e) {
                         $paisesDb = [];

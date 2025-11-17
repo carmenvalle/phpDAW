@@ -68,7 +68,7 @@ if ($id > 0 && isset($conexion)) {
                                           tv.NomTVivienda AS tipoVivienda
                                      FROM Anuncios a
                                      LEFT JOIN Usuarios u ON a.Usuario = u.IdUsuario
-                                     LEFT JOIN Paises p ON a.Pais = p.IdPais
+                                    LEFT JOIN Paises p ON a.Pais = p.IdPaises
                                      LEFT JOIN TiposAnuncios ta ON a.TAnuncio = ta.IdTAnuncio
                                      LEFT JOIN TiposViviendas tv ON a.TVivienda = tv.IdTVivienda
                                      WHERE a.IdAnuncio = ? LIMIT 1");

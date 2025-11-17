@@ -5,6 +5,19 @@ $cssPagina = "folleto.css";
 require_once("cabecera.inc");
 require_once(__DIR__ . '/privado.inc');
 require_once("inicioLog.inc");
+require_once __DIR__ . '/includes/conexion.php';
+
+$userId = $_SESSION['id'] ?? null;
+$misAnuncios = [];
+if ($userId && isset($conexion)) {
+    try {
+        $st = $conexion->prepare('SELECT IdAnuncio, Titulo FROM Anuncios WHERE Usuario = ? ORDER BY FRegistro DESC');
+        $st->execute([$userId]);
+        $misAnuncios = $st->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        $misAnuncios = [];
+    }
+}
 ?>
 
 <main>
@@ -152,8 +165,13 @@ require_once("inicioLog.inc");
                 <label for="anuncio">Selecciona el anuncio (*):</label>
                 <select id="anuncio" name="anuncio">
                     <option value="">-- Selecciona tu anuncio --</option>
-                    <option value="anuncio1">Anuncio 1</option>
-                    <option value="anuncio2">Anuncio 2</option>
+                    <?php if (!empty($misAnuncios)): ?>
+                        <?php foreach ($misAnuncios as $ma): ?>
+                            <option value="<?= (int)$ma['IdAnuncio'] ?>"><?= htmlspecialchars($ma['Titulo'] ?: 'Sin título', ENT_QUOTES, 'UTF-8') ?></option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="">(No tienes anuncios disponibles)</option>
+                    <?php endif; ?>
                 </select>
             </p>
 

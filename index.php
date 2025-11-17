@@ -114,7 +114,7 @@ require_once __DIR__ . '/includes/conexion.php';
       try {
           $stmt = $conexion->query("SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.FRegistro, a.Ciudad, p.NomPais, a.Precio
                                       FROM Anuncios a
-                                      LEFT JOIN Paises p ON a.Pais = p.IdPais
+                                      LEFT JOIN Paises p ON a.Pais = p.IdPaises
                                       ORDER BY a.FRegistro DESC
                                       LIMIT 5");
           $ultimos = $stmt->fetchAll(PDO::FETCH_ASSOC);

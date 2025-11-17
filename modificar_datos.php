@@ -63,7 +63,8 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 						<option value="">--</option>
 						<?php
 						try {
-							$rs = $conexion->query('SELECT IdPais, NomPais FROM Paises ORDER BY NomPais');
+							// IdPaises en la BD; usamos alias IdPais para mantener la plantilla
+							$rs = $conexion->query('SELECT IdPaises AS IdPais, NomPais FROM Paises ORDER BY NomPais');
 							$ps = $rs->fetchAll(PDO::FETCH_ASSOC);
 						} catch (Exception $e) {
 							$ps = [];

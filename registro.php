@@ -25,7 +25,8 @@ require_once(__DIR__ . '/includes/conexion.php');
 $paises = [];
 if (isset($conexion)) {
     try {
-        $stmt = $conexion->query("SELECT IdPais, NomPais FROM Paises ORDER BY NomPais");
+        // La columna en la BD se llama IdPaises; la seleccionamos con alias IdPais
+        $stmt = $conexion->query("SELECT IdPaises AS IdPais, NomPais FROM Paises ORDER BY NomPais");
         $paises = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         $paises = [];

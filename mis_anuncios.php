@@ -17,23 +17,39 @@ if ($userId && isset($conexion)) {
 ?>
 
 <main>
-  <section>
+    <section class="mis-anuncios">
     <?php if (empty($anuncios)): ?>
         <p>No has publicado anuncios todavía.</p>
     <?php else: ?>
-        <?php foreach ($anuncios as $a): ?>
-            <article>
-                <h2><?= htmlspecialchars($a['Titulo'] ?: 'Sin título') ?></h2>
-                <a href="anuncio.php?id=<?= $a['IdAnuncio'] ?>">
-                    <?php $imgPath = resolve_image_url($a['FPrincipal'] ?? ''); ?>
-                    <img src="<?= $imgPath ?>" alt="Foto" width="200" height="200">
-                </a>
-                <p><strong>Ciudad:</strong> <?= htmlspecialchars($a['Ciudad'] ?: '—') ?></p>
-                <p><strong>Fecha:</strong> <?= htmlspecialchars($a['FRegistro']) ?></p>
-                <p><strong>Precio:</strong> <?= $a['Precio'] !== null ? number_format((float)$a['Precio'],2,',','.') . ' €' : '—' ?></p>
-                <p><a href="modificar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Editar</a> | <a href="borrar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Borrar</a></p>
-            </article>
-        <?php endforeach; ?>
+        <div class="total-anuncios">
+            <strong>Total de anuncios:</strong> <?= count($anuncios) ?>
+        </div>
+
+        <div class="anuncios-list">
+            <?php foreach ($anuncios as $a): ?>
+                <article>
+                    <h2><?= htmlspecialchars($a['Titulo'] ?: 'Sin título') ?></h2>
+                    <a href="anuncio.php?id=<?= $a['IdAnuncio'] ?>">
+                        <?php $imgPath = resolve_image_url($a['FPrincipal'] ?? ''); ?>
+                        <img src="<?= $imgPath ?>" alt="Foto" width="200" height="200">
+                    </a>
+                    <p><strong>Ciudad:</strong> <?= htmlspecialchars($a['Ciudad'] ?: '—') ?></p>
+                    <p><strong>Fecha:</strong> <?= htmlspecialchars($a['FRegistro']) ?></p>
+                    <p><strong>Precio:</strong> <span class="precio"><?php
+                        if (!function_exists('formatearPrecio')) require_once __DIR__ . '/includes/precio.php';
+                        $p = $a['Precio'] ?? null;
+                        if ($p !== null && is_numeric($p) && function_exists('formatearPrecio')) {
+                            echo formatearPrecio((float)$p);
+                        } elseif ($p !== null) {
+                            echo htmlspecialchars($p, ENT_QUOTES, 'UTF-8');
+                        } else {
+                            echo '—';
+                        }
+                    ?></span></p>
+                    <p><a href="modificar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Editar</a> | <a href="borrar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Borrar</a></p>
+                </article>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 
   </section>

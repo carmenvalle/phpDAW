@@ -128,6 +128,52 @@ article .price-badge {
   }
 }
 
+/* ==== LAYOUT ESPECIAL PARA MIS ANUNCIOS ==== */
+.mis-anuncios {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.mis-anuncios .total-anuncios {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-principal);
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  letter-spacing: 0.02em;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: calc(var(--radio-borde) + 4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.mis-anuncios .anuncios-list {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .mis-anuncios {
+    padding: 0 0.5rem;
+  }
+  .mis-anuncios .total-anuncios {
+    text-align: center;
+  }
+}
+
 /* Style the "Volver al formulario" link (assumed to be the last paragraph link in the results section)
    This makes the link look like a button while keeping semantic markup. */
 section > p:last-of-type {

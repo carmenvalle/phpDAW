@@ -105,7 +105,8 @@ if (isset($_SESSION['flash']['nuevo_anuncio_old'])) {
                     $paisesDb = [];
                     try {
                         require_once __DIR__ . '/includes/conexion.php';
-                        $rs = $conexion->query('SELECT IdPais, NomPais FROM Paises ORDER BY NomPais');
+                        // IdPaises en la BD: usar alias para mantener compatibilidad
+                        $rs = $conexion->query('SELECT IdPaises AS IdPais, NomPais FROM Paises ORDER BY NomPais');
                         $paisesDb = $rs->fetchAll(PDO::FETCH_ASSOC);
                     } catch (Exception $e) {
                         $paisesDb = [];
@@ -122,7 +123,7 @@ if (isset($_SESSION['flash']['nuevo_anuncio_old'])) {
 
             <p>
                 <label for="precio">Precio (€):</label><br>
-                <input type="number" id="precio" name="precio" step="0.01" value="<?php echo htmlspecialchars($valores['precio'] ?? ''); ?>">
+                <input type="number" id="precio" name="precio" step="1000" min="0" value="<?php echo htmlspecialchars($valores['precio'] ?? ''); ?>">
             </p>
 
             <!-- Fecha de publicación se asigna automáticamente -->

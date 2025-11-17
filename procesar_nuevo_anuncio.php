@@ -74,8 +74,9 @@ $IdPais = null;
 if (ctype_digit((string)$pais)) {
     $IdPais = intval($pais);
 } else if ($pais !== '') {
-    $stmt = $conexion->prepare('SELECT IdPais FROM Paises WHERE NomPais LIKE ? LIMIT 1');
-    $stmt->execute(["%$pais%"]);
+    // Buscar por nombre y devolver IdPaises con alias IdPais para compatibilidad
+    $stmt = $conexion->prepare('SELECT IdPaises AS IdPais FROM Paises WHERE NomPais LIKE ? LIMIT 1');
+    $stmt->execute(["%$pais%"]); 
     $r = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($r) $IdPais = $r['IdPais'];
 }
