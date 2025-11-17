@@ -7,11 +7,9 @@ require_once("inicioLog.inc");
 
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
-// Use shared loader for anuncio + fotos
 require_once __DIR__ . '/includes/ver_fotos_common.php';
 require_once __DIR__ . '/includes/precio.php';
 
-// common sets $vf_anuncio, $vf_fotos, $vf_total
 $anuncio = $vf_anuncio;
 $fotos = $vf_fotos;
 $totalFotos = $vf_total;

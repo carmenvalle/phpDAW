@@ -1,7 +1,4 @@
 <?php
-// includes/ver_fotos_common.php
-// Expects: GET param 'id' (IdAnuncio)
-// Provides: $vf_anuncio (assoc) or null, $vf_fotos (array), $vf_total (int)
 
 $vf_anuncio = null;
 $vf_fotos = [];
@@ -26,7 +23,6 @@ try {
         $st2->execute([$id]);
         $vf_fotos = $st2->fetchAll(PDO::FETCH_ASSOC);
         $vf_total = count($vf_fotos);
-        // Normalize foto paths if needed: keep as stored; caller can use resolve_image_url if required
     }
 } catch (Exception $e) {
     $vf_anuncio = null;

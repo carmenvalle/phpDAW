@@ -12,6 +12,6 @@ try {
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 } catch (PDOException $e) {
-    die("❌ Error de conexión a la BD: " . $e->getMessage());
+    die("Error de conexión a la BD: " . $e->getMessage());
 }
 ?>

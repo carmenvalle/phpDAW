@@ -2,7 +2,7 @@
 // ver_fotos_priv.php - Página privada: accesible sólo al propietario del anuncio
 $title = "PI - Ver fotos (privado)";
 $cssPagina = "miperfil.css";
-require_once __DIR__ . '/privado.inc'; // exige usuario autenticado
+require_once __DIR__ . '/privado.inc'; 
 require_once __DIR__ . '/cabecera.inc';
 require_once __DIR__ . '/inicioLog.inc';
 
