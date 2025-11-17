@@ -7,44 +7,18 @@ require_once("inicioLog.inc");
 
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
-// Conexión y helpers
-if (file_exists(__DIR__ . '/includes/conexion.php')) require_once __DIR__ . '/includes/conexion.php';
-if (file_exists(__DIR__ . '/includes/precio.php')) require_once __DIR__ . '/includes/precio.php';
+require_once __DIR__ . '/includes/ver_fotos_common.php';
+require_once __DIR__ . '/includes/precio.php';
 
-// Validar id de anuncio
-if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
-    echo "<main><p style='color:red;'>Error: No se ha especificado el anuncio.</p></main>";
-    require_once("pie.inc");
-    exit();
-}
-
-$idAnuncio = intval($_GET['id']);
-
-// Obtener anuncio
-try {
-    $stmt = $conexion->prepare('SELECT IdAnuncio, Titulo, Ciudad, Precio, FPrincipal, Texto FROM anuncios WHERE IdAnuncio = ? LIMIT 1');
-    $stmt->execute([$idAnuncio]);
-    $anuncio = $stmt->fetch(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $anuncio = false;
-}
+$anuncio = $vf_anuncio;
+$fotos = $vf_fotos;
+$totalFotos = $vf_total;
 
 if (!$anuncio) {
     echo "<main><p style='color:red;'>Anuncio no encontrado.</p></main>";
     require_once("pie.inc");
     exit();
 }
-
-// Obtener fotos
-try {
-    $sf = $conexion->prepare('SELECT IdFoto, Titulo, Foto, Alternativo FROM fotos WHERE Anuncio = ? ORDER BY IdFoto ASC');
-    $sf->execute([$idAnuncio]);
-    $fotos = $sf->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $fotos = [];
-}
-
-$totalFotos = count($fotos);
 
 ?>
 
