@@ -12,7 +12,7 @@ require_once __DIR__ . '/conexion.php';
 try {
     $st = $conexion->prepare("SELECT a.IdAnuncio, a.Titulo, a.Texto, a.Precio, a.Ciudad, a.FRegistro, p.NomPais AS Pais, u.NomUsuario AS Usuario, a.FPrincipal
                               FROM Anuncios a
-                              LEFT JOIN Paises p ON a.Pais = p.IdPaises
+                              LEFT JOIN Paises p ON a.Pais = p.IdPais
                               LEFT JOIN Usuarios u ON a.Usuario = u.IdUsuario
                               WHERE a.IdAnuncio = ? LIMIT 1");
     $st->execute([$id]);

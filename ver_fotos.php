@@ -6,6 +6,10 @@ require_once(__DIR__ . "/privado.inc");
 require_once("inicioLog.inc");
 
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+// DEBUG: registrar $_GET para diagnosticar por qué llega 'Anuncio no encontrado'
+$debugFile = __DIR__ . '/logs/ver_fotos_get.log';
+@mkdir(dirname($debugFile), 0777, true);
+file_put_contents($debugFile, sprintf("[%s] URI=%s GET=%s\n", date('Y-m-d H:i:s'), $_SERVER['REQUEST_URI'] ?? '', var_export($_GET, true)), FILE_APPEND);
 
 require_once __DIR__ . '/includes/ver_fotos_common.php';
 require_once __DIR__ . '/includes/precio.php';
@@ -56,7 +60,7 @@ if (!$anuncio) {
             </div>
         <?php endif; ?>
 
-        <a href="anuncio.php?id=<?php echo $idAnuncio; ?>" class="btn">Volver al anuncio</a>
+        <a href="anuncio.php?id=<?php echo (int)($anuncio['IdAnuncio'] ?? 0); ?>" class="btn">Volver al anuncio</a>
 
     </section>
 
