@@ -1,9 +1,5 @@
 <?php
-$servidor = "localhost";
-$usuario = "root";
-$clave = "";
-$basedatos = "pibd";
-$puerto = "3306";
+require_once("conect.inc");
 try {
     $dsn = "mysql:host=$servidor;dbname=$basedatos;charset=utf8mb4";
     $conexion = new PDO($dsn, $usuario, $clave);

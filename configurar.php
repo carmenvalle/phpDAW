@@ -1,70 +1,86 @@
 <?php
 // configurar.php
-// Procesar selección de tema antes de enviar cualquier salida (setcookie debe enviar headers).
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 $title = "Configurar estilo visual";
 $cssPagina = "configurar.css";
 
-// Lista blanca de estilos: clave => etiqueta
-$estilos = [
-    "default" => "Estilo clásico",
-    "modo_oscuro" => "Modo oscuro",
-    "letra_grande" => "Letra grande / accesibilidad",
-    "alto_contraste" => "Alto contraste",
-    "contraste_letra" => "Alto contraste + accesibilidad"
-];
+// Cargar conexión
+require_once __DIR__ . '/includes/conexion.php';
 
-// Incluir conexión solo si vamos a necesitarla (opcional guardar en BD)
-if (file_exists(__DIR__ . '/includes/conexion.php')) {
-    require_once __DIR__ . '/includes/conexion.php';
+// Obtener estilos desde la BD
+$estilos = [];
+try {
+    $sql = $conexion->prepare("SELECT IdEstilo, Nombre, Fichero FROM estilos ORDER BY IdEstilo");
+    $sql->execute();
+    $estilos = $sql->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $estilos = [];
 }
 
-// Manejo de POST: validar clave y guardar en sesión + cookie
+$mensaje = "";
+
+// Procesar selección POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['style'])) {
-    $sel = (string)$_POST['style'];
-    if (array_key_exists($sel, $estilos)) {
-        // Guardar en sesión (prioridad)
-        $_SESSION['style'] = $sel;
-        $_SESSION['estilo'] = $sel; // compatibilidad
 
-        // Guardar cookie (90 días). Esto debe ocurrir antes de imprimir HTML.
-        setcookie('style', $sel, time() + 90 * 24 * 60 * 60, '/');
+    $sel = (int)$_POST['style'];   // ID numérico
 
-        // Si el usuario está logueado, opcionalmente guardar en BD
-        if (!empty($_SESSION['id']) && isset($conexion) && $conexion instanceof PDO) {
-            try {
-                $upd = $conexion->prepare('UPDATE Usuarios SET Estilo = ? WHERE IdUsuario = ?');
-                $upd->execute([$sel, (int)$_SESSION['id']]);
-            } catch (Exception $e) {
-                // No detener el flujo por fallo en BD
+    // Comprobar que existe en la lista cargada
+    foreach ($estilos as $est) {
+        if ((int)$est['IdEstilo'] === $sel) {
+
+            // Guardar en sesión y cookie
+            $_SESSION['style'] = $sel;
+            setcookie('style', $sel, time() + 90*24*60*60, '/');
+
+            // Actualizar en BD si el usuario está logueado
+            if (!empty($_SESSION['id'])) {
+                try {
+                    $upd = $conexion->prepare("UPDATE usuarios SET Estilo=? WHERE IdUsuario=?");
+                    $upd->execute([$sel, (int)$_SESSION['id']]);
+                } catch (Exception $e) {}
             }
-        }
 
-        // Redirigir para evitar reenvío de formulario
-        header('Location: configurar.php');
-        exit();
+            // Mensaje de éxito que se mostrará tras redirect
+            $_SESSION['mensaje_estilo'] = "Estilo visual actualizado correctamente.";
+
+            // Redirigir para evitar reenvío
+            header("Location: configurar.php");
+            exit();
+        }
     }
 }
 
-// A partir de aquí, podemos incluir la cabecera y empezar a enviar HTML
+// Mostrar mensaje si existe
+if (isset($_SESSION['mensaje_estilo'])) {
+    $mensaje = $_SESSION['mensaje_estilo'];
+    unset($_SESSION['mensaje_estilo']);
+}
+
+// Incluir cabecera
 require_once('cabecera.inc');
 require_once('inicioLog.inc');
 ?>
 
 <main>
     <h2>Configurar apariencia visual</h2>
+
+    <?php if ($mensaje): ?>
+        <p class="mensaje-ok"><?= htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'); ?></p>
+    <?php endif; ?>
+
     <p>Selecciona el estilo visual que prefieres para la web:</p>
 
     <form action="configurar.php" method="post" class="form-estilos">
         <ul class="lista-estilos">
 
-            <?php foreach ($estilos as $valor => $texto): ?>
+            <?php foreach ($estilos as $e): ?>
                 <li>
                     <label>
-                        <input type="radio" name="style" value="<?php echo htmlspecialchars($valor, ENT_QUOTES, 'UTF-8'); ?>"
-                            <?php echo (isset($_SESSION['style']) && $_SESSION['style'] === $valor) ? 'checked' : ''; ?>>
-                        <?php echo htmlspecialchars($texto, ENT_QUOTES, 'UTF-8'); ?>
+                        <input type="radio" name="style"
+                               value="<?= htmlspecialchars($e['IdEstilo'], ENT_QUOTES, 'UTF-8'); ?>"
+                               <?= (isset($_SESSION['style']) && $_SESSION['style'] == $e['IdEstilo']) ? 'checked' : ''; ?>>
+                        <?= htmlspecialchars($e['Nombre'], ENT_QUOTES, 'UTF-8'); ?>
                     </label>
                 </li>
             <?php endforeach; ?>
