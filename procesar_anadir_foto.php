@@ -91,7 +91,46 @@ try {
         exit();
     }
 
-    // Preparar nombre y mover
+    // VALIDACIONES OBLIGATORIAS DE LA PRÁCTICA ------------------------------
+
+    $titulo = isset($_POST['titulo_foto']) ? trim($_POST['titulo_foto']) : '';
+    $alt = isset($_POST['alt']) ? trim($_POST['alt']) : '';
+
+    // Título obligatorio
+    if ($titulo === '') {
+        $_SESSION['flash']['error'] = 'El título de la foto es obligatorio.';
+        header('Location: anyadir_foto.php?id=' . $idAnuncio);
+        exit();
+    }
+
+    // ALT obligatorio
+    if ($alt === '') {
+        $_SESSION['flash']['error'] = 'El texto alternativo es obligatorio.';
+        header('Location: anyadir_foto.php?id=' . $idAnuncio);
+        exit();
+    }
+
+    // ALT mínimo 10 caracteres
+    if (strlen($alt) < 10) {
+        $_SESSION['flash']['error'] = 'El texto alternativo debe tener al menos 10 caracteres.';
+        header('Location: anyadir_foto.php?id=' . $idAnuncio);
+        exit();
+    }
+
+    // ALT no puede empezar por "foto", "imagen", "texto"
+    $altLower = strtolower($alt);
+    $prohibidos = ['foto', 'imagen', 'texto'];
+    foreach ($prohibidos as $p) {
+        if (str_starts_with($altLower, $p)) {
+            $_SESSION['flash']['error'] = 'El texto alternativo no debe empezar por "' . $p . '".';
+            header('Location: anyadir_foto.php?id=' . $idAnuncio);
+            exit();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Preparar nombre y mover archivo
     $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
     $random = bin2hex(random_bytes(6));
     $nombreFoto = time() . '_' . $random . '.' . ($ext ?: 'jpg');
@@ -106,9 +145,7 @@ try {
     }
 
     // Insertar en la tabla Fotos
-    $titulo = isset($_POST['titulo_foto']) ? trim($_POST['titulo_foto']) : null;
-    $alt = isset($_POST['alt']) ? trim($_POST['alt']) : null;
-    $fotoDB = $nombreFoto; // guardamos basename para compatibilidad
+    $fotoDB = $nombreFoto; // basename
 
     $i = $conexion->prepare('INSERT INTO Fotos (Titulo, Foto, Alternativo, Anuncio) VALUES (?, ?, ?, ?)');
     $i->execute([$titulo, $fotoDB, $alt, $idAnuncio]);
@@ -122,5 +159,4 @@ try {
     header('Location: anyadir_foto.php');
     exit();
 }
-
 ?>
