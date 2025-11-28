@@ -1,1 +1,18 @@
-[2025-11-26 20:02:02] Anuncio inválido. POST keys: id_anuncio,alt,titulo_foto
+[2025-11-26 20:02:02] Anuncio inválido. POST keys: id_anuncio,alt,titulo_foto[2025-11-28 14:36:59] DEBUG inicio: array (
+  'REQUEST_URI' => '/phpDAW/procesar_anadir_foto.php',
+  'CONTENT_LENGTH' => '7173',
+  'upload_max_filesize' => '40M',
+  'post_max_size' => '40M',
+  'upload_tmp_dir' => 'C:\\xampp\\tmp',
+  'tmp_dir_writable' => 'yes',
+  'files_keys' => 
+  array (
+    0 => 'foto',
+  ),
+  'post_keys' => 
+  array (
+    0 => 'id_anuncio',
+    1 => 'alt',
+    2 => 'titulo_foto',
+  ),
+)
