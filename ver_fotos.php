@@ -7,10 +7,29 @@ require_once("inicioLog.inc");
 
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
-
 require_once __DIR__ . '/includes/ver_fotos_common.php';
 require_once __DIR__ . '/includes/precio.php';
 
+// Ejecutar el borrado real
+if (isset($_POST['confirmarEliminar']) && $_POST['confirmarEliminar'] == 1) {
+
+    require_once("conexion.php");
+
+    $idFoto = (int)$_POST['idFoto'];
+    $idAnuncio = (int)$_POST['id'];
+
+    $stmt = $mysqli->prepare("DELETE FROM fotos WHERE IdFoto=?");
+    $stmt->bind_param("i", $idFoto);
+    $stmt->execute();
+
+    header("Location: ver_fotos.php?id=$idAnuncio&msg=FotoEliminada");
+    exit();
+}
+
+// ====================== FIN SISTEMA ELIMINAR ======================
+
+
+// Datos del anuncio y fotos
 $anuncio = $vf_anuncio;
 $fotos = $vf_fotos;
 $totalFotos = $vf_total;
@@ -20,7 +39,6 @@ if (!$anuncio) {
     require_once("pie.inc");
     exit();
 }
-
 ?>
 
 <main>
@@ -37,6 +55,12 @@ if (!$anuncio) {
         </div>
     </section>
 
+    <?php if (isset($_GET['msg']) && $_GET['msg'] === "FotoEliminada"): ?>
+        <div style="margin:15px auto;max-width:600px;padding:12px;border-radius:8px;background:#d6f5d6;color:#155724;text-align:center;">
+            Foto eliminada correctamente ✔
+        </div>
+    <?php endif; ?>
+
     <section style="max-width:1100px;margin:1rem auto;padding:0 1rem;">
         <h3>Galería de fotos</h3>
 
@@ -51,6 +75,10 @@ if (!$anuncio) {
                         <img src="<?php echo htmlspecialchars($ruta, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($foto['Alternativo'] ?: $foto['Titulo']); ?>" style="width:100%;height:160px;object-fit:cover;display:block;">
                         <figcaption style="padding:8px;font-size:0.95rem;color:var(--color-texto);">
                             <?php echo htmlspecialchars($foto['Titulo'] ?: 'Foto'); ?>
+                            <br>
+                            <a class="btn-delete btn-small ghost" href="eliminar-foto.php?idFoto=<?php echo (int)$foto['IdFoto']; ?>&idAnuncio=<?php echo (int)$anuncio['IdAnuncio']; ?>">
+                                ELIMINAR
+                            </a>
                         </figcaption>
                     </figure>
                 <?php endforeach; ?>
@@ -58,7 +86,6 @@ if (!$anuncio) {
         <?php endif; ?>
 
         <a href="anuncio.php?id=<?php echo (int)($anuncio['IdAnuncio'] ?? 0); ?>" class="btn">Volver al anuncio</a>
-
     </section>
 
 </main>
