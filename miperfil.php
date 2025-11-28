@@ -223,7 +223,7 @@ if ($usuario && !empty($usuario['FRegistro'])) {
                     <i class="icon-form"></i>
                     Solicitar folleto publicitario impreso
                 </a></li>
-            <li><a href="index.php">
+            <li><a href="dar-baja.php">
                     <i class="icon-baja"></i>
                     Darme de baja
                 </a></li>
