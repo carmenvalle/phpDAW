@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     $title = "PI - PI Pisos & Inmuebles";
     $cssPagina = "registro.css";
     require_once("cabecera.inc");
@@ -47,6 +49,18 @@
 <main>
     <section class="formulario-anadir-foto">
         <h2>Añadir foto a un anuncio</h2>
+
+        <?php
+        if (!empty($_SESSION['flash']['error'])) {
+            echo '<p class="error">' . htmlspecialchars($_SESSION['flash']['error'], ENT_QUOTES, 'UTF-8') . '</p>';
+            unset($_SESSION['flash']['error']);
+        }
+
+        if (!empty($_SESSION['flash']['ok'])) {
+            echo '<p class="ok">' . htmlspecialchars($_SESSION['flash']['ok'], ENT_QUOTES, 'UTF-8') . '</p>';
+            unset($_SESSION['flash']['ok']);
+        }
+        ?>
 
         <?php if ($errorMensaje !== ''): ?>
             <p class="error"><?= htmlspecialchars($errorMensaje, ENT_QUOTES, 'UTF-8') ?></p>
