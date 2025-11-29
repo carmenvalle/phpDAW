@@ -6,21 +6,37 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 require_once __DIR__ . '/includes/conexion.php';
+require_once __DIR__ . '/includes/anuncio_filter.php';
 
-// Recoger datos y saneado básico
-$tipo = trim($_POST['tipo_anuncio'] ?? '');
-$vivienda = trim($_POST['vivienda'] ?? '');
-$titulo = trim($_POST['titulo'] ?? '');
-$ciudad = trim($_POST['ciudad'] ?? '');
-$pais = trim($_POST['pais'] ?? '');
-$precio = isset($_POST['precio']) && $_POST['precio'] !== '' ? floatval($_POST['precio']) : null;
-$fecha_publicacion = null; // no se toma desde el formulario; se usará NOW() en la inserción
-$texto = trim($_POST['descripcion'] ?? '');
-$superficie = isset($_POST['superficie']) && $_POST['superficie'] !== '' ? floatval($_POST['superficie']) : null;
-$habitaciones = isset($_POST['habitaciones']) && $_POST['habitaciones'] !== '' ? intval($_POST['habitaciones']) : null;
-$banos = isset($_POST['banos']) && $_POST['banos'] !== '' ? intval($_POST['banos']) : null;
-$planta = isset($_POST['planta']) && $_POST['planta'] !== '' ? intval($_POST['planta']) : null;
-$anio = isset($_POST['anio']) && $_POST['anio'] !== '' ? intval($_POST['anio']) : null;
+// Indicar que en creación la imagen es obligatoria para la validación
+$_POST['imagenes_required'] = true;
+
+// Usar función centralizada para filtrar y validar
+$filtered = filtrar_anuncio($_POST, $_FILES);
+$values = $filtered['values'];
+$errors = $filtered['errors'];
+
+// Extraer variables desde $values
+$tipo = $values['tipo_anuncio'];
+$vivienda = $values['vivienda'];
+$titulo = $values['titulo'];
+$ciudad = $values['ciudad'];
+$pais = $values['pais'];
+$precio = $values['precio'];
+$texto = $values['descripcion'];
+$superficie = $values['superficie'];
+$habitaciones = $values['habitaciones'];
+$banos = $values['banos'];
+$planta = $values['planta'];
+$anio = $values['anio'];
+
+// Si hay errores, volver al formulario
+if (!empty($errors)) {
+    $_SESSION['flash']['nuevo_anuncio_errors'] = $errors;
+    $_SESSION['flash']['nuevo_anuncio_values'] = $values;
+    header('Location: nuevo_anuncio.php');
+    exit;
+}
 
 // Usuario: preferir sesión
 $usuarioId = $_SESSION['id'] ?? null;
@@ -37,12 +53,34 @@ if (!$usuarioId) {
 
 $errors = [];
 if ($titulo === '') $errors[] = 'titulo';
+if ($texto === '') $errors[] = 'descripcion';
 if (!$usuarioId) $errors[] = 'usuario';
+
+// Validar que se haya subido al menos una imagen válida
+$hasValidImage = false;
+if (!empty($_FILES['imagenes']) && is_array($_FILES['imagenes']['name'])) {
+    $files = $_FILES['imagenes'];
+    for ($i = 0; $i < count($files['name']); $i++) {
+        if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
+        $tmp = $files['tmp_name'][$i];
+        if (!is_uploaded_file($tmp)) continue;
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $tmp);
+        finfo_close($finfo);
+        $allowed = ['image/jpeg'=>'jpg','image/png'=>'png','image/gif'=>'gif','image/webp'=>'webp'];
+        if (!isset($allowed[$mime])) continue;
+        $hasValidImage = true;
+        break;
+    }
+}
+if (!$hasValidImage) {
+    $errors[] = 'imagenes';
+}
 
 if (!empty($errors)) {
     // flash y redirigir
     $_SESSION['flash']['nuevo_anuncio_errors'] = $errors;
-    $_SESSION['flash']['nuevo_anuncio_old'] = $_POST;
+    $_SESSION['flash']['nuevo_anuncio_values'] = $values;
     header('Location: nuevo_anuncio.php');
     exit;
 }
@@ -138,6 +176,13 @@ if ($firstFoto) {
     $u->execute([$firstFoto, $anuncioId]);
 }
 
-// Redirigir al anuncio creado
-header('Location: anuncio.php?id=' . $anuncioId);
-exit;
+// Si no se han subido fotos, invitar al usuario a subir la primera foto
+if ($firstFoto) {
+    header('Location: anuncio.php?id=' . $anuncioId);
+    exit;
+} else {
+    // flash para indicar que ahora puede subir la primera foto
+    $_SESSION['flash']['info'] = 'Anuncio creado. Puedes añadir la primera foto ahora.';
+    header('Location: anyadir_foto.php?id=' . $anuncioId);
+    exit;
+}
