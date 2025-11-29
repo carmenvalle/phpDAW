@@ -151,19 +151,34 @@ main p a:hover {
 /* colocar miniaturas al lado de la foto principal en pantallas anchas */
 @media (min-width: 769px) {
   .fotos {
-    display: grid;
-    grid-template-columns: 1fr 180px;
+    display: flex;
     gap: 1rem;
     align-items: start;
   }
   .fotos .foto-principal {
-    width: 100%;
+    flex: 1 1 auto;
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
     height: auto;
     max-height: 480px;
     object-fit: cover;
     border-radius: 8px;
-    justify-content: center;
   }
+  .fotos .miniaturas {
+    flex: 0 0 180px;
+  }
+}
+
+/* asegurar centrado en pantallas pequeñas y por defecto */
+.fotos {
+  justify-items: center;
+}
+.fotos .foto-principal {
+  display: block;
+  margin: 0.6rem auto;
+  max-width: 100%;
+  height: auto;
 }
 
 /* ==== H1 ESTÉTICO PARA DETALLE DE ANUNCIO ==== */

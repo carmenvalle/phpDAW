@@ -54,22 +54,11 @@ try {
         $fotos = $stmtFotos->fetchAll(PDO::FETCH_COLUMN, 0);
 
         foreach ($fotos as $foto) {
-            // Resolver ruta: intentar varias formas seguras
-            $candidates = [];
-            // Si la columna guarda un path relativo, probar tal cual
-            $candidates[] = __DIR__ . '/' . ltrim($foto, '/\\');
-            // Probar dentro del directorio de imágenes del proyecto
-            $candidates[] = __DIR__ . '/DAW/practica/imagenes/' . ltrim(basename($foto), '/\\');
-            foreach ($candidates as $p) {
-                if (file_exists($p) && is_file($p)) {
-                    @unlink($p);
-                    file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "baja: eliminado fichero $p\n", FILE_APPEND);
-                    break;
-                }
-            }
+            // No eliminamos ficheros físicos en esta práctica; quedan "basura" en el sistema
+            file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "baja: fichero no eliminado (práctica): $foto\n", FILE_APPEND);
         }
 
-        // Borrar filas de Fotos para esos anuncios
+        // Borrar filas de Fotos para esos anuncios (solo BD)
         $stmtDelFotos = $conexion->prepare("DELETE FROM Fotos WHERE Anuncio IN ($in)");
         $stmtDelFotos->execute($anuncios);
     }
@@ -77,6 +66,10 @@ try {
     // Borrar anuncios del usuario
     $stmtDelAn = $conexion->prepare('DELETE FROM Anuncios WHERE Usuario = ?');
     $stmtDelAn->execute([$idUsuario]);
+
+    // Borrar mensajes relacionados (origen o destino)
+    $stmtDelMens = $conexion->prepare('DELETE FROM Mensajes WHERE UsuOrigen = ? OR UsuDestino = ?');
+    $stmtDelMens->execute([$idUsuario, $idUsuario]);
 
     // Borrar usuario
     $stmtDelUser = $conexion->prepare('DELETE FROM Usuarios WHERE IdUsuario = ?');

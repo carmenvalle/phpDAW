@@ -60,6 +60,11 @@ if ($id > 0 && isset($conexion)) {
                                           a.FPrincipal AS fotoPrincipal,
                                           a.Texto AS texto,
                                           a.Precio AS precio,
+                                      a.Superficie AS superficie,
+                                      a.NHabitaciones AS habitaciones,
+                                      a.NBanyos AS banos,
+                                      a.Planta AS planta,
+                                      a.Anyo AS anyo,
                                           a.FRegistro AS fecha,
                                           a.Ciudad AS ciudad,
                                           p.NomPais AS pais,
@@ -68,7 +73,7 @@ if ($id > 0 && isset($conexion)) {
                                           tv.NomTVivienda AS tipoVivienda
                                      FROM Anuncios a
                                      LEFT JOIN Usuarios u ON a.Usuario = u.IdUsuario
-                                     LEFT JOIN Paises p ON a.Pais = p.IdPais
+                                     LEFT JOIN Paises p ON a.Pais = p.IdPaises
                                      LEFT JOIN TiposAnuncios ta ON a.TAnuncio = ta.IdTAnuncio
                                      LEFT JOIN TiposViviendas tv ON a.TVivienda = tv.IdTVivienda
                                      WHERE a.IdAnuncio = ? LIMIT 1");
@@ -139,7 +144,26 @@ if ($id > 0 && $anuncio && isset($anuncio['titulo'])) {
 
 $title = "PI - Pisos & Inmuebles";
 $cssPagina = "anuncio.css";
+// Si no hemos encontrado el anuncio, mostrar mensaje amigable y evitar warnings
+if (!$anuncio) {
+    // mostrar cabecera básica y mensaje
+    require_once("cabecera.inc");
+    require_once("inicioLog.inc");
+    ?>
+    <main>
+        <section class="anuncio-detalle">
+            <h2>Anuncio no encontrado</h2>
+            <p>El anuncio solicitado no existe o ha sido eliminado.</p>
+            <p><a href="index.php">Volver al inicio</a></p>
+        </section>
+    </main>
+    <?php
+    require_once("pie.inc");
+    exit;
+}
+
 require_once("cabecera.inc");
+require_once __DIR__ . '/includes/precio.php';
 require_once("inicioLog.inc");
 ?>
 
@@ -157,12 +181,39 @@ require_once("inicioLog.inc");
             <aside class="detalles">
                 <p><strong>Tipo de anuncio:</strong> <?= htmlspecialchars($anuncio['tipoAnuncio'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p><strong>Tipo de vivienda:</strong> <?= htmlspecialchars($anuncio['tipoVivienda'], ENT_QUOTES, 'UTF-8') ?></p>
-                <p><strong>Precio:</strong> <span class="precio"><?= htmlspecialchars($anuncio['precio'], ENT_QUOTES, 'UTF-8') ?></span></p>
+                <p><strong>Precio:</strong> <span class="precio"><?= formatearPrecio($anuncio['precio'] ?? 0) ?></span></p>
                 <p><strong>Descripción:</strong> <?= nl2br(htmlspecialchars($anuncio['texto'], ENT_QUOTES, 'UTF-8')) ?></p>
-                <p><strong>Fecha de publicación:</strong> <?= htmlspecialchars($anuncio['fecha'], ENT_QUOTES, 'UTF-8') ?></p>
+                <p><strong>Fecha de publicación:</strong> <?php
+                    $fechaRaw = $anuncio['fecha'] ?? '';
+                    $fechaStr = htmlspecialchars($fechaRaw, ENT_QUOTES, 'UTF-8');
+                    $dt = false;
+                    if (!empty($fechaRaw)) {
+                        try {
+                            $dt = new DateTime($fechaRaw);
+                        } catch (Exception $e) {
+                            $dt = false;
+                        }
+                    }
+                    echo $dt ? $dt->format('d/m/Y H:i:s') : $fechaStr;
+                ?></p>
                 <p><strong>Ciudad:</strong> <?= htmlspecialchars($anuncio['ciudad'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p><strong>País:</strong> <?= htmlspecialchars($anuncio['pais'], ENT_QUOTES, 'UTF-8') ?></p>
                 <p><strong>Usuario:</strong> <?= htmlspecialchars($anuncio['usuario'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php if (!empty($anuncio['superficie'])): ?>
+                    <p><strong>Superficie:</strong> <?= htmlspecialchars((string)$anuncio['superficie'], ENT_QUOTES, 'UTF-8') ?> m²</p>
+                <?php endif; ?>
+                <?php if (!empty($anuncio['habitaciones'])): ?>
+                    <p><strong>Habitaciones:</strong> <?= htmlspecialchars((string)$anuncio['habitaciones'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php endif; ?>
+                <?php if (!empty($anuncio['banos'])): ?>
+                    <p><strong>Baños:</strong> <?= htmlspecialchars((string)$anuncio['banos'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php endif; ?>
+                <?php if (!empty($anuncio['planta'])): ?>
+                    <p><strong>Planta:</strong> <?= htmlspecialchars((string)$anuncio['planta'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php endif; ?>
+                <?php if (!empty($anuncio['anyo'])): ?>
+                    <p><strong>Año construcción:</strong> <?= htmlspecialchars((string)$anuncio['anyo'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php endif; ?>
             </aside>
 
             <h3>Características</h3>
@@ -172,6 +223,7 @@ require_once("inicioLog.inc");
                 <?php endforeach; ?>
             </ul>
 
+            <?php if (!empty($anuncio['fotos'])): ?>
             <section>
                 <aside class="miniaturas">
                     <?php foreach ($anuncio['fotos'] as $index => $foto): ?>
@@ -182,6 +234,7 @@ require_once("inicioLog.inc");
                     <?php endforeach; ?>
                 </aside>
             </section>
+            <?php endif; ?>
 
             <aside class="acciones">
                 <?php

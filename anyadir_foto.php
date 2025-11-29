@@ -60,6 +60,11 @@
             echo '<p class="ok">' . htmlspecialchars($_SESSION['flash']['ok'], ENT_QUOTES, 'UTF-8') . '</p>';
             unset($_SESSION['flash']['ok']);
         }
+
+        if (!empty($_SESSION['flash']['info'])) {
+            echo '<p class="info">' . htmlspecialchars($_SESSION['flash']['info'], ENT_QUOTES, 'UTF-8') . '</p>';
+            unset($_SESSION['flash']['info']);
+        }
         ?>
 
         <?php if ($errorMensaje !== ''): ?>
@@ -96,8 +101,13 @@
             </p>
 
             <p>
-                <label for="foto">Foto (archivo):</label>
-                <input type="file" name="foto" id="foto" accept="image/*">
+                <strong>Importante:</strong> Por ahora sube la imagen manualmente a <code>DAW/practica/imagenes/</code>
+                y escribe aquí su nombre exacto (ej. <code>mi_foto.jpg</code>).
+            </p>
+
+            <p>
+                <label for="nombre_foto">Nombre del fichero en servidor:</label>
+                <input type="text" name="nombre_foto" id="nombre_foto" placeholder="mi_foto.jpg" required>
             </p>
 
             <p>

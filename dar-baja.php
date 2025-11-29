@@ -68,6 +68,13 @@ if (file_exists($viewPath)) {
 <main>
     <h2>Confirmar baja de usuario</h2>
 
+    <?php if (isset($_SESSION['flash']) && is_array($_SESSION['flash'])): ?>
+        <?php foreach ($_SESSION['flash'] as $k => $msg): ?>
+            <p class="flash-message flash-<?php echo htmlspecialchars($k); ?>" style="color:darkred; font-weight:600;"><?php echo htmlspecialchars($msg); ?></p>
+        <?php endforeach; ?>
+        <?php unset($_SESSION['flash']); ?>
+    <?php endif; ?>
+
     <p>Esta operación eliminará permanentemente tu cuenta y todos tus datos.</p>
 
     <h3>Tus anuncios:</h3>

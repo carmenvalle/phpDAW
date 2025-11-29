@@ -30,7 +30,7 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
 <main>
     <section>
         <h3>Enviar Mensaje</h3>
-        <form id="formMensaje" action="#" method="get" onsubmit="return false;" aria-disabled="true">
+        <form id="formMensaje" action="mensaje_enviado.php" method="post" novalidate>
             <p>
                 <label for="mensaje"><strong>Mensaje:</strong></label><br>
                 <textarea name="mensaje" id="mensaje" placeholder="Mensaje al anunciante" rows="6" cols="60"></textarea>
@@ -54,7 +54,7 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
             <?php endif; ?>
 
             <p>
-                <button type="button" disabled aria-disabled="true"><strong>ENVÍO DESHABILITADO</strong></button>
+                <button type="submit"><strong>Enviar mensaje</strong></button>
             </p>
         </form>
     </section>
