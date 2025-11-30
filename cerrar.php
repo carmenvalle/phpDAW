@@ -6,9 +6,24 @@ require_once("acceso.inc");
 ?>
 
 <main>
-    <h1>Tu cuenta ha sido eliminada correctamente</h1>
+    <?php
+    if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+    $msg = $_SESSION['flash']['ok'] ?? null;
+    if ($msg) {
+        unset($_SESSION['flash']['ok']);
+    }
+    ?>
+
+    <h1><?= isset($msg) ? htmlspecialchars($msg) : 'Tu cuenta ha sido eliminada correctamente' ?></h1>
 
     <a href="index.php">Volver a la página principal</a>
+    <?php
+    // Finalmente destruir sesión si aún existe
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_unset();
+        session_destroy();
+    }
+    ?>
 </main>
 
 <?php

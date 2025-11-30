@@ -71,7 +71,13 @@ try {
         $u->execute([$nuevo, $idAnuncio]);
     }
 
-    $_SESSION['flash']['ok'] = 'Foto eliminada correctamente.';
+    // Prepare user-friendly message including title if available
+    $tituloFoto = $fotoRow['Titulo'] ?? '';
+    if ($tituloFoto) {
+        $_SESSION['flash']['ok'] = 'Foto "' . htmlspecialchars($tituloFoto) . '" eliminada correctamente.';
+    } else {
+        $_SESSION['flash']['ok'] = 'Foto eliminada correctamente.';
+    }
     header('Location: ver_fotos.php?id=' . $idAnuncio . '&msg=FotoEliminada');
     exit();
 

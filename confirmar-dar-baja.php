@@ -46,12 +46,14 @@ try {
     $stmt->execute([$idUsuario]);
     $anuncios = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    // Para cada anuncio, borrar ficheros asociados
+    // Para cada anuncio, obtener y borrar ficheros asociados (BD)
+    $numFotos = 0;
     if (!empty($anuncios)) {
         $in = implode(',', array_fill(0, count($anuncios), '?'));
         $stmtFotos = $conexion->prepare("SELECT Foto FROM Fotos WHERE Anuncio IN ($in)");
         $stmtFotos->execute($anuncios);
         $fotos = $stmtFotos->fetchAll(PDO::FETCH_COLUMN, 0);
+        $numFotos = is_array($fotos) ? count($fotos) : 0;
 
         foreach ($fotos as $foto) {
             // No eliminamos ficheros físicos en esta práctica; quedan "basura" en el sistema
@@ -66,10 +68,12 @@ try {
     // Borrar anuncios del usuario
     $stmtDelAn = $conexion->prepare('DELETE FROM Anuncios WHERE Usuario = ?');
     $stmtDelAn->execute([$idUsuario]);
+    $numAnuncios = $stmtDelAn->rowCount();
 
     // Borrar mensajes relacionados (origen o destino)
     $stmtDelMens = $conexion->prepare('DELETE FROM Mensajes WHERE UsuOrigen = ? OR UsuDestino = ?');
     $stmtDelMens->execute([$idUsuario, $idUsuario]);
+    $numMensajes = $stmtDelMens->rowCount();
 
     // Borrar usuario
     $stmtDelUser = $conexion->prepare('DELETE FROM Usuarios WHERE IdUsuario = ?');
@@ -77,9 +81,10 @@ try {
 
     $conexion->commit();
 
-    // Destruir sesión y redirigir a página de cierre
-    session_unset();
-    session_destroy();
+    // Preparar resumen para mostrar al usuario
+    $_SESSION['flash']['ok'] = "Cuenta eliminada correctamente. Se han eliminado {$numAnuncios} anuncio(s) y {$numFotos} foto(s). Se han eliminado {$numMensajes} mensaje(s).";
+
+    // Mantener la sesión momentáneamente para mostrar el resumen en cerrar.php
     header('Location: cerrar.php');
     exit;
 

@@ -54,6 +54,11 @@ try {
 
 // Perform update
 try {
+    // Obtener valores actuales para comparar y listar cambios
+    $sel = $conexion->prepare('SELECT TAnuncio, TVivienda, Titulo, Ciudad, Pais, Precio, Texto, Superficie, NHabitaciones, NBanyos, Planta, Anyo FROM Anuncios WHERE IdAnuncio = ? LIMIT 1');
+    $sel->execute([$id]);
+    $old = $sel->fetch(PDO::FETCH_ASSOC) ?: [];
+
     $u = $conexion->prepare('UPDATE Anuncios SET TAnuncio = ?, TVivienda = ?, Titulo = ?, Ciudad = ?, Pais = ?, Precio = ?, Texto = ?, Superficie = ?, NHabitaciones = ?, NBanyos = ?, Planta = ?, Anyo = ? WHERE IdAnuncio = ?');
     $u->execute([
         $valores['tipo_anuncio'],
@@ -71,7 +76,28 @@ try {
         $id
     ]);
 
-    $_SESSION['flash']['success'] = 'Anuncio modificado correctamente.';
+    // Comparar campos y preparar detalle de cambios
+    $changed = [];
+    $mapping = [
+        'TAnuncio' => 'tipo_anuncio', 'TVivienda' => 'vivienda', 'Titulo' => 'titulo', 'Ciudad' => 'ciudad', 'Pais' => 'pais',
+        'Precio' => 'precio', 'Texto' => 'descripcion', 'Superficie' => 'superficie', 'NHabitaciones' => 'habitaciones',
+        'NBanyos' => 'banos', 'Planta' => 'planta', 'Anyo' => 'anio'
+    ];
+    foreach ($mapping as $col => $key) {
+        $oldVal = isset($old[$col]) ? (string)$old[$col] : '';
+        $newVal = isset($valores[$key]) ? (string)$valores[$key] : '';
+        if ($oldVal !== $newVal) {
+            $changed[] = "$col: '" . htmlspecialchars($oldVal) . "' → '" . htmlspecialchars($newVal) . "'";
+        }
+    }
+
+    if (!empty($changed)) {
+        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+        $_SESSION['flash']['ok'] = 'Anuncio modificado correctamente.';
+        $_SESSION['flash']['anuncio_modificado_detalle'] = $changed;
+    } else {
+        $_SESSION['flash']['ok'] = 'No se han realizado cambios.';
+    }
     header('Location: anuncio.php?id=' . $id);
     exit();
 } catch (Exception $e) {

@@ -8,6 +8,16 @@ require_once("inicioLog.inc");
 require_once __DIR__ . '/includes/conexion.php';
 require_once __DIR__ . '/includes/precio.php';
 
+// Recuperar errores y valores enviados desde el procesador (flash)
+$errors = [];
+$old = [];
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (isset($_SESSION['flash']['misdatos_errors'])) {
+	$errors = $_SESSION['flash']['misdatos_errors'];
+	$old = $_SESSION['flash']['misdatos_values'] ?? [];
+	unset($_SESSION['flash']['misdatos_errors'], $_SESSION['flash']['misdatos_values']);
+}
+
 $user = null;
 if (isset($_SESSION['id']) && isset($conexion)) {
 	$stmt = $conexion->prepare('SELECT IdUsuario, NomUsuario, Email, Sexo, FNacimiento, Ciudad, Pais, Foto FROM Usuarios WHERE IdUsuario = ?');
@@ -29,69 +39,91 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 	<section>
 		<h2>Modificar mis datos</h2>
 		<?php if (!$user): ?>
-			<p>No se han podido cargar tus datos. Asegúrate de estar identificado.</p>
-		<?php else: ?>
-			<form action="#" method="get" enctype="multipart/form-data" onsubmit="return false;" aria-disabled="true">
-				<p>
-					<label>Nombre de usuario: </label>
-					<input type="text" name="usuario" value="<?= htmlspecialchars($user['NomUsuario']) ?>" readonly>
-				</p>
-				<p>
-					<label>Email:</label>
-					<input type="email" name="email" value="<?= htmlspecialchars($user['Email']) ?>">
-				</p>
-				<p>
-					<label>Sexo:</label>
-					<select name="sexo">
-						<option value="">--</option>
-							<option value="H" <?= (isset($user['SexoChar']) && $user['SexoChar'] === 'H') ? 'selected' : '' ?>>Hombre</option>
-							<option value="M" <?= (isset($user['SexoChar']) && $user['SexoChar'] === 'M') ? 'selected' : '' ?>>Mujer</option>
-							<option value="O" <?= (isset($user['SexoChar']) && $user['SexoChar'] === 'O') ? 'selected' : '' ?>>Otro</option>
-					</select>
-				</p>
-				<p>
-					<label>Fecha nacimiento:</label>
-					<input type="date" name="nacimiento" value="<?= htmlspecialchars($user['FNacimiento']) ?>">
-				</p>
-				<p>
-					<label>Ciudad:</label>
-					<input type="text" name="ciudad" value="<?= htmlspecialchars($user['Ciudad']) ?>">
-				</p>
-				<p>
-					<label>País:</label>
-					<select name="pais">
-						<option value="">--</option>
-						<?php
-						try {
-							// IdPaises en la BD; usamos alias IdPais para mantener la plantilla
-							$rs = $conexion->query('SELECT IdPaises AS IdPais, NomPais FROM Paises ORDER BY NomPais');
-							$ps = $rs->fetchAll(PDO::FETCH_ASSOC);
-						} catch (Exception $e) {
-							$ps = [];
-						}
-						foreach ($ps as $p) {
-							$sel = ($p['IdPais'] == $user['Pais']) ? 'selected' : '';
-							echo "<option value='{$p['IdPais']}' $sel>" . htmlspecialchars($p['NomPais']) . "</option>";
-						}
-						?>
-					</select>
-				</p>
-				<p>
-					<label>Foto actual:</label>
-					<?php if ($user['Foto']): ?>
-						<?php $avatar = resolve_image_url($user['Foto']); ?>
-						<br><img src="<?= htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8') ?>" alt="Foto" width="120">
-					<?php else: ?>No hay foto<?php endif; ?>
-				</p>
-				<p>
-					<label>Subir nueva foto:</label>
-					<input type="file" name="foto" accept="image/*">
-				</p>
-				<p>
-					<button type="button" disabled aria-disabled="true">GUARDAR (DESHABILITADO)</button>
-				</p>
-			</form>
-		<?php endif; ?>
+				<p>No se han podido cargar tus datos. Asegúrate de estar identificado.</p>
+			<?php else: ?>
+				<form action="procesar_modificar_datos.php" method="post" enctype="multipart/form-data">
+					<p>
+						<label>Nombre de usuario: </label>
+						<input type="text" name="usuario" value="<?= htmlspecialchars($old['usuario'] ?? $user['NomUsuario']) ?>">
+						<label>Email:</label>
+						<input type="email" name="email" value="<?= htmlspecialchars($old['email'] ?? $user['Email']) ?>">
+					</p>
+					<p>
+						<label>Sexo:</label>
+						<?php $sexoSel = $old['sexo'] ?? ($user['SexoChar'] ?? ''); ?>
+						<select name="sexo">
+							<option value="">--</option>
+							<option value="H" <?= ($sexoSel === 'H') ? 'selected' : '' ?>>Hombre</option>
+							<option value="M" <?= ($sexoSel === 'M') ? 'selected' : '' ?>>Mujer</option>
+							<option value="O" <?= ($sexoSel === 'O') ? 'selected' : '' ?>>Otro</option>
+						</select>
+					</p>
+					<p>
+						<label>Fecha nacimiento:</label>
+						<input type="date" name="nacimiento" value="<?= htmlspecialchars($old['nacimiento'] ?? $user['FNacimiento']) ?>">
+					</p>
+					<p>
+						<label>Ciudad:</label>
+						<input type="text" name="ciudad" value="<?= htmlspecialchars($old['ciudad'] ?? $user['Ciudad']) ?>">
+					</p>
+					<p>
+						<label>País:</label>
+						<select name="pais">
+							<option value="">--</option>
+							<?php
+							try {
+								$rs = $conexion->query('SELECT IdPaises AS IdPais, NomPais FROM Paises ORDER BY NomPais');
+								$ps = $rs->fetchAll(PDO::FETCH_ASSOC);
+							} catch (Exception $e) {
+								$ps = [];
+							}
+							foreach ($ps as $p) {
+								$sel = (($old['pais'] ?? $user['Pais']) == $p['IdPais']) ? 'selected' : '';
+								echo "<option value='{$p['IdPais']}' $sel>" . htmlspecialchars($p['NomPais']) . "</option>";
+							}
+							?>
+						</select>
+					</p>
+					<p>
+						<label>Foto actual:</label>
+						<?php if ($user['Foto']): ?>
+							<?php $avatar = resolve_image_url($user['Foto']); ?>
+							<br><img src="<?= htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8') ?>" alt="Foto" width="120">
+						<?php else: ?>No hay foto<?php endif; ?>
+					</p>
+					<p>
+						<label>Subir nueva foto:</label>
+						<input type="file" name="foto" accept="image/*">
+					</p>
+
+					<hr>
+					<p>Para confirmar los cambios introduce tu <strong>contraseña actual</strong>:</p>
+					<p>
+						<label>Contraseña actual:</label>
+						<input type="password" name="current_password" required>
+					</p>
+					<?php if (in_array('current_password_required', $errors)): ?>
+						<span class="error-campo">Debes introducir tu contraseña actual.</span>
+					<?php endif; ?>
+					<?php if (in_array('current_password_invalid', $errors)): ?>
+						<span class="error-campo">La contraseña actual es incorrecta.</span>
+					<?php endif; ?>
+
+					<h4>Cambiar contraseña (opcional)</h4>
+					<p>
+						<label>Nueva contraseña:</label>
+						<input type="password" name="new_password">
+					</p>
+					<p>
+						<label>Repetir nueva contraseña:</label>
+						<input type="password" name="repeat_new_password">
+					</p>
+
+					<p>
+						<button type="submit">GUARDAR</button>
+					</p>
+				</form>
+			<?php endif; ?>
 	</section>
 </main>
 

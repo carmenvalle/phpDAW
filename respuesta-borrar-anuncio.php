@@ -59,7 +59,10 @@ try {
 
     $conexion->commit();
 
-    $_SESSION['flash']['ok'] = 'Anuncio eliminado correctamente.';
+    $numFotos = is_array($fotos) ? count($fotos) : 0;
+    // contar mensajes eliminados (ya ejecutado) -- podemos intentar estimarlo por rowCount() if supported
+    // Para simplicidad, no consultamos nuevamente; informamos de fotos y anuncio
+    $_SESSION['flash']['ok'] = "Anuncio eliminado correctamente. Se han eliminado {$numFotos} foto(s).";
     header('Location: mis_anuncios.php');
     exit();
 
