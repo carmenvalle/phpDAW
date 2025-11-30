@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 
 // --- Control de acceso: solo usuarios logueados o recordados ---
 session_start();
@@ -154,7 +155,7 @@ if (!$anuncio) {
         <section class="anuncio-detalle">
             <h2>Anuncio no encontrado</h2>
             <p>El anuncio solicitado no existe o ha sido eliminado.</p>
-            <p><a href="index.php">Volver al inicio</a></p>
+            <p><a href="/phpDAW/">Volver al inicio</a></p>
         </section>
     </main>
     <?php
@@ -246,11 +247,11 @@ if ($flash_detalle) unset($_SESSION['flash']['anuncio_modificado_detalle']);
             <?php if (!empty($anuncio['fotos'])): ?>
             <section>
                 <aside class="miniaturas">
-                    <?php foreach ($anuncio['fotos'] as $index => $foto): ?>
-                        <a href="ver_foto.php?id=<?= $id ?>&foto=<?= urlencode($foto) ?>">
-                            <img src="DAW/practica/imagenes/<?= htmlspecialchars($foto) ?>"
+                        <?php foreach ($anuncio['fotos'] as $index => $foto): ?>
+                            <a href="/phpDAW/ver_foto?id=<?= $id ?>&foto=<?= urlencode($foto) ?>">
+                                <img src="<?= htmlspecialchars(resolve_image_url($foto), ENT_QUOTES, 'UTF-8') ?>"
                                 alt="Miniatura <?= $index+1 ?> del anuncio" class="miniatura" width="150" height="150">
-                        </a>
+                            </a>
                     <?php endforeach; ?>
                 </aside>
             </section>
@@ -261,14 +262,14 @@ if ($flash_detalle) unset($_SESSION['flash']['anuncio_modificado_detalle']);
                 // Mostrar 'Añadir foto' solo si el usuario autenticado es el propietario del anuncio
                 $usuarioLog = $_SESSION['usuario'] ?? null;
                 $propietario = $anuncio['usuario'] ?? null;
-                if ($usuarioLog && $propietario && $usuarioLog === $propietario): ?>
-                    <a href="anyadir_foto.php?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
-                    <a href="ver_fotos.php?id=<?= $id ?>" class="btn btn-outline">Ver fotos</a>
-                    <a href="mis_anuncios.php" class="btn">Volver a mis anuncios</a>
+                    if ($usuarioLog && $propietario && $usuarioLog === $propietario): ?>
+                    <a href="/phpDAW/anyadir_foto?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
+                    <a href="/phpDAW/ver_fotos?id=<?= $id ?>" class="btn btn-outline">Ver fotos</a>
+                    <a href="/phpDAW/mis-anuncios" class="btn">Volver a mis anuncios</a>
                 <?php else: ?>
-                    <a href="mensaje.php?anuncio=<?= $id ?>" class="btn">Enviar mensaje al anunciante</a>
-                    <a href="ver_fotos.php?id=<?= $id ?>" class="btn btn-outline">Ver fotos</a>
-                    <a href="index.php" class="btn">Volver al inicio</a>
+                    <a href="/phpDAW/mensaje?anuncio=<?= $id ?>" class="btn">Enviar mensaje al anunciante</a>
+                    <a href="/phpDAW/ver_fotos?id=<?= $id ?>" class="btn btn-outline">Ver fotos</a>
+                    <a href="/phpDAW/" class="btn">Volver al inicio</a>
                 <?php endif; ?>
             </aside>
         </section>

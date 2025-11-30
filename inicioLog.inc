@@ -6,26 +6,26 @@
 
 <nav>
     <ul class="menu">
-        <li><a href="index_logueado.php">
+        <li><a href="index_logueado">
                 <i class="icon-home"></i>
                 <strong>INICIO</strong>
             </a></li>
-        <li><a href="logout.php">
+        <li><a href="logout">
                 <i class="icon-baja"></i>
                 <strong>CERRAR SESIÓN</strong></a></li>
-        <li><a href="busqueda.php">
+        <li><a href="busqueda">
                 <i class="icon-search"></i>
                 <strong>BÚSQUEDA</strong>
             </a></li>
-        <li><a href="configurar.php">
+        <li><a href="configurar">
                 <i class="icon-cog"></i>
                 <strong>CONFIGURAR</strong>
             </a></li>
         <li class="perfil">
-            <a href="miperfil.php">
+            <a href="miperfil">
                 <?php
                 require_once __DIR__ . '/includes/precio.php';
-                $avatar = 'DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
+                $avatar = '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
                 if (isset($_SESSION['foto']) && $_SESSION['foto'] !== '') {
                     $avatar = resolve_image_url($_SESSION['foto']);
                 }

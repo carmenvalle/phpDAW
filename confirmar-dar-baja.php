@@ -85,7 +85,7 @@ try {
     $_SESSION['flash']['ok'] = "Cuenta eliminada correctamente. Se han eliminado {$numAnuncios} anuncio(s) y {$numFotos} foto(s). Se han eliminado {$numMensajes} mensaje(s).";
 
     // Mantener la sesión momentáneamente para mostrar el resumen en cerrar.php
-    header('Location: cerrar.php');
+    header('Location: /phpDAW/cerrar');
     exit;
 
 } catch (Exception $e) {

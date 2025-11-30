@@ -9,12 +9,12 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="DAW/practica/fontello/css/fontello.css">
-  <link rel="stylesheet" href="DAW/practica/css/general.css" media="screen">
+  <link rel="stylesheet" href="/phpDAW/DAW/practica/fontello/css/fontello.css">
+  <link rel="stylesheet" href="/phpDAW/DAW/practica/css/general.css" media="screen">
   <?php
   // CSS específico de cada página
   if (isset($cssPagina) && $cssPagina != '') {
-      echo '<link rel="stylesheet" href="DAW/practica/css/' . $cssPagina . '" media="screen">';
+      echo '<link rel="stylesheet" href="/phpDAW/DAW/practica/css/' . $cssPagina . '" media="screen">';
   }
   ?>
   <?php
@@ -97,7 +97,7 @@
   if ($selected_key && $selected_key !== 'default') {
     $cssfile = $theme_map[$selected_key];
     if ($cssfile) {
-      echo '<link rel="stylesheet" href="DAW/practica/css/' . htmlspecialchars($cssfile, ENT_QUOTES, 'UTF-8') . '" media="screen">';
+      echo '<link rel="stylesheet" href="/phpDAW/DAW/practica/css/' . htmlspecialchars($cssfile, ENT_QUOTES, 'UTF-8') . '" media="screen">';
     }
   }
 
@@ -108,23 +108,49 @@
   // Evitar duplicar si el estilo seleccionado ya incluye la funcionalidad
   if ($use_dark) {
     if ($selected_key !== 'modo_oscuro') {
-      echo '<link rel="stylesheet" href="DAW/practica/css/modo_oscuro.css" media="screen">';
+      echo '<link rel="stylesheet" href="/phpDAW/DAW/practica/css/modo_oscuro.css" media="screen">';
     }
   }
   if ($use_accplus) {
     if ($selected_key !== 'contraste_letra') {
-      echo '<link rel="stylesheet" href="DAW/practica/css/alto-contraste-accesibilidad.css" media="screen">';
+      echo '<link rel="stylesheet" href="/phpDAW/DAW/practica/css/alto-contraste-accesibilidad.css" media="screen">';
     }
   }
   ?>
-  <link rel="stylesheet" type="text/css" href="DAW/practica/css/print-index.css" media="print">
+  <link rel="stylesheet" type="text/css" href="/phpDAW/DAW/practica/css/print-index.css" media="print">
 
-  <link rel="alternate stylesheet" href="DAW/practica/css/modo_oscuro.css" title="Modo oscuro">
-  <link rel="alternate stylesheet" href="DAW/practica/css/alto-contraste.css" title="Alto contraste" media="screen">
-  <link rel="alternate stylesheet" href="DAW/practica/css/accesibilidad.css" title="Letra grande" media="screen">
-  <link rel="alternate stylesheet" href="DAW/practica/css/alto-contraste-accesibilidad.css" title="Alto contraste y accesibilidad" media="screen">
+  <link rel="alternate stylesheet" href="/phpDAW/DAW/practica/css/modo_oscuro.css" title="Modo oscuro">
+  <link rel="alternate stylesheet" href="/phpDAW/DAW/practica/css/alto-contraste.css" title="Alto contraste" media="screen">
+  <link rel="alternate stylesheet" href="/phpDAW/DAW/practica/css/accesibilidad.css" title="Letra grande" media="screen">
+  <link rel="alternate stylesheet" href="/phpDAW/DAW/practica/css/alto-contraste-accesibilidad.css" title="Alto contraste y accesibilidad" media="screen">
 
   <title><?php echo $title; ?></title>
 </head>
 
 <body>
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+// Global flash messages (ok / error / details)
+if (!empty($_SESSION['flash']) && is_array($_SESSION['flash'])) {
+  $ok = $_SESSION['flash']['ok'] ?? null;
+  $err = $_SESSION['flash']['error'] ?? null;
+  $detail = $_SESSION['flash']['anuncio_modificado_detalle'] ?? null;
+  if ($ok) {
+    echo '<div class="flash flash-ok" style="max-width:1100px;margin:12px auto;padding:10px;border-radius:6px;background:#d6f5d6;color:#155724;text-align:center;">' . htmlspecialchars($ok, ENT_QUOTES, 'UTF-8') . '</div>';
+    unset($_SESSION['flash']['ok']);
+  }
+  if ($err) {
+    echo '<div class="flash flash-error" style="max-width:1100px;margin:12px auto;padding:10px;border-radius:6px;background:#fdecea;color:#7a1f1f;text-align:center;">' . htmlspecialchars($err, ENT_QUOTES, 'UTF-8') . '</div>';
+    unset($_SESSION['flash']['error']);
+  }
+  if (!empty($detail) && is_array($detail)) {
+    echo '<div class="flash flash-detail" style="max-width:1100px;margin:12px auto;padding:10px;border-radius:6px;background:#eef7ff;color:#0b3d91;">';
+    echo '<strong>Detalle de cambios:</strong><ul style="margin:8px 0 0;">';
+    foreach ($detail as $d) {
+      echo '<li>' . htmlspecialchars($d, ENT_QUOTES, 'UTF-8') . '</li>';
+    }
+    echo '</ul></div>';
+    unset($_SESSION['flash']['anuncio_modificado_detalle']);
+  }
+}
+?>

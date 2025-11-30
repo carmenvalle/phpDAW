@@ -1,9 +1,137 @@
 <?php
+// Front controller flag
+define('APP_INIT', true);
+
+// --- Simple router for clean URLs -------------------------------------------------------------
+// Determine the request path and dispatch to existing scripts when appropriate.
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$scriptName = dirname($_SERVER['SCRIPT_NAME']);
+$path = parse_url($requestUri, PHP_URL_PATH);
+// Remove script directory prefix if present
+if ($scriptName && $scriptName !== '/') {
+  $path = preg_replace('#^' . preg_quote($scriptName, '#') . '#', '', $path);
+}
+$path = '/' . trim($path, '/');
+$segments = array_values(array_filter(explode('/', $path)));
+
+// Helper to include a target script safely
+function include_target($file) {
+  $target = __DIR__ . '/' . ltrim($file, '/');
+  if (file_exists($target)) {
+    // Preserve original globals and include
+    include $target;
+    exit;
+  }
+  return false;
+}
+
+// Dispatch rules (minimal, non-destructive)
+if (!empty($segments)) {
+  // /anuncio/{id} and subroutes
+  if ($segments[0] === 'anuncio' && isset($segments[1])) {
+    // If second segment is not a digit, handle common misroutes (e.g. /anuncio/miperfil)
+    if (!ctype_digit($segments[1])) {
+      // If user accidentally navigated to /anuncio/miperfil, redirect to the profile page
+      if ($segments[1] === 'miperfil') {
+        header('Location: /phpDAW/miperfil');
+        exit();
+      }
+      // Unknown non-numeric second segment: redirect to homepage to avoid unexpected behavior
+      header('Location: /phpDAW/');
+      exit();
+    }
+
+    // Now segments[1] is numeric
+    if (ctype_digit($segments[1])) {
+      $id = (int)$segments[1];
+      // If there's a third segment, handle known subroutes first
+      if (isset($segments[2])) {
+        // /anuncio/{id}/modificar
+        if ($segments[2] === 'modificar') {
+          $controllerFile = __DIR__ . '/app/Controllers/AnuncioController.php';
+          if (file_exists($controllerFile)) {
+            require_once $controllerFile;
+            $c = new \App\Controllers\AnuncioController();
+            $c->edit($id);
+          }
+          $_GET['id'] = $segments[1];
+          include_target('modificar_anuncio.php');
+        }
+        // Unknown extra segment: redirect to canonical announcement URL
+        header('Location: /phpDAW/anuncio/' . $id);
+        exit();
+      }
+
+      // No extra segment: show anuncio
+      $controllerFile = __DIR__ . '/app/Controllers/AnuncioController.php';
+      if (file_exists($controllerFile)) {
+        require_once $controllerFile;
+        $c = new \App\Controllers\AnuncioController();
+        $c->show($id);
+      }
+      $_GET['id'] = $segments[1];
+      include_target('anuncio.php');
+    }
+  }
+  // /mis-anuncios
+  if ($segments[0] === 'mis-anuncios') include_target('mis_anuncios.php');
+  // /nuevo-anuncio
+  if ($segments[0] === 'nuevo-anuncio') include_target('nuevo_anuncio.php');
+  // /folleto
+  if ($segments[0] === 'folleto') include_target('folleto.php');
+  // /registro
+  if ($segments[0] === 'registro') include_target('registro.php');
+  // /mensaje
+  if ($segments[0] === 'mensaje') include_target('mensaje.php');
+
+  // /index_logueado (zona privada - enrutado al front controller)
+  if ($segments[0] === 'index_logueado') include_target('index_logueado.php');
+  // /control_acceso (login POST handler)
+  if ($segments[0] === 'control_acceso') include_target('control_acceso.php');
+  // /resultados (search results)
+  if ($segments[0] === 'resultados' || $segments[0] === 'resultados.php') include_target('resultados.php');
+  // /ver_fotos and /ver_foto
+  if ($segments[0] === 'ver_fotos' || $segments[0] === 'ver_fotos.php') include_target('ver_fotos.php');
+  if ($segments[0] === 'ver_foto' || $segments[0] === 'ver_foto.php') include_target('ver_foto.php');
+  // /ver_fotos_priv
+  if ($segments[0] === 'ver_fotos_priv' || $segments[0] === 'ver_fotos_priv.php') include_target('ver_fotos_priv.php');
+  // /anyadir_foto and its processor
+  if ($segments[0] === 'anyadir_foto' || $segments[0] === 'anyadir_foto.php') include_target('anyadir_foto.php');
+  if ($segments[0] === 'procesar_anadir_foto' || $segments[0] === 'procesar_anadir_foto.php') include_target('procesar_anadir_foto.php');
+  // /editar_foto and its processor
+  if ($segments[0] === 'editar_foto' || $segments[0] === 'editar_foto.php') include_target('editar_foto.php');
+  if ($segments[0] === 'procesar_editar_foto' || $segments[0] === 'procesar_editar_foto.php') include_target('procesar_editar_foto.php');
+  // /mis_anuncios and /mis-anuncios
+  if ($segments[0] === 'mis_anuncios' || $segments[0] === 'mis_anuncios.php' || $segments[0] === 'mis-anuncios') include_target('mis_anuncios.php');
+  // /miperfil
+  if ($segments[0] === 'miperfil' || $segments[0] === 'miperfil.php') include_target('miperfil.php');
+
+  // Fallback: if the path maps to an existing file name, include it
+  $maybeFile = ltrim($path, '/');
+  // Avoid including the front controller itself (prevents self-include / redeclare errors)
+  if ($maybeFile !== '' && $maybeFile !== basename(__FILE__)) {
+    // Prefer exact match, otherwise try with .php extension so requests like '/miperfil' include 'miperfil.php'
+    $direct = __DIR__ . '/' . $maybeFile;
+    $withPhp = __DIR__ . '/' . $maybeFile . '.php';
+    if (file_exists($direct)) {
+      include_target($maybeFile);
+    } elseif (file_exists($withPhp)) {
+      include_target($maybeFile . '.php');
+    }
+  }
+  // Otherwise continue to render the homepage as before
+}
+//-----------------------------------------------------------------------------------------------
+
 // Detectar si el navegador ya tiene una cookie de sesión activa (PHPSESSID)
 $hadSessionCookie = isset($_COOKIE[session_name()]);
 
-// Iniciar sesión
-session_start();
+// Iniciar sesión solo cuando sea necesario: evitamos crear sesiones vacías para visitantes
+$startSession = false;
+$startSession = $hadSessionCookie || isset($_COOKIE['usuario']);
+if ($startSession) {
+  session_start();
+}
 require_once __DIR__ . '/includes/precio.php';
 
 // Restaurar usuario desde cookie si no había sesión previa (nuevo navegador) y existe cookie 'usuario'
@@ -127,7 +255,7 @@ require_once __DIR__ . '/includes/conexion.php';
       } else {
           foreach ($ultimos as $a) {
             // Comprobar que la imagen existe; si no, usar imagen por defecto
-            $img = 'DAW/practica/imagenes/anuncio2.jpg';
+            $img = '/phpDAW/DAW/practica/imagenes/anuncio2.jpg';
             if (!empty($a['FPrincipal'])) {
               $img = resolve_image_url($a['FPrincipal']);
             }
@@ -135,7 +263,7 @@ require_once __DIR__ . '/includes/conexion.php';
               $ciudad = htmlspecialchars($a['Ciudad'] ?: '—');
               $pais = htmlspecialchars($a['NomPais'] ?: '—');
               $precio = $a['Precio'] !== null ? number_format((float)$a['Precio'], 2, ',', '.') . ' €' : '—';
-              echo "<li><article><a href=\"anuncio.php?id={$a['IdAnuncio']}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"150\"><h3>{$titulo}</h3></a><p>Fecha: {$a['FRegistro']} | Ciudad: {$ciudad} <br>País: {$pais} | Precio: {$precio}</p></article></li>";
+              echo "<li><article><a href=\"anuncio/{$a['IdAnuncio']}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"150\"><h3>{$titulo}</h3></a><p>Fecha: {$a['FRegistro']} | Ciudad: {$ciudad} <br>País: {$pais} | Precio: {$precio}</p></article></li>";
           }
       }
       ?>

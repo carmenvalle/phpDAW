@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 session_start();
 require_once __DIR__ . '/includes/conexion.php';
 require_once __DIR__ . '/includes/precio.php';
@@ -62,11 +63,11 @@ require_once 'inicioLog.inc';
 
         <p style="color:#a00;">Esta operación eliminará el anuncio y todos los datos asociados (fotos, mensajes relacionados). No se puede deshacer.</p>
 
-        <form method="post" action="respuesta-borrar-anuncio.php">
+        <form method="post" action="respuesta-borrar-anuncio">
             <input type="hidden" name="idAnuncio" value="<?php echo $id; ?>">
             <p>
                 <button type="submit" style="background:#c00;color:#fff;padding:10px 18px;border:none;border-radius:6px;cursor:pointer;">Eliminar anuncio</button>
-                <a href="mis_anuncios.php" style="margin-left:12px;text-decoration:none;color:#333;">Cancelar</a>
+                <a href="mis_anuncios" style="margin-left:12px;text-decoration:none;color:#333;">Cancelar</a>
             </p>
         </form>
     </div>

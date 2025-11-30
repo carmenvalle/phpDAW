@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "Mis Anuncios - PI Pisos & Inmuebles";
 $cssPagina = "resultados.css";
 require_once("cabecera.inc");
@@ -29,7 +30,7 @@ if ($userId && isset($conexion)) {
             <?php foreach ($anuncios as $a): ?>
                 <article>
                     <h2><?= htmlspecialchars($a['Titulo'] ?: 'Sin título') ?></h2>
-                    <a href="anuncio.php?id=<?= $a['IdAnuncio'] ?>">
+                    <a href="anuncio/<?= $a['IdAnuncio'] ?>">
                         <?php $imgPath = resolve_image_url($a['FPrincipal'] ?? ''); ?>
                         <img src="<?= $imgPath ?>" alt="Foto" width="200" height="200">
                     </a>
@@ -46,7 +47,7 @@ if ($userId && isset($conexion)) {
                             echo '—';
                         }
                     ?></span></p>
-                    <p><a href="modificar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Editar</a> | <a href="borrar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Borrar</a></p>
+                    <p><a href="anuncio/<?= $a['IdAnuncio'] ?>/modificar">Editar</a> | <a href="borrar_anuncio.php?id=<?= $a['IdAnuncio'] ?>">Borrar</a></p>
                 </article>
             <?php endforeach; ?>
         </div>
@@ -55,7 +56,7 @@ if ($userId && isset($conexion)) {
   </section>
 
 
-  <a href="anyadir_foto.php" class="btn">
+    <a href="anyadir_foto" class="btn">
       <i class="icon-foto"></i>
       <strong>AÑADIR FOTO</strong>
   </a>

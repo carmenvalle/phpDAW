@@ -48,7 +48,7 @@
 
               // Determinar enlace: si id válido usar anuncio.php?id=, si no usar link si existe
               if ($id_int > 0) {
-                $href = 'anuncio.php?id=' . $id_int;
+                $href = 'anuncio/' . $id_int;
               } elseif (isset($a['link'])) {
                 $href = htmlspecialchars($a['link'], ENT_QUOTES, 'UTF-8');
               } else {

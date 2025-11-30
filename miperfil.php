@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "PI - PI Pisos & Inmuebles";
 $cssPagina = "miperfil.css";
 require_once("cabecera.inc");
@@ -143,7 +144,7 @@ if ($usuario && !empty($usuario['FRegistro'])) {
     <?php if ($usuario): ?>
     <section class="profile-box">
         <div class="profile-left">
-            <?php $foto = (function_exists('resolve_image_url') ? resolve_image_url($usuario['Foto'] ?? '') : ($usuario['Foto'] ?? '')) ?: 'DAW/practica/imagenes/default-user.png'; ?>
+            <?php $foto = (function_exists('resolve_image_url') ? resolve_image_url($usuario['Foto'] ?? '') : ($usuario['Foto'] ?? '')) ?: '/phpDAW/DAW/practica/imagenes/default-user.png'; ?>
             <img src="<?php echo htmlspecialchars($foto, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de <?php echo htmlspecialchars($usuario['NomUsuario']); ?>" class="perfil-foto">
         </div>
         <div class="profile-right">
@@ -166,15 +167,17 @@ if ($usuario && !empty($usuario['FRegistro'])) {
             <ul class="lista-anuncios">
                 <?php foreach ($anuncios as $an): ?>
                     <?php
-                        $idA = (int)$an['IdAnuncio'];
-                        $titulo = htmlspecialchars($an['Titulo'] ?? '(sin título)');
+                    if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
+                        // Identificadores y títulos del anuncio (evita variables indefinidas)
+                        $idA = isset($an['IdAnuncio']) ? (int)$an['IdAnuncio'] : 0;
+                        $titulo = htmlspecialchars($an['Titulo'] ?? 'Sin título', ENT_QUOTES, 'UTF-8');
                         $ciudad = htmlspecialchars($an['Ciudad'] ?? '');
                         $precio = isset($an['Precio']) ? number_format((float)$an['Precio'], 2, ',', '.') . ' €' : '—';
-                        $fotoA = (function_exists('resolve_image_url') ? resolve_image_url($an['FPrincipal'] ?? '') : ($an['FPrincipal'] ?? '')) ?: 'DAW/practica/imagenes/default-list.png';
+                        $fotoA = (function_exists('resolve_image_url') ? resolve_image_url($an['FPrincipal'] ?? '') : ($an['FPrincipal'] ?? '')) ?: '/phpDAW/DAW/practica/imagenes/default-list.png';
                     ?>
                     <li>
                         <div class="anuncio-card">
-                            <a class="anuncio-media" href="anuncio.php?id=<?php echo $idA; ?>">
+                            <a class="anuncio-media" href="anuncio/<?php echo $idA; ?>">
                                 <img src="<?php echo htmlspecialchars($fotoA, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo $titulo; ?>">
                             </a>
                             <div class="anuncio-body">
@@ -185,7 +188,7 @@ if ($usuario && !empty($usuario['FRegistro'])) {
                                     <span class="anuncio-price"><?php echo $precio; ?></span>
                                 </p>
                                 <div class="anuncio-actions" style="margin-top:8px;display:flex;gap:8px;align-items:center;">
-                                    <a class="btn btn-outline" href="ver_fotos.php?id=<?php echo $idA; ?>">Ver fotos</a>
+                                    <a class="btn btn-outline" href="/phpDAW/ver_fotos?id=<?php echo $idA; ?>">Ver fotos</a>
                                 </div>
                             </div>
                         </div>
@@ -203,27 +206,27 @@ if ($usuario && !empty($usuario['FRegistro'])) {
     <section>
         <h2>OPCIONES DE USUARIO</h2>
         <ul>
-            <li><a href="modificar_datos.php">
+            <li><a href="modificar_datos">
                     <i class="icon-edit"></i>
                     Editar mis datos
                 </a></li>
-            <li><a href="mis_anuncios.php">
+            <li><a href="/phpDAW/mis-anuncios">
                     <i class="icon-anuncio"></i>
                     Mis anuncios
                 </a></li>
-            <li><a href="nuevo_anuncio.php">
+            <li><a href="nuevo_anuncio">
                     <i class="icon-crear-anuncio"></i>
                     Crear anuncio nuevo
                 </a></li>
-            <li><a href="mis_mensajes.php">
+            <li><a href="mis_mensajes">
                     <i class="icon-mensaje"></i>
                     Mis mensajes
                 </a></li>
-            <li><a href="folleto.php">
+            <li><a href="folleto">
                     <i class="icon-form"></i>
                     Solicitar folleto publicitario impreso
                 </a></li>
-            <li><a href="dar-baja.php">
+            <li><a href="dar-baja">
                     <i class="icon-baja"></i>
                     Darme de baja
                 </a></li>

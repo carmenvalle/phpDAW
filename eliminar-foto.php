@@ -16,7 +16,7 @@ require_once("inicioLog.inc");
         <h2 style="margin-top:0;">Eliminar foto</h2>
         <p>¿Seguro que deseas eliminar esta foto? Esta acción no se puede deshacer.</p>
 
-        <form method="post" action="respuesta-eliminar-foto.php">
+        <form method="post" action="/phpDAW/respuesta-eliminar-foto">
             <input type="hidden" name="idFoto" value="<?php echo $idFoto; ?>">
             <input type="hidden" name="idAnuncio" value="<?php echo $idAnuncio; ?>">
 
@@ -24,7 +24,7 @@ require_once("inicioLog.inc");
                 Eliminar
             </button>
 
-            <a href="ver_fotos.php?id=<?php echo $idAnuncio; ?>"
+            <a href="/phpDAW/ver_fotos?id=<?php echo $idAnuncio; ?>"
                style="background:#555;color:white;padding:10px 25px;border-radius:6px;text-decoration:none;">
                 Cancelar
             </a>

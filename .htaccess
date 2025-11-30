@@ -1,0 +1,18 @@
+# Rewrite all requests to index.php (front controller)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /phpDAW/
+
+    # If the request targets a PHP entrypoint, route it to the front controller
+    # This prevents direct access to legacy PHP scripts (they must go through index.php)
+    RewriteRule \.(php)$ index.php [L,QSA,NC]
+
+    # If the requested resource exists as a file or directory and is NOT a PHP file, serve it directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteCond %{REQUEST_URI} !\.php$ [NC]
+    RewriteRule ^ - [L]
+
+    # Otherwise rewrite to index.php and preserve query string
+    RewriteRule ^ index.php [L,QSA]
+</IfModule>

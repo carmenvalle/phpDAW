@@ -25,14 +25,17 @@ function format_price_display($raw) {
 }
 
 function resolve_image_url($fotoCandidate) {
-    // Accept either a basename or a path; prefer DAW/imagenes then DAW/practica/imagenes then fallback
-    if (empty($fotoCandidate)) return 'DAW/practica/imagenes/anuncio2.jpg';
+    // Accept either a basename or a path; prefer project ./imagenes then DAW/practica/imagenes then DAW/imagenes.
+    // Return absolute paths under /phpDAW so they resolve correctly when using clean URLs.
+    if (empty($fotoCandidate)) return '/phpDAW/DAW/practica/imagenes/anuncio2.jpg';
     $basename = basename($fotoCandidate);
-    $path1 = __DIR__ . '/../DAW/imagenes/' . $basename;
-    if (file_exists($path1)) return 'DAW/imagenes/' . $basename;
-    $path2 = __DIR__ . '/../DAW/practica/imagenes/' . $basename;
-    if (file_exists($path2)) return 'DAW/practica/imagenes/' . $basename;
-    return 'DAW/practica/imagenes/anuncio2.jpg';
+    $pathRootImg = __DIR__ . '/../imagenes/' . $basename;
+    if (file_exists($pathRootImg)) return '/phpDAW/imagenes/' . $basename;
+    $pathPractica = __DIR__ . '/../DAW/practica/imagenes/' . $basename;
+    if (file_exists($pathPractica)) return '/phpDAW/DAW/practica/imagenes/' . $basename;
+    $pathDawImg = __DIR__ . '/../DAW/imagenes/' . $basename;
+    if (file_exists($pathDawImg)) return '/phpDAW/DAW/imagenes/' . $basename;
+    return '/phpDAW/DAW/practica/imagenes/anuncio2.jpg';
 }
 
 ?>

@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "PI - PI Pisos & Inmuebles";
 $cssPagina = "busqueda.css";
 
@@ -91,7 +92,7 @@ require_once("inicioLog.inc");
     <section>
         <h2>Formulario de búsqueda</h2>
 
-        <form id="formBuscar" action="busqueda.php" method="get">
+        <form id="formBuscar" action="busqueda" method="get">
             <input type="hidden" name="enviado" value="1">
 
             <p class="anuncio <?php echo isset($errores['tipo_anuncio']) ? 'campo-error' : ''; ?>">

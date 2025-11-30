@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
     $usuarios = crearUsuarios(); 
     $aceptado = true;
     $error = "";
@@ -32,7 +33,7 @@ function comprobarUsuario(){
             ";
         }
         else{
-            header("Location: index_logueado.php");
+            header("Location: /phpDAW/index_logueado");
             exit;
         }
     }

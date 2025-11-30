@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "PI - PI Pisos & Inmuebles";
 $cssPagina = "resultados.css";
 
@@ -90,7 +91,7 @@ if (!empty($errors)) {
     foreach ($old as $k => $v) {
         if ($v !== '') $query["old_" . $k] = $v;
     }
-    header("Location: busqueda.php?" . http_build_query($query));
+    header("Location: /phpDAW/busqueda?" . http_build_query($query));
     exit;
 }
 
@@ -239,7 +240,7 @@ if (isset($_GET['q']) && trim((string)$_GET['q']) !== '') {
                 $ciudad = htmlspecialchars($r['Ciudad'] ?: '—');
                 $pais = htmlspecialchars($r['NomPais'] ?: '—');
                 $precio = $r['Precio'] !== null ? number_format((float)$r['Precio'], 2, ',', '.') . ' €' : '—';
-                echo "<article><h2><a href=\"anuncio.php?id={$r['IdAnuncio']}\">{$titulo}</a></h2><a href=\"anuncio.php?id={$r['IdAnuncio']}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"200\"></a><p><strong>Ciudad:</strong> {$ciudad} | <strong>País:</strong> {$pais} | <strong>Precio:</strong> {$precio}</p></article>";
+                echo "<article><h2><a href=\"anuncio/{$r['IdAnuncio']}\">{$titulo}</a></h2><a href=\"anuncio/{$r['IdAnuncio']}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"200\"></a><p><strong>Ciudad:</strong> {$ciudad} | <strong>País:</strong> {$pais} | <strong>Precio:</strong> {$precio}</p></article>";
             }
         }
         ?>

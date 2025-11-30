@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "Mensaje enviado - PI Pisos & Inmuebles";
 $cssPagina = "mensaje.css";
 require_once("cabecera.inc");
@@ -100,7 +101,7 @@ if (empty($errors) && file_exists(__DIR__ . '/includes/conexion.php')) {
             </ul>
 
             <p>
-                <a href="mensaje.php" class="btn"><strong>VOLVER AL FORMULARIO</strong></a>
+                <a href="mensaje" class="btn"><strong>VOLVER AL FORMULARIO</strong></a>
             </p>
         <?php endif; ?>
     </section>

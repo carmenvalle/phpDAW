@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: nuevo_anuncio.php');
+    header('Location: /phpDAW/nuevo-anuncio');
     exit;
 }
 
@@ -34,7 +34,7 @@ $anio = $values['anio'];
 if (!empty($errors)) {
     $_SESSION['flash']['nuevo_anuncio_errors'] = $errors;
     $_SESSION['flash']['nuevo_anuncio_values'] = $values;
-    header('Location: nuevo_anuncio.php');
+    header('Location: /phpDAW/nuevo-anuncio');
     exit;
 }
 
@@ -178,11 +178,11 @@ if ($firstFoto) {
 
 // Si no se han subido fotos, invitar al usuario a subir la primera foto
 if ($firstFoto) {
-    header('Location: anuncio.php?id=' . $anuncioId);
+    header('Location: /phpDAW/anuncio/' . $anuncioId);
     exit;
 } else {
     // flash para indicar que ahora puede subir la primera foto
     $_SESSION['flash']['info'] = 'Anuncio creado. Puedes añadir la primera foto ahora.';
-    header('Location: anyadir_foto.php?id=' . $anuncioId);
+    header('Location: /phpDAW/anyadir_foto?id=' . $anuncioId);
     exit;
 }

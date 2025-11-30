@@ -3,21 +3,21 @@ session_start();
 require_once __DIR__ . '/includes/conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: mis_anuncios.php');
+    header('Location: /phpDAW/mis-anuncios');
     exit();
 }
 
 $idAnuncio = filter_input(INPUT_POST, 'idAnuncio', FILTER_VALIDATE_INT);
 if (!$idAnuncio) {
     $_SESSION['flash']['error'] = 'Anuncio inválido.';
-    header('Location: mis_anuncios.php');
+    header('Location: /phpDAW/mis-anuncios');
     exit();
 }
 
 $userId = $_SESSION['id'] ?? null;
 if (!$userId) {
     $_SESSION['flash']['error'] = 'Debes iniciar sesión.';
-    header('Location: index.php');
+    header('Location: /phpDAW/');
     exit();
 }
 
@@ -28,12 +28,12 @@ try {
     $row = $s->fetch(PDO::FETCH_ASSOC);
     if (!$row) {
         $_SESSION['flash']['error'] = 'Anuncio no encontrado.';
-        header('Location: mis_anuncios.php');
+        header('Location: /phpDAW/mis-anuncios');
         exit();
     }
     if ((int)$row['Usuario'] !== (int)$userId) {
         $_SESSION['flash']['error'] = 'No tienes permiso para eliminar este anuncio.';
-        header('Location: mis_anuncios.php');
+        header('Location: /phpDAW/mis-anuncios');
         exit();
     }
 
@@ -63,13 +63,13 @@ try {
     // contar mensajes eliminados (ya ejecutado) -- podemos intentar estimarlo por rowCount() if supported
     // Para simplicidad, no consultamos nuevamente; informamos de fotos y anuncio
     $_SESSION['flash']['ok'] = "Anuncio eliminado correctamente. Se han eliminado {$numFotos} foto(s).";
-    header('Location: mis_anuncios.php');
+    header('Location: /phpDAW/mis-anuncios');
     exit();
 
 } catch (Exception $e) {
     if ($conexion->inTransaction()) $conexion->rollBack();
     $_SESSION['flash']['error'] = 'Error eliminando el anuncio: ' . $e->getMessage();
-    header('Location: mis_anuncios.php');
+    header('Location: /phpDAW/mis-anuncios');
     exit();
 }
 

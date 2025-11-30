@@ -4,14 +4,14 @@ require_once __DIR__ . '/includes/conexion.php';
 require_once __DIR__ . '/includes/usuario_filter.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: modificar_datos.php');
+    header('Location: /phpDAW/modificar_datos');
     exit();
 }
 
 $userId = $_SESSION['id'] ?? null;
 if (!$userId) {
     $_SESSION['flash']['error'] = 'Debes iniciar sesión.';
-    header('Location: index.php');
+    header('Location: /phpDAW/');
     exit();
 }
 
@@ -27,7 +27,7 @@ if ($current === '') $errors[] = 'current_password_required';
 if (!empty($errors)) {
     $_SESSION['flash']['misdatos_errors'] = $errors;
     $_SESSION['flash']['misdatos_values'] = $values;
-    header('Location: modificar_datos.php');
+    header('Location: /phpDAW/modificar_datos');
     exit();
 }
 
@@ -39,13 +39,13 @@ try {
     if (!$r || !isset($r['Clave']) || !password_verify($current, $r['Clave'])) {
         $_SESSION['flash']['misdatos_errors'] = ['current_password_invalid'];
         $_SESSION['flash']['misdatos_values'] = $values;
-        header('Location: modificar_datos.php');
+        header('Location: /phpDAW/modificar_datos');
         exit();
     }
 } catch (Exception $e) {
     $_SESSION['flash']['misdatos_errors'] = ['db_error'];
     $_SESSION['flash']['misdatos_values'] = $values;
-    header('Location: modificar_datos.php');
+    header('Location: /phpDAW/modificar_datos');
     exit();
 }
 
@@ -87,11 +87,11 @@ try {
     // If style provided in POST (from configurar), update cookie only if recordarme active — handled elsewhere
 
     $_SESSION['flash']['ok'] = 'Datos actualizados correctamente.';
-    header('Location: miperfil.php');
+    header('Location: /phpDAW/miperfil');
     exit();
 } catch (Exception $e) {
     $_SESSION['flash']['misdatos_errors'] = ['db_error'];
     $_SESSION['flash']['misdatos_values'] = $values;
-    header('Location: modificar_datos.php');
+    header('Location: /phpDAW/modificar_datos');
     exit();
 }

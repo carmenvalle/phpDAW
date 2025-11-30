@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['style'])) {
             $_SESSION['mensaje_estilo'] = "Estilo visual actualizado correctamente.";
 
             // Redirigir para evitar reenvío
-            header("Location: configurar.php");
+            header("Location: configurar");
             exit();
         }
     }
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si no hemos redirigido ya, mostrar mensaje
     if (!isset($_SESSION['mensaje_estilo'])) {
         $_SESSION['mensaje_estilo'] = "Preferencias guardadas.";
-        header("Location: configurar.php");
+        header("Location: configurar");
         exit();
     }
 }
@@ -109,7 +109,7 @@ require_once('inicioLog.inc');
 
     <p>Selecciona el estilo visual que prefieres para la web:</p>
 
-    <form action="configurar.php" method="post" class="form-estilos">
+    <form action="configurar" method="post" class="form-estilos">
         <ul class="lista-estilos">
 
             <?php foreach ($estilos as $e): ?>
@@ -138,7 +138,7 @@ require_once('inicioLog.inc');
         <button type="submit" class="btn-guardar">Guardar estilo</button>
     </form>
 
-    <p><a href="index_logueado.php" class="volver">Volver al inicio</a></p>
+    <p><a href="index_logueado" class="volver">Volver al inicio</a></p>
 </main>
 
 <?php require_once('pie.inc'); ?>

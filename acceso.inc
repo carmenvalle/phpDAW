@@ -22,7 +22,7 @@
   }
   ?>
 
-  <form action="control_acceso.php" method="post">
+  <form action="control_acceso" method="post">
     <fieldset>
       <legend>INTRODUCE TUS CREDENCIALES</legend>
 

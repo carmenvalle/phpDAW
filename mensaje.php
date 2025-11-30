@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "PI - Pisos & Inmuebles";
 $cssPagina = "mensaje.css";
 require_once("cabecera.inc");
@@ -30,7 +31,7 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
 <main>
     <section>
         <h3>Enviar Mensaje</h3>
-        <form id="formMensaje" action="mensaje_enviado.php" method="post" novalidate>
+        <form id="formMensaje" action="mensaje_enviado" method="post" novalidate>
             <p>
                 <label for="mensaje"><strong>Mensaje:</strong></label><br>
                 <textarea name="mensaje" id="mensaje" placeholder="Mensaje al anunciante" rows="6" cols="60"></textarea>
@@ -65,7 +66,7 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
 
 </main>
 
-<script src="DAW/practica/js/mensaje.js"></script>
+<script src="/phpDAW/DAW/practica/js/mensaje.js"></script>
 
 <?php
 require_once("pie.inc");
