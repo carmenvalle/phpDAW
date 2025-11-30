@@ -100,6 +100,22 @@
       echo '<link rel="stylesheet" href="DAW/practica/css/' . htmlspecialchars($cssfile, ENT_QUOTES, 'UTF-8') . '" media="screen">';
     }
   }
+
+  // Cargar estilos adicionales solicitados vía checkboxes (sesión o cookie)
+  $use_dark = !empty($_SESSION['modo_oscuro']) || (!empty($_COOKIE['modo_oscuro']) && $_COOKIE['modo_oscuro'] === '1');
+  $use_accplus = !empty($_SESSION['accesibilidad_plus']) || (!empty($_COOKIE['accesibilidad_plus']) && $_COOKIE['accesibilidad_plus'] === '1');
+
+  // Evitar duplicar si el estilo seleccionado ya incluye la funcionalidad
+  if ($use_dark) {
+    if ($selected_key !== 'modo_oscuro') {
+      echo '<link rel="stylesheet" href="DAW/practica/css/modo_oscuro.css" media="screen">';
+    }
+  }
+  if ($use_accplus) {
+    if ($selected_key !== 'contraste_letra') {
+      echo '<link rel="stylesheet" href="DAW/practica/css/alto-contraste-accesibilidad.css" media="screen">';
+    }
+  }
   ?>
   <link rel="stylesheet" type="text/css" href="DAW/practica/css/print-index.css" media="print">
 

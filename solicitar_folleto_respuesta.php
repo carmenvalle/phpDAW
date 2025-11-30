@@ -34,6 +34,7 @@ $precioUnitario = calcularPrecio($paginas, $isColor, $resolucion, 1);
 $total_formateado = formatearPrecio($precioTotal);
 
 // Insertar solicitud en la base de datos (una vez recogidos los datos y calculado el precio)
+$insertOk = false;
 if (file_exists(__DIR__ . '/includes/conexion.php')) {
     require_once __DIR__ . '/includes/conexion.php';
     try {
@@ -54,19 +55,47 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
             ($mostrar_precio === 'si') ? 1 : 0,
             $precioTotal
         ]);
+        $insertOk = true;
     } catch (Exception $e) {
-        // Silencioso: mostrar la respuesta pero no detener si la BD falla
+        // Registrar detalle técnico para depuración y notificar al usuario
+        error_log('[solicitar_folleto_respuesta] Error al insertar Solicitud: ' . $e->getMessage());
+        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+        $_SESSION['flash']['error'] = 'No se ha podido registrar la solicitud. Inténtalo más tarde.';
+        $insertOk = false;
     }
+} else {
+    // Si no existe el fichero de conexión, registrar y avisar
+    error_log('[solicitar_folleto_respuesta] No se encontró includes/conexion.php');
+    if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+    $_SESSION['flash']['error'] = 'No se ha podido procesar la solicitud. Inténtalo más tarde.';
+    $insertOk = false;
 }
 ?>
 
 <main>
-    <p class="mensaje-confirmacion">Tu solicitud ha sido registrada correctamente.</p>
+    <?php
+    if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+    $flashError = $_SESSION['flash']['error'] ?? null;
+    if ($flashError) {
+        unset($_SESSION['flash']['error']);
+    }
+    ?>
 
-    <p class="coste-total">
-        <strong>Coste total del folleto:</strong>
-        <?php echo $total_formateado; ?>
-    </p>
+    <?php if ($insertOk): ?>
+        <p class="mensaje-confirmacion">Tu solicitud ha sido registrada correctamente.</p>
+
+        <p class="coste-total">
+            <strong>Coste total del folleto:</strong>
+            <?php echo $total_formateado; ?>
+        </p>
+    <?php else: ?>
+        <p class="mensaje-error"><?php echo htmlspecialchars($flashError ?? 'Se ha producido un error al procesar la solicitud.'); ?></p>
+        <p class="coste-total">
+            <strong>Coste estimado del folleto:</strong>
+            <?php echo $total_formateado; ?>
+        </p>
+        <p><a href="folleto.php" class="btn"><strong>VOLVER AL FORMULARIO</strong></a></p>
+    <?php endif; ?>
 
     <section>
         <h2>Respuestas del formulario:</h2>

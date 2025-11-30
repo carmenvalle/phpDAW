@@ -165,9 +165,29 @@ if (!$anuncio) {
 require_once("cabecera.inc");
 require_once __DIR__ . '/includes/precio.php';
 require_once("inicioLog.inc");
+
+// Mostrar flashes de operación (p. ej. anuncio modificado)
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+$flash_ok = $_SESSION['flash']['ok'] ?? null;
+$flash_detalle = $_SESSION['flash']['anuncio_modificado_detalle'] ?? null;
+if ($flash_ok) unset($_SESSION['flash']['ok']);
+if ($flash_detalle) unset($_SESSION['flash']['anuncio_modificado_detalle']);
 ?>
 
 <main>
+    <?php if (!empty($flash_ok)): ?>
+        <div class="mensaje-confirmacion"><?php echo htmlspecialchars($flash_ok); ?></div>
+        <?php if (!empty($flash_detalle) && is_array($flash_detalle)): ?>
+            <div class="detalle-cambios">
+                <strong>Detalles de la modificación:</strong>
+                <ul>
+                    <?php foreach ($flash_detalle as $d): ?>
+                        <li><?php echo htmlspecialchars($d); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
     <section class="anuncio-detalle">
         <h2><?= htmlspecialchars($anuncio['titulo'], ENT_QUOTES, 'UTF-8') ?></h2>
         <section class="fotos">
