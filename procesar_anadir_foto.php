@@ -46,9 +46,7 @@ foreach ($prohibidos as $p) {
 }
 
 
-// En esta práctica no gestionamos la subida automática de ficheros.
-// El usuario debe subir manualmente el archivo a DAW/practica/imagenes y proporcionar
-// el nombre de fichero en el formulario (`nombre_foto`). Validamos ese nombre aquí.
+// foto predeterminada
 $nombreFoto = trim($_POST['nombre_foto'] ?? '');
 if ($nombreFoto === '') {
     $_SESSION['flash']['error'] = 'Debes indicar el nombre del fichero tal como lo has subido al servidor.';
