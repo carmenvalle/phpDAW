@@ -6,9 +6,6 @@ if (empty($_SESSION['usuario'])) {
     $_SESSION['flash']['error'] = 'Debes iniciar sesión.';
     header('Location: /phpDAW/');
     exit();
-
-// Validar id del anuncio
-if (!isset($_POST['id_anuncio']) || !ctype_digit((string)$_POST['id_anuncio'])) {
     $_SESSION['flash']['error'] = 'Anuncio inválido.';
     header('Location: /phpDAW/anyadir_foto');
     exit();
