@@ -6,9 +6,6 @@ if (empty($_SESSION['usuario'])) {
     $_SESSION['flash']['error'] = 'Debes iniciar sesión.';
     header('Location: /phpDAW/');
     exit();
-}
-
-$usuario = $_SESSION['usuario'];
 
 // Validar id del anuncio
 if (!isset($_POST['id_anuncio']) || !ctype_digit((string)$_POST['id_anuncio'])) {
@@ -46,6 +43,7 @@ foreach ($prohibidos as $p) {
 }
 
 
+$
 // En esta práctica no gestionamos la subida automática de ficheros.
 // El usuario debe subir manualmente el archivo a /phpDAW/DAW/practica/imagenes y proporcionar
 // el nombre de fichero en el formulario (`nombre_foto`). Validamos ese nombre aquí.
