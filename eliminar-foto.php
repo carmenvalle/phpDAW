@@ -18,7 +18,7 @@ echo '<link rel="stylesheet" href="DAW/practica/css/eliminar-foto.css">';
         <h2 class="ef-title">Eliminar foto</h2>
         <p>¿Seguro que deseas eliminar esta foto? Esta acción no se puede deshacer.</p>
 
-        <form method="post" action="respuesta-eliminar-foto.php">
+        <form method="post" action="/phpDAW/respuesta-eliminar-foto">
             <input type="hidden" name="idFoto" value="<?php echo $idFoto; ?>">
             <input type="hidden" name="idAnuncio" value="<?php echo $idAnuncio; ?>">
             <div class="ef-actions">

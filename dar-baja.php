@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 session_start();
 
 // Cargar conexión
@@ -87,7 +88,7 @@ if (file_exists($viewPath)) {
     <p><b>Total anuncios:</b> <?= $totalAnuncios ?></p>
     <p><b>Total fotos:</b> <?= $totalFotos ?></p>
 
-    <form action="confirmar-dar-baja.php" method="POST">
+    <form action="/phpDAW/confirmar-dar-baja" method="POST">
         <label>Introduce tu contraseña para confirmar:</label>
         <input type="password" name="password" required>
 

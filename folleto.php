@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 //comentario de prueba
 $title = "PI - Pisos & Inmueblees";
 $cssPagina = "folleto.css";
@@ -79,7 +80,7 @@ if ($userId && isset($conexion)) {
         <p>
             Los campos marcados con un asterisco (*) son obligatorios.
         </p>
-        <form id="formFolleto" action="solicitar_folleto_respuesta.php" method="post" novalidate>
+        <form id="formFolleto" action="solicitar_folleto_respuesta" method="post" novalidate>
 
             <p>
                 <label for="nombre">Nombre y apellidos (*):</label>
@@ -236,7 +237,7 @@ if ($userId && isset($conexion)) {
 </main>
 
 <?php
-echo "<script src=\"DAW/practica/js/solicitar_folleto.js\"></script>\n";
+echo "<script src=\"/phpDAW/DAW/practica/js/solicitar_folleto.js\"></script>\n";
 require_once("salto.inc");
 require_once("pie.inc");
 ?>

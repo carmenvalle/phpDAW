@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
     session_start();
 
     $title = "PI - PI Pisos & Inmuebles";
@@ -71,7 +72,7 @@
             <p class="error"><?= htmlspecialchars($errorMensaje, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
 
-        <form action="procesar_anadir_foto.php" method="post" enctype="multipart/form-data">
+        <form action="procesar_anadir_foto" method="post" enctype="multipart/form-data">
 
             <p>
                 <label for="id_anuncio">Anuncio:</label>
@@ -101,7 +102,7 @@
             </p>
 
             <p>
-                <strong>Importante:</strong> Por ahora sube la imagen manualmente a <code>DAW/practica/imagenes/</code>
+                <strong>Importante:</strong> Por ahora sube la imagen manualmente a <code>/phpDAW/DAW/practica/imagenes/</code>
                 y escribe aquí su nombre exacto (ej. <code>mi_foto.jpg</code>).
             </p>
 

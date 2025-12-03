@@ -7,7 +7,7 @@ $idAnuncio = filter_input(INPUT_POST, "idAnuncio", FILTER_VALIDATE_INT);
 
 if (!$idFoto || !$idAnuncio) {
     $_SESSION['flash']['error'] = 'Parámetros inválidos para eliminar la foto.';
-    header("Location: ver_fotos.php?id=" . ($idAnuncio ?: 0));
+    header("Location: /phpDAW/ver_fotos?id=" . ($idAnuncio ?: 0));
     exit();
 }
 
@@ -22,8 +22,8 @@ if (!$idUsuarioSession && !empty($_SESSION['usuario'])) {
 }
 
 if (!$idUsuarioSession) {
-    $_SESSION['flash']['error'] = 'Debes iniciar sesión para eliminar fotos.';
-    header('Location: index.php');
+        $_SESSION['flash']['error'] = 'Debes iniciar sesión para eliminar fotos.';
+    header('Location: /phpDAW/');
     exit();
 }
 
@@ -34,7 +34,7 @@ try {
     $fotoRow = $s1->fetch(PDO::FETCH_ASSOC);
     if (!$fotoRow) {
         $_SESSION['flash']['error'] = 'Foto no encontrada.';
-        header('Location: ver_fotos.php?id=' . $idAnuncio);
+        header('Location: /phpDAW/ver_fotos?id=' . $idAnuncio);
         exit();
     }
 
@@ -44,12 +44,12 @@ try {
     $an = $s2->fetch(PDO::FETCH_ASSOC);
     if (!$an) {
         $_SESSION['flash']['error'] = 'Anuncio no encontrado.';
-        header('Location: ver_fotos.php?id=' . $idAnuncio);
+        header('Location: /phpDAW/ver_fotos?id=' . $idAnuncio);
         exit();
     }
     if ((int)$an['Usuario'] !== (int)$idUsuarioSession) {
         $_SESSION['flash']['error'] = 'No tienes permiso para eliminar esta foto.';
-        header('Location: ver_fotos.php?id=' . $idAnuncio);
+        header('Location: /phpDAW/ver_fotos?id=' . $idAnuncio);
         exit();
     }
 
@@ -78,12 +78,12 @@ try {
     } else {
         $_SESSION['flash']['ok'] = 'Foto eliminada correctamente.';
     }
-    header('Location: ver_fotos.php?id=' . $idAnuncio . '&msg=FotoEliminada');
+    header('Location: /phpDAW/ver_fotos?id=' . $idAnuncio . '&msg=FotoEliminada');
     exit();
 
 } catch (Exception $e) {
     $_SESSION['flash']['error'] = 'Error al eliminar la foto: ' . $e->getMessage();
-    header('Location: ver_fotos.php?id=' . $idAnuncio);
+    header('Location: /phpDAW/ver_fotos?id=' . $idAnuncio);
     exit();
 }
 ?>

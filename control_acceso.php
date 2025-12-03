@@ -14,7 +14,7 @@ if (!($hasOld || $hasNew)) {
     $error = "Por favor introduzca un Nombre de Usuario y una Contraseña";
     $_SESSION['flash']['acceso_error'] = $error;
     if (session_status() === PHP_SESSION_ACTIVE) session_write_close();
-    header("Location: index.php");
+    header("Location: /phpDAW/");
     exit;
 }
 
@@ -25,7 +25,7 @@ if ($userName === "" || $pass === "") {
     $error = "Por favor introduzca un Nombre de Usuario y una Contraseña";
     $_SESSION['flash']['acceso_error'] = $error;
     if (session_status() === PHP_SESSION_ACTIVE) session_write_close();
-    header("Location: index.php");
+    header("Location: /phpDAW/");
     exit;
 }
 
@@ -55,7 +55,7 @@ if (isset($conexion)) {
             if (!empty($datos['Foto'])) {
                 $_SESSION['foto'] = resolve_image_url($datos['Foto']);
             } else {
-                $_SESSION['foto'] = 'DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
+                $_SESSION['foto'] = '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
             }
             $autenticado = true;
         }
@@ -81,7 +81,7 @@ if (!$autenticado) {
     $error = "Usuario o contraseña incorrectos.";
     $_SESSION['flash']['acceso_error'] = $error;
     if (session_status() === PHP_SESSION_ACTIVE) session_write_close();
-    header("Location: index.php");
+    header("Location: /phpDAW/");
     exit;
 }
 
@@ -100,8 +100,8 @@ if (isset($_POST['recordarme'])) {
     }
 }
 
-// Acceso correcto → redirige a la zona privada
-header("Location: index_logueado.php");
+// Acceso correcto → redirige a la zona privada (usar ruta absoluta para evitar reescrituras)
+header("Location: /phpDAW/index_logueado");
 exit;
 ?>
 
