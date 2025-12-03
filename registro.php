@@ -147,10 +147,7 @@ if (isset($conexion)) {
                     <?php if (!empty($paises)): foreach ($paises as $p): ?>
                         <option value="<?php echo $p['IdPais']; ?>" <?php echo ((isset($old['pais']) && $old['pais'] == $p['IdPais'])) ? 'selected' : ''; ?>><?php echo htmlspecialchars($p['NomPais']); ?></option>
                     <?php endforeach; else: ?>
-                        <option value="es" <?php echo (isset($old['pais']) && $old['pais'] === 'es') ? 'selected' : ''; ?>>España</option>
-                        <option value="pt" <?php echo (isset($old['pais']) && $old['pais'] === 'pt') ? 'selected' : ''; ?>>Portugal</option>
-                        <option value="fr" <?php echo (isset($old['pais']) && $old['pais'] === 'fr') ? 'selected' : ''; ?>>Francia</option>
-                        <option value="it" <?php echo (isset($old['pais']) && $old['pais'] === 'it') ? 'selected' : ''; ?>>Italia</option>
+                        <option value="" disabled>No hay países disponibles</option>
                     <?php endif; ?>
                 </select>
             </p>

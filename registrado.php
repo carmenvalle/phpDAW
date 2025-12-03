@@ -40,6 +40,8 @@ if ($stmt->fetch()) {
 $passHash = password_hash($values['contrasena'], PASSWORD_DEFAULT);
 
 // (Photo storage disabled in this practice; photo already validated above if provided.)
+// Asegurar variable para el nombre de la foto
+$nombreFoto = $nombreFoto ?? null;
 
 // Insertar usuario
 $stmt = $conexion->prepare("\n    INSERT INTO Usuarios\n    (NomUsuario, Clave, Email, Sexo, FNacimiento, Ciudad, Pais, Foto, Estilo)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)\n");
@@ -54,17 +56,26 @@ if ($sexo_input === 'H' || $sexo_input === '1') {
     $sexo_db = 0;
 }
 
-// Ejecutar INSERT con valores filtrados
-$stmt->execute([
-    $values["usuario"],
-    $passHash,
-    $values["email"],
-    $sexo_db,
-    $values["nacimiento"],
-    $values["ciudad"],
-    $values["pais"],
-    $nombreFoto
-]);
+// Ejecutar INSERT con valores filtrados y manejar errores de BD (FK, etc.)
+try {
+    $stmt->execute([
+        $values["usuario"],
+        $passHash,
+        $values["email"],
+        $sexo_db,
+        $values["nacimiento"],
+        $values["ciudad"],
+        $values["pais"],
+        $nombreFoto
+    ]);
+} catch (Exception $e) {
+    if (!is_dir(__DIR__ . '/logs')) @mkdir(__DIR__ . '/logs', 0755, true);
+    file_put_contents(__DIR__ . '/logs/registro.log', date('[Y-m-d H:i:s] ') . "registro: DB insert exception: " . $e->getMessage() . "\n", FILE_APPEND);
+    $_SESSION['flash']['registro_errors'] = ['db_error'];
+    $_SESSION['flash']['registro_old'] = $values;
+    header("Location: registro.php");
+    exit;
+}
 
 // Iniciar sesión automáticamente tras registro y guardar foto en sesión (no crear cookies)
 $_SESSION['usuario'] = $values['usuario'];
