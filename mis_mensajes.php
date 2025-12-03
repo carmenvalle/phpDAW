@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 $title = "PI - PI Pisos & Inmuebles";
 $cssPagina = "mis_mensajes.css";
 require_once("cabecera.inc");

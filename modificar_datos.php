@@ -41,7 +41,7 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 		<?php if (!$user): ?>
 				<p>No se han podido cargar tus datos. Asegúrate de estar identificado.</p>
 			<?php else: ?>
-				<form action="procesar_modificar_datos.php" method="post" enctype="multipart/form-data">
+				<form action="procesar_modificar_datos" method="post" enctype="multipart/form-data">
 					<p>
 						<label>Nombre de usuario: </label>
 						<input type="text" name="usuario" value="<?= htmlspecialchars($old['usuario'] ?? $user['NomUsuario']) ?>">

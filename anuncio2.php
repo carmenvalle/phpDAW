@@ -1,4 +1,5 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 
 // --- Control de acceso: solo usuarios logueados o recordados ---
 session_start();
@@ -56,7 +57,7 @@ if ($esPar) {
     $anuncio = [
         'tipoAnuncio' => 'Alquiler',
         'tipoVivienda' => 'Apartamento',
-        'fotoPrincipal' => 'DAW/practica/imagenes/anuncio4.jpg',
+        'fotoPrincipal' => '/phpDAW/DAW/practica/imagenes/anuncio4.jpg',
         'titulo' => 'Apartamento en alquiler en Bilbao',
         'precio' => '600 €/mes',
         'texto' => 'Amplio apartamento situado a 5 minutos del centro, con vistas y todas las comodidades. Perfecto para familias o profesionales.',
@@ -72,7 +73,7 @@ if ($esPar) {
     $anuncio = [
         'tipoAnuncio' => 'Venta',
         'tipoVivienda' => 'Casa',
-        'fotoPrincipal' => 'DAW/practica/imagenes/anuncio3.jpg',
+        'fotoPrincipal' => '/phpDAW/DAW/practica/imagenes/anuncio3.jpg',
         'titulo' => 'Casa en venta en Portugal',
         'precio' => '150.000 €',
         'texto' => 'Casa completamente reformado en el centro de la ciudad, con excelentes comunicaciones y cerca de todos los servicios.',
@@ -163,15 +164,15 @@ require_once("inicioLog.inc");
             <section>
                 <aside class="miniaturas">
                     <?php foreach ($anuncio['fotos'] as $index => $foto): ?>
-                        <img src="DAW/practica/imagenes/<?= htmlspecialchars($foto, ENT_QUOTES, 'UTF-8') ?>"
+                        <img src="/phpDAW/DAW/practica/imagenes/<?= htmlspecialchars($foto, ENT_QUOTES, 'UTF-8') ?>"
                             alt="Miniatura <?= $index + 1 ?> del anuncio" class="miniatura" width="150" height="150">
                     <?php endforeach; ?>
                 </aside>
             </section>
 
             <aside class="acciones">
-                <a href="anyadir_foto.php?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
-                <a href="mis_anuncios.php" class="btn">Volver a mis anuncios</a>
+                <a href="/phpDAW/anyadir_foto?id=<?= $id ?>" class="btn">Añadir foto a este anuncio</a>
+                <a href="mis_anuncios" class="btn">Volver a mis anuncios</a>
             </aside>
         </section>
     </section>

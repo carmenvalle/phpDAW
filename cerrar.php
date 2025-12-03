@@ -1,16 +1,16 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
+
 session_start();
 
 // Recoger mensaje flash antes de destruir la sesión
 $msg = $_SESSION['flash']['ok'] ?? 'Tu cuenta ha sido eliminada correctamente';
-// Eliminar solo el mensaje, el resto desaparecerá con session_destroy
 unset($_SESSION['flash']['ok']);
 
-// Destruir la sesión completamente
+// Destruir la sesión
 session_unset();
 session_destroy();
 
-// Variables para la vista
 $title = "PI - Pisos & Inmuebles";
 
 // Cargar cabecera e inicio SIN acceso.inc (porque ya no existe sesión)

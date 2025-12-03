@@ -1,7 +1,8 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
+    header("Location: /phpDAW/");
     exit;
 }
 
@@ -43,7 +44,7 @@ require_once("inicioLog.inc");
 
   <section>
     <h2>BÚSQUEDA RÁPIDA</h2>
-    <form action="resultados.php" method="get">
+    <form action="resultados" method="get">
       <p>
         <label for="consulta">Ciudad:</label>
         <input type="text" id="consulta" name="q" placeholder="Ej. Madrid">
@@ -80,7 +81,7 @@ require_once("inicioLog.inc");
               'Ciudad' => 'Madrid',
               'NomPais' => 'España',
               'Precio' => 85000,
-              'link' => 'DAW/practica/anuncio.html'
+              'link' => '/phpDAW/DAW/practica/anuncio.html'
             ],
             [
               'Titulo' => 'Apartamento junto al parque',
@@ -89,7 +90,7 @@ require_once("inicioLog.inc");
               'Ciudad' => 'Sevilla',
               'NomPais' => 'España',
               'Precio' => 120000,
-              'link' => 'DAW/practica/anuncio.html'
+              'link' => '/phpDAW/DAW/practica/anuncio.html'
             ],
             [
               'Titulo' => 'Estudio acogedor en zona universitaria',
@@ -98,7 +99,7 @@ require_once("inicioLog.inc");
               'Ciudad' => 'Valencia',
               'NomPais' => 'España',
               'Precio' => 65000,
-              'link' => 'DAW/practica/anuncio.html'
+              'link' => '/phpDAW/DAW/practica/anuncio.html'
             ]
           ];
         }
@@ -109,7 +110,7 @@ require_once("inicioLog.inc");
           $ciudad = htmlspecialchars($a['Ciudad'] ?? '—');
           $pais = htmlspecialchars($a['NomPais'] ?? ($a['NomPais'] ?? '—'));
           $precio = isset($a['Precio']) ? number_format((float)$a['Precio'], 2, ',', '.') . ' €' : '—';
-          $link = isset($a['link']) ? $a['link'] : (isset($a['IdAnuncio']) ? "anuncio.php?id={$a['IdAnuncio']}" : '#');
+          $link = isset($a['link']) ? $a['link'] : (isset($a['IdAnuncio']) ? "anuncio/{$a['IdAnuncio']}" : '#');
           echo "<li><article><a href=\"{$link}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"150\"><h3>{$titulo}</h3></a><p>Fecha: {$a['FRegistro']} | Ciudad: {$ciudad} <br>País: {$pais} | Precio: {$precio}</p></article></li>";
         }
       ?>

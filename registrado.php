@@ -1,6 +1,7 @@
 <?php
+if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: registro.php");
+    header("Location: registro");
     exit;
 }
 
@@ -21,7 +22,7 @@ if (!empty($errors)) {
     $old = $values;
     unset($old['contrasena'], $old['repetir']);
     $_SESSION['flash']['registro_old'] = $old;
-    header("Location: registro.php");
+    header("Location: registro");
     exit;
 }
 
@@ -31,7 +32,7 @@ $stmt->execute([$values['usuario']]);
 if ($stmt->fetch()) {
     $_SESSION['flash']['registro_errors'] = ['usuario_duplicado'];
     $_SESSION['flash']['registro_old'] = $values;
-    header("Location: registro.php");
+    header("Location: registro");
     exit;
 }
 
@@ -44,7 +45,7 @@ $passHash = password_hash($values['contrasena'], PASSWORD_DEFAULT);
 $stmt = $conexion->prepare("\n    INSERT INTO Usuarios\n    (NomUsuario, Clave, Email, Sexo, FNacimiento, Ciudad, Pais, Foto, Estilo)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)\n");
 
 // Mapear sexo a código numérico: H=>1, M=>2, otros=>0
-$sexo_input = strtoupper(trim($old['sexo'] ?? ''));
+$sexo_input = strtoupper(trim($values['sexo'] ?? ''));
 if ($sexo_input === 'H' || $sexo_input === '1') {
     $sexo_db = 1;
 } elseif ($sexo_input === 'M' || $sexo_input === '2') {
@@ -71,11 +72,11 @@ $lastId = $conexion->lastInsertId();
 if ($lastId) {
     $_SESSION['id'] = (int)$lastId;
 }
-if (!empty($nombreFoto)) {
-    $pathFoto = 'DAW/practica/imagenes/' . $nombreFoto;
+    if (!empty($nombreFoto)) {
+    $pathFoto = '/phpDAW/DAW/practica/imagenes/' . $nombreFoto;
     $_SESSION['foto'] = $pathFoto;
 } else {
-    $_SESSION['foto'] = 'DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
+    $_SESSION['foto'] = '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
 }
 
 $title = 'Registrado';
@@ -99,7 +100,7 @@ if (isset($sexo_db)) {
 }
 ?>
 <p><strong>Sexo:</strong> <?= $sexo_label ?></p>
-<p><strong>Ciudad:</strong> <?= htmlspecialchars($old["ciudad"]) ?></p>
+<p><strong>Ciudad:</strong> <?= htmlspecialchars($values["ciudad"] ?? '') ?></p>
 
 <p><a href="index.php"><strong>INICIAR SESIÓN</strong></a></p>
 </section>

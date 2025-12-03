@@ -94,7 +94,7 @@ if (file_exists(__DIR__ . '/includes/conexion.php')) {
             <strong>Coste estimado del folleto:</strong>
             <?php echo $total_formateado; ?>
         </p>
-        <p><a href="folleto.php" class="btn"><strong>VOLVER AL FORMULARIO</strong></a></p>
+        <p><a href="folleto" class="btn"><strong>VOLVER AL FORMULARIO</strong></a></p>
     <?php endif; ?>
 
     <section>
