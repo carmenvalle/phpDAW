@@ -105,6 +105,8 @@ if (!empty($segments)) {
   if ($segments[0] === 'mis_anuncios' || $segments[0] === 'mis_anuncios.php' || $segments[0] === 'mis-anuncios') include_target('mis_anuncios.php');
   // /miperfil
   if ($segments[0] === 'miperfil' || $segments[0] === 'miperfil.php') include_target('miperfil.php');
+  // /configurar (visual preferences)
+  if ($segments[0] === 'configurar' || $segments[0] === 'configurar.php') include_target('configurar.php');
 
   // Fallback: if the path maps to an existing file name, include it
   $maybeFile = ltrim($path, '/');

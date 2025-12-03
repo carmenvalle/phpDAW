@@ -17,7 +17,7 @@
                 <i class="icon-search"></i>
                 <strong>BÚSQUEDA</strong>
             </a></li>
-        <li><a href="configurar">
+        <li><a href="/phpDAW/configurar">
                 <i class="icon-cog"></i>
                 <strong>CONFIGURAR</strong>
             </a></li>
