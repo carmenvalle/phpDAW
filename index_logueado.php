@@ -1,5 +1,5 @@
 <?php
-if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.'; exit; }
+if (!defined('APP_INIT')) define('APP_INIT', true);
 session_start();
 if (!isset($_SESSION['usuario'])) {
     header("Location: /phpDAW/");
@@ -23,11 +23,15 @@ if ($hora >= 6 && $hora <= 11) {
 }
 $saludoCompleto = $saludoPrefijo . ' ' . $nombreUsuario . '.';
 
-
 $title = "PI - Pisos & Inmuebles";
 $cssPagina = "index.css";
 require_once("cabecera.inc");
 require_once("inicioLog.inc");
+
+// Utilidades
+require_once __DIR__ . '/includes/funciones-ficheros.php';
+require_once __DIR__ . '/includes/precio.php';
+require_once __DIR__ . '/includes/conexion.php';
 ?>
 
 <main>
@@ -59,8 +63,6 @@ require_once("inicioLog.inc");
       <?php
       // Mostrar últimos 5 anuncios desde la BD
       try {
-          if (!isset($conexion)) require_once __DIR__ . '/includes/conexion.php';
-          require_once __DIR__ . '/includes/precio.php';
           $stmt = $conexion->query("SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.FRegistro, a.Ciudad, p.NomPais, a.Precio
                                       FROM Anuncios a
                                       LEFT JOIN Paises p ON a.Pais = p.IdPaises
@@ -71,8 +73,8 @@ require_once("inicioLog.inc");
           $ultimos = [];
       }
 
-        if (empty($ultimos)) {
-          // Fallback: anuncios predefinidos para pruebas cuando la BD está vacía
+      if (empty($ultimos)) {
+          // Fallback: anuncios predefinidos para pruebas
           $ultimos = [
             [
               'Titulo' => 'Piso luminoso en el centro',
@@ -91,28 +93,19 @@ require_once("inicioLog.inc");
               'NomPais' => 'España',
               'Precio' => 120000,
               'link' => '/phpDAW/DAW/practica/anuncio.html'
-            ],
-            [
-              'Titulo' => 'Estudio acogedor en zona universitaria',
-              'FPrincipal' => '',
-              'FRegistro' => date('Y-m-d'),
-              'Ciudad' => 'Valencia',
-              'NomPais' => 'España',
-              'Precio' => 65000,
-              'link' => '/phpDAW/DAW/practica/anuncio.html'
             ]
           ];
-        }
+      }
 
-        foreach ($ultimos as $a) {
+      foreach ($ultimos as $a) {
           $img = resolve_image_url($a['FPrincipal'] ?? '');
           $titulo = htmlspecialchars($a['Titulo'] ?? 'Sin título');
           $ciudad = htmlspecialchars($a['Ciudad'] ?? '—');
-          $pais = htmlspecialchars($a['NomPais'] ?? ($a['NomPais'] ?? '—'));
+          $pais = htmlspecialchars($a['NomPais'] ?? '—');
           $precio = isset($a['Precio']) ? number_format((float)$a['Precio'], 2, ',', '.') . ' €' : '—';
-          $link = isset($a['link']) ? $a['link'] : (isset($a['IdAnuncio']) ? "anuncio/{$a['IdAnuncio']}" : '#');
+          $link = isset($a['link']) ? $a['link'] : (isset($a['IdAnuncio']) ? "/phpDAW/anuncio/{$a['IdAnuncio']}" : '#');
           echo "<li><article><a href=\"{$link}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"150\"><h3>{$titulo}</h3></a><p>Fecha: {$a['FRegistro']} | Ciudad: {$ciudad} <br>País: {$pais} | Precio: {$precio}</p></article></li>";
-        }
+      }
       ?>
     </ul>
   </section>

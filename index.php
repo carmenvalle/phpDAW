@@ -128,12 +128,9 @@ if (!empty($segments)) {
 // Detectar si el navegador ya tiene una cookie de sesión activa (PHPSESSID)
 $hadSessionCookie = isset($_COOKIE[session_name()]);
 
-// Iniciar sesión solo cuando sea necesario: evitamos crear sesiones vacías para visitantes
-$startSession = false;
-$startSession = $hadSessionCookie || isset($_COOKIE['usuario']);
-if ($startSession) {
-  session_start();
-}
+// Iniciar sesión de forma segura siempre para mantener el estado del usuario
+// (se usa un guard para no re-iniciar si ya está activa).
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 require_once __DIR__ . '/includes/precio.php';
 
 // Restaurar usuario desde cookie si no había sesión previa (nuevo navegador) y existe cookie 'usuario'
