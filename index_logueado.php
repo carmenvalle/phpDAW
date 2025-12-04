@@ -57,6 +57,68 @@ require_once __DIR__ . '/includes/conexion.php';
     </form>
   </section>
 
+  <section class="anuncio-escogido">
+    <h2>ANUNCIO ESCOGIDO</h2>
+
+    <?php
+    $ficheroAE = __DIR__ . "/includes/anuncio-escogido.txt";
+
+    if (!file_exists($ficheroAE)) {
+        echo "<p>No hay anuncios escogidos disponibles.</p>";
+    } else {
+        $lineas = file($ficheroAE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+        if (!$lineas) {
+            echo "<p>El fichero de anuncios escogidos está vacío.</p>";
+        } else {
+            // Selección aleatoria
+            $linea = $lineas[array_rand($lineas)];
+
+            // Formato: ID|Experto|Comentario
+            $partes = explode("|", $linea);
+
+            if (count($partes) >= 3) {
+                list($idEsc, $expertoAE, $comentarioAE) = $partes;
+
+                // Comprobar en BD
+                $stmtAE = $conexion->prepare("
+                    SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.Ciudad, 
+                           p.NomPais AS Pais, a.Precio 
+                    FROM Anuncios a
+                    LEFT JOIN Paises p ON a.Pais = p.IdPaises
+                    WHERE a.IdAnuncio = ?
+                ");
+                $stmtAE->execute([$idEsc]);
+                $anEscogido = $stmtAE->fetch(PDO::FETCH_ASSOC);
+
+                if ($anEscogido) {
+                    // Foto principal calculada con tu función
+                    $fotoAE = resolve_image_url($anEscogido['FPrincipal']);
+
+                    echo "<article class='anuncioAE'>";
+                    echo "<img src='$fotoAE' alt='Foto principal' width='200'>";
+                    echo "<h3>{$anEscogido['Titulo']}</h3>";
+                    echo "<p><strong>Ciudad:</strong> {$anEscogido['Ciudad']} ({$anEscogido['Pais']})</p>";
+                    echo "<p><strong>Precio:</strong> " 
+                        . number_format($anEscogido['Precio'], 2, ',', '.') . " €</p>";
+
+                    echo "<p><strong>$expertoAE</strong> opina:</p>";
+                    echo "<blockquote>$comentarioAE</blockquote>";
+
+                    echo "<p><a href='/phpDAW/anuncio/{$anEscogido['IdAnuncio']}'>Ver anuncio completo</a></p>";
+                    echo "</article>";
+                } else {
+                    echo "<p>El anuncio escogido ya no existe en la base de datos.</p>";
+                }
+            } else {
+                echo "<p>Formato incorrecto en el fichero de anuncios escogidos.</p>";
+            }
+        }
+    }
+    ?>
+  </section>
+
+
   <section class="anuncios">
     <h2>ÚLTIMOS 5 ANUNCIOS PUBLICADOS</h2>
     <ul>
