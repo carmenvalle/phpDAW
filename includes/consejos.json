@@ -1,0 +1,27 @@
+[
+  {
+    "categoria": "Compra",
+    "importancia": "Baja",
+    "descripcion": "Haz una lista de deseos y necesidades de tu nueva vivienda."
+  },
+  {
+    "categoria": "Venta",
+    "importancia": "Baja",
+    "descripcion": "Primero fija un precio alto y bájalo poco a poco."
+  },
+  {
+    "categoria": "Compra",
+    "importancia": "Media",
+    "descripcion": "Hazte un cuadro comparativo de las viviendas."
+  },
+  {
+    "categoria": "Venta",
+    "importancia": "Media",
+    "descripcion": "Limpia y repara defectos para aumentar valor."
+  },
+  {
+    "categoria": "Compra",
+    "importancia": "Alta",
+    "descripcion": "Con la pareja puedes cortar, con la hipoteca no."
+  }
+]

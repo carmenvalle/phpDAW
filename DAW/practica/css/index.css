@@ -336,6 +336,48 @@ button {
   }
 }
 
+/* ==== CONSEJO COMPRA/VENTA (zona privada) ==== */
+.consejo {
+  max-width: 1000px;
+  margin: 1.5rem auto;
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(245,248,255,0.95), rgba(240,245,255,0.9));
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+}
+.consejo h2 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.65rem;
+  color: var(--color-principal);
+}
+.consejo .consejo-box {
+  background: var(--color-blanco);
+  border: 2px solid var(--color-secundario);
+  border-left: 6px solid var(--color-acento);
+  border-radius: 10px;
+  padding: 1.25rem 1.35rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  display: grid;
+  gap: 0.35rem;
+}
+.consejo .consejo-box p {
+  margin: 0;
+  color: #333;
+  line-height: 1.45;
+}
+.consejo .consejo-box strong {
+  color: var(--color-principal);
+}
+
+@media (max-width: 700px) {
+  .consejo {
+    padding: 0.85rem;
+  }
+  .consejo .consejo-box {
+    padding: 1rem 1.05rem;
+  }
+}
+
 /* ==== RESPONSIVE ==== */
 @media (max-width: 768px) {
   /* Anuncios en 1 columna en móviles */
