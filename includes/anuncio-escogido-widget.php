@@ -16,47 +16,59 @@ if (!file_exists($ficheroAE)) {
     if (!$lineas) {
         echo "<p>El fichero de anuncios escogidos está vacío.</p>";
     } else {
-        // Selección aleatoria
-        $linea = $lineas[array_rand($lineas)];
+        // Opción 3: Reintentar hasta 5 veces para encontrar un anuncio válido
+        $maxIntentos = 5;
+        $anEscogido = null;
+        $expertoAE = null;
+        $comentarioAE = null;
 
-        // Formato: ID|Experto|Comentario
-        $partes = explode("|", $linea);
+        for ($intento = 0; $intento < $maxIntentos; $intento++) {
+            // Selección aleatoria
+            $linea = $lineas[array_rand($lineas)];
 
-        if (count($partes) >= 3) {
-            list($idEsc, $expertoAE, $comentarioAE) = $partes;
+            // Formato: ID|Experto|Comentario
+            $partes = explode("|", $linea);
 
-            // Comprobar en BD
-            $stmtAE = $conexion->prepare("
-                SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.Ciudad, 
-                       p.NomPais AS Pais, a.Precio 
-                FROM Anuncios a
-                LEFT JOIN Paises p ON a.Pais = p.IdPaises
-                WHERE a.IdAnuncio = ?
-            ");
-            $stmtAE->execute([$idEsc]);
-            $anEscogido = $stmtAE->fetch(PDO::FETCH_ASSOC);
+            if (count($partes) >= 3) {
+                list($idEsc, $expertoAE, $comentarioAE) = $partes;
 
-            if ($anEscogido) {
-                // Foto principal calculada con tu función
-                $fotoAE = resolve_image_url($anEscogido['FPrincipal']);
+                // Comprobar en BD
+                $stmtAE = $conexion->prepare("
+                    SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.Ciudad, 
+                           p.NomPais AS Pais, a.Precio 
+                    FROM Anuncios a
+                    LEFT JOIN Paises p ON a.Pais = p.IdPaises
+                    WHERE a.IdAnuncio = ?
+                ");
+                $stmtAE->execute([$idEsc]);
+                $anEscogido = $stmtAE->fetch(PDO::FETCH_ASSOC);
 
-                echo "<article class='anuncioAE'>";
-                echo "<img src='$fotoAE' alt='Foto principal' width='200'>";
-                echo "<h3>{$anEscogido['Titulo']}</h3>";
-                echo "<p><strong>Ciudad:</strong> {$anEscogido['Ciudad']} ({$anEscogido['Pais']})</p>";
-                echo "<p><strong>Precio:</strong> " 
-                    . number_format($anEscogido['Precio'], 2, ',', '.') . " €</p>";
-
-                echo "<p><strong>$expertoAE</strong> opina:</p>";
-                echo "<blockquote>$comentarioAE</blockquote>";
-
-                echo "<p><a href='/phpDAW/anuncio/{$anEscogido['IdAnuncio']}'>Ver anuncio completo</a></p>";
-                echo "</article>";
-            } else {
-                echo "<p>El anuncio escogido ya no existe en la base de datos.</p>";
+                // Si encontramos uno válido, salir del bucle
+                if ($anEscogido) {
+                    break;
+                }
             }
+        }
+
+        // Mostrar resultado
+        if ($anEscogido) {
+            // Foto principal calculada con tu función
+            $fotoAE = resolve_image_url($anEscogido['FPrincipal']);
+
+            echo "<article class='anuncioAE'>";
+            echo "<img src='$fotoAE' alt='Foto principal' width='200'>";
+            echo "<h3>{$anEscogido['Titulo']}</h3>";
+            echo "<p><strong>Ciudad:</strong> {$anEscogido['Ciudad']} ({$anEscogido['Pais']})</p>";
+            echo "<p><strong>Precio:</strong> " 
+                . number_format($anEscogido['Precio'], 2, ',', '.') . " €</p>";
+
+            echo "<p><strong>$expertoAE</strong> opina:</p>";
+            echo "<blockquote>$comentarioAE</blockquote>";
+
+            echo "<p><a href='/phpDAW/anuncio/{$anEscogido['IdAnuncio']}'>Ver anuncio completo</a></p>";
+            echo "</article>";
         } else {
-            echo "<p>Formato incorrecto en el fichero de anuncios escogidos.</p>";
+            echo "<p>No hay anuncios destacados disponibles en este momento.</p>";
         }
     }
 }
