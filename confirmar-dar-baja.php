@@ -41,13 +41,28 @@ try {
     // Iniciar transacción
     $conexion->beginTransaction();
 
+    // Obtener foto del usuario para borrarla
+    $stmtUserFoto = $conexion->prepare('SELECT Foto FROM Usuarios WHERE IdUsuario = ?');
+    $stmtUserFoto->execute([$idUsuario]);
+    $userFoto = $stmtUserFoto->fetch(PDO::FETCH_COLUMN, 0);
+    
+    $imagenDir = __DIR__ . '/DAW/practica/imagenes/';
+    if (!empty($userFoto)) {
+        $rutaFoto = $imagenDir . $userFoto;
+        if (file_exists($rutaFoto) && is_file($rutaFoto)) {
+            @unlink($rutaFoto);
+            file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "baja: foto de usuario eliminada: $userFoto\n", FILE_APPEND);
+        }
+    }
+
     // Obtener anuncios del usuario
     $stmt = $conexion->prepare('SELECT IdAnuncio FROM Anuncios WHERE Usuario = ?');
     $stmt->execute([$idUsuario]);
     $anuncios = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-    // Para cada anuncio, obtener y borrar ficheros asociados (BD)
+    // Para cada anuncio, obtener y borrar ficheros asociados
     $numFotos = 0;
+    $imagenDir = __DIR__ . '/DAW/practica/imagenes/';
     if (!empty($anuncios)) {
         $in = implode(',', array_fill(0, count($anuncios), '?'));
         $stmtFotos = $conexion->prepare("SELECT Foto FROM Fotos WHERE Anuncio IN ($in)");
@@ -56,11 +71,15 @@ try {
         $numFotos = is_array($fotos) ? count($fotos) : 0;
 
         foreach ($fotos as $foto) {
-            // No eliminamos ficheros físicos en esta práctica; quedan "basura" en el sistema
-            file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "baja: fichero no eliminado (práctica): $foto\n", FILE_APPEND);
+            // Eliminar fichero físico
+            $rutaFoto = $imagenDir . $foto;
+            if (file_exists($rutaFoto) && is_file($rutaFoto)) {
+                @unlink($rutaFoto);
+                file_put_contents($logFile, date('[Y-m-d H:i:s] ') . "baja: fichero eliminado: $foto\n", FILE_APPEND);
+            }
         }
 
-        // Borrar filas de Fotos para esos anuncios (solo BD)
+        // Borrar filas de Fotos para esos anuncios
         $stmtDelFotos = $conexion->prepare("DELETE FROM Fotos WHERE Anuncio IN ($in)");
         $stmtDelFotos->execute($anuncios);
     }
@@ -82,7 +101,9 @@ try {
     $conexion->commit();
 
     // Preparar resumen para mostrar al usuario
-    $_SESSION['flash']['ok'] = "Cuenta eliminada correctamente. Se han eliminado {$numAnuncios} anuncio(s) y {$numFotos} foto(s). Se han eliminado {$numMensajes} mensaje(s).";
+    $numAnuncios = isset($numAnuncios) ? $numAnuncios : 0;
+    $totalFotos = (isset($numFotos) ? $numFotos : 0) + (!empty($userFoto) ? 1 : 0);
+    $_SESSION['flash']['ok'] = "Cuenta eliminada correctamente. Se han eliminado {$numAnuncios} anuncio(s) y {$totalFotos} foto(s). Se han eliminado {$numMensajes} mensaje(s).";
 
     // Mantener la sesión momentáneamente para mostrar el resumen en cerrar.php
     header('Location: /phpDAW/cerrar');

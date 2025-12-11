@@ -53,9 +53,13 @@ try {
         exit();
     }
 
-    // Nota: por ahora NO BORRAMOS los ficheros físicos. Solo se elimina la fila en la BD.
-    // En una práctica posterior se eliminarán los ficheros del sistema de ficheros.
     $fotoNombre = $fotoRow['Foto'];
+
+    // Borrar el fichero físico si existe
+    $rutaFoto = __DIR__ . '/DAW/practica/imagenes/' . $fotoNombre;
+    if (file_exists($rutaFoto) && is_file($rutaFoto)) {
+        @unlink($rutaFoto);
+    }
 
     // Borrar la fila en la BD
     $del = $conexion->prepare('DELETE FROM Fotos WHERE IdFoto = ?');

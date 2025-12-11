@@ -89,6 +89,7 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 						<?php if ($user['Foto']): ?>
 							<?php $avatar = resolve_image_url($user['Foto']); ?>
 							<br><img src="<?= htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8') ?>" alt="Foto" width="120">
+							<br><label><input type="checkbox" name="eliminar_foto"> Eliminar foto</label>
 						<?php else: ?>No hay foto<?php endif; ?>
 					</p>
 					<p>

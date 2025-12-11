@@ -56,17 +56,71 @@ elseif ($sexo_in === 'M' || $sexo_in === '2') $sexo_db = 2;
 else $sexo_db = 0;
 
 try {
+    // Procesar foto si se proporciona o si se elimina
+    $nuevaFoto = null;
+    $oldFoto = null;
+    
+    // Obtener foto actual antes de actualizar
+    $s2 = $conexion->prepare('SELECT Foto FROM Usuarios WHERE IdUsuario = ? LIMIT 1');
+    $s2->execute([$userId]);
+    $userData = $s2->fetch(PDO::FETCH_ASSOC);
+    $oldFoto = $userData['Foto'] ?? null;
+    
+    // Si se sube una nueva foto
+    if ($_FILES && !empty($_FILES['foto']['name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['foto'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $nuevaFoto = time() . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
+        $dirFotos = __DIR__ . '/DAW/practica/imagenes/';
+        if (!is_dir($dirFotos)) @mkdir($dirFotos, 0755, true);
+        $rutaFoto = $dirFotos . $nuevaFoto;
+        if (move_uploaded_file($file['tmp_name'], $rutaFoto)) {
+            // Eliminar foto antigua si existe
+            if ($oldFoto && file_exists($dirFotos . $oldFoto)) {
+                @unlink($dirFotos . $oldFoto);
+            }
+        } else {
+            // Error al guardar, registrar pero continuar
+            if (!is_dir(__DIR__ . '/logs')) @mkdir(__DIR__ . '/logs', 0755, true);
+            file_put_contents(__DIR__ . '/logs/registro.log', date('[Y-m-d H:i:s] ') . "modificar_datos: photo upload failed for user " . $values['usuario'] . "\n", FILE_APPEND);
+            $nuevaFoto = null;
+        }
+    }
+    
+    // Si se solicita eliminar la foto
+    if (isset($_POST['eliminar_foto']) && $_POST['eliminar_foto'] === 'on') {
+        if ($oldFoto && file_exists(__DIR__ . '/DAW/practica/imagenes/' . $oldFoto)) {
+            @unlink(__DIR__ . '/DAW/practica/imagenes/' . $oldFoto);
+        }
+        $nuevaFoto = null; // Para actualizar a NULL en BD
+        $userToUpdateFoto = null;
+    } else {
+        $userToUpdateFoto = $nuevaFoto;
+    }
+    
     // Update user fields
-    $upd = $conexion->prepare('UPDATE Usuarios SET NomUsuario = ?, Email = ?, Sexo = ?, FNacimiento = ?, Ciudad = ?, Pais = ? WHERE IdUsuario = ?');
-    $upd->execute([
+    $sqlUpdate = 'UPDATE Usuarios SET NomUsuario = ?, Email = ?, Sexo = ?, FNacimiento = ?, Ciudad = ?, Pais = ?';
+    $params = [
         $values['usuario'],
         $values['email'],
         $sexo_db,
         $values['nacimiento'],
         $values['ciudad'],
-        $values['pais'],
-        $userId
-    ]);
+        $values['pais']
+    ];
+    
+    if ($nuevaFoto) {
+        $sqlUpdate .= ', Foto = ?';
+        $params[] = $nuevaFoto;
+    } elseif (isset($_POST['eliminar_foto']) && $_POST['eliminar_foto'] === 'on') {
+        $sqlUpdate .= ', Foto = NULL';
+    }
+    
+    $sqlUpdate .= ' WHERE IdUsuario = ?';
+    $params[] = $userId;
+    
+    $upd = $conexion->prepare($sqlUpdate);
+    $upd->execute($params);
 
     // If new password provided, update
     if (!empty($values['new_password'])) {

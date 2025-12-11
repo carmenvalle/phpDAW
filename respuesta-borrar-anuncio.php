@@ -40,11 +40,19 @@ try {
     // Iniciar transacción
     $conexion->beginTransaction();
 
-    // Obtener fotos asociadas. NOTA: no se borran los ficheros físicos en esta práctica,
-    // solo se eliminarán las filas en la BD. En una práctica posterior se limpiarán los ficheros.
+    // Obtener fotos asociadas para borrar ficheros
     $st = $conexion->prepare('SELECT Foto FROM Fotos WHERE Anuncio = ?');
     $st->execute([$idAnuncio]);
     $fotos = $st->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    // Borrar ficheros físicos
+    $imagenDir = __DIR__ . '/DAW/practica/imagenes/';
+    foreach ($fotos as $nombreFoto) {
+        $rutaFoto = $imagenDir . $nombreFoto;
+        if (file_exists($rutaFoto) && is_file($rutaFoto)) {
+            @unlink($rutaFoto);
+        }
+    }
 
     // Borrar filas relacionadas
     $d1 = $conexion->prepare('DELETE FROM Fotos WHERE Anuncio = ?');

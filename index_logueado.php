@@ -59,96 +59,12 @@ require_once __DIR__ . '/includes/conexion.php';
 
   <section class="anuncio-escogido">
     <h2>ANUNCIO ESCOGIDO</h2>
-
-    <?php
-    $ficheroAE = __DIR__ . "/includes/anuncio-escogido.txt";
-
-    if (!file_exists($ficheroAE)) {
-        echo "<p>No hay anuncios escogidos disponibles.</p>";
-    } else {
-        $lineas = file($ficheroAE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-        if (!$lineas) {
-            echo "<p>El fichero de anuncios escogidos está vacío.</p>";
-        } else {
-            // Selección aleatoria
-            $linea = $lineas[array_rand($lineas)];
-
-            // Formato: ID|Experto|Comentario
-            $partes = explode("|", $linea);
-
-            if (count($partes) >= 3) {
-                list($idEsc, $expertoAE, $comentarioAE) = $partes;
-
-                // Comprobar en BD
-                $stmtAE = $conexion->prepare("
-                    SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.Ciudad, 
-                           p.NomPais AS Pais, a.Precio 
-                    FROM Anuncios a
-                    LEFT JOIN Paises p ON a.Pais = p.IdPaises
-                    WHERE a.IdAnuncio = ?
-                ");
-                $stmtAE->execute([$idEsc]);
-                $anEscogido = $stmtAE->fetch(PDO::FETCH_ASSOC);
-
-                if ($anEscogido) {
-                    // Foto principal calculada con tu función
-                    $fotoAE = resolve_image_url($anEscogido['FPrincipal']);
-
-                    echo "<article class='anuncioAE'>";
-                    echo "<img src='$fotoAE' alt='Foto principal' width='200'>";
-                    echo "<h3>{$anEscogido['Titulo']}</h3>";
-                    echo "<p><strong>Ciudad:</strong> {$anEscogido['Ciudad']} ({$anEscogido['Pais']})</p>";
-                    echo "<p><strong>Precio:</strong> " 
-                        . number_format($anEscogido['Precio'], 2, ',', '.') . " €</p>";
-
-                    echo "<p><strong>$expertoAE</strong> opina:</p>";
-                    echo "<blockquote>$comentarioAE</blockquote>";
-
-                    echo "<p><a href='/phpDAW/anuncio/{$anEscogido['IdAnuncio']}'>Ver anuncio completo</a></p>";
-                    echo "</article>";
-                } else {
-                    echo "<p>El anuncio escogido ya no existe en la base de datos.</p>";
-                }
-            } else {
-                echo "<p>Formato incorrecto en el fichero de anuncios escogidos.</p>";
-            }
-        }
-    }
-    ?>
+    <?php include __DIR__ . '/includes/anuncio-escogido-widget.php'; ?>
   </section>
 
   <section class="consejo">
     <h2>CONSEJO DE COMPRA/VENTA</h2>
-
-    <?php
-    // Ruta del fichero JSON
-    $ficheroConsejo = __DIR__ . "/includes/consejos.json";
-
-    if (file_exists($ficheroConsejo)) {
-        $json = file_get_contents($ficheroConsejo);
-        $listaConsejos = json_decode($json, true);
-
-        // Comprobar que es un array válido
-        if (is_array($listaConsejos) && count($listaConsejos) > 0) {
-
-            // Seleccionar aleatoriamente 1
-            $indice = array_rand($listaConsejos);
-            $c = $listaConsejos[$indice];
-
-            // Mostrar consejo
-            echo "<article class='consejo-box'>";
-            echo "<p><strong>Categoría:</strong> " . htmlspecialchars($c['categoria']) . "</p>";
-            echo "<p><strong>Importancia:</strong> " . htmlspecialchars($c['importancia']) . "</p>";
-            echo "<p><strong>Descripción:</strong> " . htmlspecialchars($c['descripcion']) . "</p>";
-            echo "</article>";
-        } else {
-            echo "<p>No hay consejos disponibles actualmente.</p>";
-        }
-    } else {
-        echo "<p>El fichero de consejos no existe.</p>";
-    }
-    ?>
+    <?php include __DIR__ . '/includes/consejo-widget.php'; ?>
   </section>
 
 
