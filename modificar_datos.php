@@ -86,11 +86,15 @@ if (isset($_SESSION['id']) && isset($conexion)) {
 					</p>
 					<p>
 						<label>Foto actual:</label>
+						<?php 
+						$avatar = $user['Foto'] 
+							? resolve_image_url($user['Foto']) 
+							: '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
+						?>
+						<br><img src="<?= htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8') ?>" alt="Foto" width="120">
 						<?php if ($user['Foto']): ?>
-							<?php $avatar = resolve_image_url($user['Foto']); ?>
-							<br><img src="<?= htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8') ?>" alt="Foto" width="120">
 							<br><label><input type="checkbox" name="eliminar_foto"> Eliminar foto</label>
-						<?php else: ?>No hay foto<?php endif; ?>
+						<?php endif; ?>
 					</p>
 					<p>
 						<label>Subir nueva foto:</label>
