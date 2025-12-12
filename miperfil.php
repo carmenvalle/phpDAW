@@ -144,7 +144,11 @@ if ($usuario && !empty($usuario['FRegistro'])) {
     <?php if ($usuario): ?>
     <section class="profile-box">
         <div class="profile-left">
-            <?php $foto = (function_exists('resolve_image_url') ? resolve_image_url($usuario['Foto'] ?? '') : ($usuario['Foto'] ?? '')) ?: '/phpDAW/DAW/practica/imagenes/default-user.png'; ?>
+            <?php 
+            $foto = $usuario['Foto'] 
+                ? (function_exists('resolve_image_url') ? resolve_image_url($usuario['Foto']) : $usuario['Foto'])
+                : '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
+            ?>
             <img src="<?php echo htmlspecialchars($foto, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de <?php echo htmlspecialchars($usuario['NomUsuario']); ?>" class="perfil-foto">
         </div>
         <div class="profile-right">

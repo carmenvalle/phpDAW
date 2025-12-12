@@ -39,9 +39,25 @@ if ($stmt->fetch()) {
 // Hash contraseña
 $passHash = password_hash($values['contrasena'], PASSWORD_DEFAULT);
 
-// (Photo storage disabled in this practice; photo already validated above if provided.)
-// Asegurar variable para el nombre de la foto
-$nombreFoto = $nombreFoto ?? null;
+// Procesar y guardar foto con nombre único
+$nombreFoto = null;
+if ($_FILES && !empty($_FILES['foto']['name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+    $file = $_FILES['foto'];
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    // Generar nombre único: timestamp + random hash para evitar colisiones
+    $nombreFoto = time() . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
+    $dirFotos = __DIR__ . '/DAW/practica/imagenes/';
+    if (!is_dir($dirFotos)) {
+        @mkdir($dirFotos, 0755, true);
+    }
+    $rutaFoto = $dirFotos . $nombreFoto;
+    if (!move_uploaded_file($file['tmp_name'], $rutaFoto)) {
+        // Si falla el guardado, continuar sin foto pero registrar el error
+        if (!is_dir(__DIR__ . '/logs')) @mkdir(__DIR__ . '/logs', 0755, true);
+        file_put_contents(__DIR__ . '/logs/registro.log', date('[Y-m-d H:i:s] ') . "registro: photo upload failed for user " . $values['usuario'] . "\n", FILE_APPEND);
+        $nombreFoto = null;
+    }
+}
 
 // Insertar usuario
 $stmt = $conexion->prepare("\n    INSERT INTO Usuarios\n    (NomUsuario, Clave, Email, Sexo, FNacimiento, Ciudad, Pais, Foto, Estilo)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)\n");
@@ -99,6 +115,13 @@ require_once('inicio.inc');
 <main>
 <section>
 <h2>Registro completado</h2>
+
+<?php if (!empty($nombreFoto)): ?>
+    <div style="margin-bottom: 20px;">
+        <p><strong>Tu foto de perfil:</strong></p>
+        <img src="/phpDAW/DAW/practica/imagenes/<?php echo htmlspecialchars($nombreFoto); ?>" alt="Tu foto de perfil" style="max-width: 200px; height: auto; border-radius: 8px;">
+    </div>
+<?php endif; ?>
 
 <p><strong>Usuario:</strong> <?= htmlspecialchars($values["usuario"]) ?></p>
 <p><strong>Email:</strong> <?= htmlspecialchars($values["email"]) ?></p>

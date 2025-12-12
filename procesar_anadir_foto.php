@@ -43,31 +43,50 @@ foreach ($prohibidos as $p) {
     }
 }
 
-
-$
-// En esta práctica no gestionamos la subida automática de ficheros.
-// El usuario debe subir manualmente el archivo a /phpDAW/DAW/practica/imagenes y proporcionar
-// el nombre de fichero en el formulario (`nombre_foto`). Validamos ese nombre aquí.
-$nombreFoto = trim($_POST['nombre_foto'] ?? '');
-if ($nombreFoto === '') {
-    $_SESSION['flash']['error'] = 'Debes indicar el nombre del fichero tal como lo has subido al servidor.';
+// Procesar upload de fichero
+if (!isset($_FILES['foto']) || $_FILES['foto']['error'] === UPLOAD_ERR_NO_FILE) {
+    $_SESSION['flash']['error'] = 'Debes seleccionar una fotografía.';
     header('Location: /phpDAW/anyadir_foto?id=' . $idAnuncio);
     exit();
 }
 
-$name = basename($nombreFoto);
-$ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-$allowedExt = ['jpg','jpeg','png','gif','webp'];
-if (!in_array($ext, $allowedExt, true)) {
-    $_SESSION['flash']['error'] = 'Extensión de fichero no permitida. Usa JPG, PNG, GIF o WEBP.';
+$file = $_FILES['foto'];
+if ($file['error'] !== UPLOAD_ERR_OK) {
+    $_SESSION['flash']['error'] = 'Error en la subida del archivo.';
     header('Location: /phpDAW/anyadir_foto?id=' . $idAnuncio);
     exit();
 }
 
-$dir = __DIR__ . DIRECTORY_SEPARATOR . 'DAW' . DIRECTORY_SEPARATOR . 'practica' . DIRECTORY_SEPARATOR . 'imagenes' . DIRECTORY_SEPARATOR;
-$fullpath = $dir . $name;
-if (!file_exists($fullpath) || !is_file($fullpath)) {
-    $_SESSION['flash']['error'] = 'No se encuentra el fichero en el servidor. Sube el archivo manualmente a /phpDAW/DAW/practica/imagenes y escribe el nombre exacto.';
+// Validar tipo MIME
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mime = finfo_file($finfo, $file['tmp_name']);
+finfo_close($finfo);
+$allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+if (!in_array($mime, $allowedMimes, true)) {
+    $_SESSION['flash']['error'] = 'Tipo de archivo no permitido. Usa JPG, PNG, GIF o WEBP.';
+    header('Location: /phpDAW/anyadir_foto?id=' . $idAnuncio);
+    exit();
+}
+
+// Validar tamaño (máximo 5MB)
+if ($file['size'] > 5 * 1024 * 1024) {
+    $_SESSION['flash']['error'] = 'El archivo es demasiado grande (máximo 5MB).';
+    header('Location: /phpDAW/anyadir_foto?id=' . $idAnuncio);
+    exit();
+}
+
+// Generar nombre único
+$ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true)) {
+    $ext = 'jpg'; // Fallback
+}
+$nombreFoto = time() . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
+$dir = __DIR__ . '/DAW/practica/imagenes/';
+if (!is_dir($dir)) @mkdir($dir, 0755, true);
+$rutaFoto = $dir . $nombreFoto;
+
+if (!move_uploaded_file($file['tmp_name'], $rutaFoto)) {
+    $_SESSION['flash']['error'] = 'Error al guardar el archivo en el servidor.';
     header('Location: /phpDAW/anyadir_foto?id=' . $idAnuncio);
     exit();
 }

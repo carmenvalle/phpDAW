@@ -234,6 +234,16 @@ require_once __DIR__ . '/includes/conexion.php';
     </form>
   </section>
 
+  <section class="anuncio-escogido">
+    <h2>ANUNCIO ESCOGIDO</h2>
+    <?php include __DIR__ . '/includes/anuncio-escogido-widget.php'; ?>
+  </section>
+
+  <section class="consejo">
+    <h2>CONSEJO DE COMPRA/VENTA</h2>
+    <?php include __DIR__ . '/includes/consejo-widget.php'; ?>
+  </section>
+
   <section class="anuncios">
     <h2>ÚLTIMOS 5 ANUNCIOS PUBLICADOS</h2>
     <ul>

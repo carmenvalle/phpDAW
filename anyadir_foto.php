@@ -102,13 +102,8 @@ if (!defined('APP_INIT')) { http_response_code(403); echo 'Acceso no autorizado.
             </p>
 
             <p>
-                <strong>Importante:</strong> Por ahora sube la imagen manualmente a <code>/phpDAW/DAW/practica/imagenes/</code>
-                y escribe aquí su nombre exacto (ej. <code>mi_foto.jpg</code>).
-            </p>
-
-            <p>
-                <label for="nombre_foto">Nombre del fichero en servidor:</label>
-                <input type="text" name="nombre_foto" id="nombre_foto" placeholder="mi_foto.jpg" required>
+                <label for="foto">Selecciona la imagen (JPG, PNG, GIF, WEBP - máximo 5MB):</label>
+                <input type="file" name="foto" id="foto" accept="image/jpeg,image/png,image/gif,image/webp" required>
             </p>
 
             <p>
