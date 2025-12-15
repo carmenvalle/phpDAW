@@ -16,7 +16,6 @@ if (!file_exists($ficheroAE)) {
     if (!$lineas) {
         echo "<p>El fichero de anuncios escogidos está vacío.</p>";
     } else {
-        // Opción 3: Reintentar hasta 5 veces para encontrar un anuncio válido
         $maxIntentos = 5;
         $anEscogido = null;
         $expertoAE = null;
