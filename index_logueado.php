@@ -21,7 +21,6 @@ if ($hora >= 6 && $hora <= 11) {
 } else {
   $saludoPrefijo = 'Buenas noches';
 }
-$saludoCompleto = $saludoPrefijo . ' ' . $nombreUsuario . '.';
 
 $title = "PI - Pisos & Inmuebles";
 $cssPagina = "index.css";
@@ -35,6 +34,7 @@ require_once __DIR__ . '/includes/conexion.php';
 ?>
 
 <main>
+
   <?php if ($nombreUsuario !== ''): ?>
     <section class="saludo">
       <div class="saludo__box">
@@ -67,25 +67,34 @@ require_once __DIR__ . '/includes/conexion.php';
     <?php include __DIR__ . '/includes/consejo-widget.php'; ?>
   </section>
 
+  <section class="estadisticas">
+    <h2>FOTOGRAFÍAS SUBIDAS EN LOS ÚLTIMOS 7 DÍAS</h2>
+
+    <?php
+      include __DIR__ . '/includes/grafico-fotos.inc.php';
+      echo '<img src="' . $graficoBase64 . '" alt="Diagrama de barras de fotografías subidas">';
+    ?>
+  </section>
 
   <section class="anuncios">
     <h2>ÚLTIMOS 5 ANUNCIOS PUBLICADOS</h2>
     <ul>
       <?php
-      // Mostrar últimos 5 anuncios desde la BD
       try {
-          $stmt = $conexion->query("SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.FRegistro, a.Ciudad, p.NomPais, a.Precio
-                                      FROM Anuncios a
-                                      LEFT JOIN Paises p ON a.Pais = p.IdPaises
-                                      ORDER BY a.FRegistro DESC
-                                      LIMIT 5");
+          $stmt = $conexion->query("
+              SELECT a.IdAnuncio, a.Titulo, a.FPrincipal, a.FRegistro,
+                     a.Ciudad, p.NomPais, a.Precio
+              FROM Anuncios a
+              LEFT JOIN Paises p ON a.Pais = p.IdPaises
+              ORDER BY a.FRegistro DESC
+              LIMIT 5
+          ");
           $ultimos = $stmt->fetchAll(PDO::FETCH_ASSOC);
       } catch (Exception $e) {
           $ultimos = [];
       }
 
       if (empty($ultimos)) {
-          // Fallback: anuncios predefinidos para pruebas
           $ultimos = [
             [
               'Titulo' => 'Piso luminoso en el centro',
@@ -94,15 +103,6 @@ require_once __DIR__ . '/includes/conexion.php';
               'Ciudad' => 'Madrid',
               'NomPais' => 'España',
               'Precio' => 85000,
-              'link' => '/phpDAW/DAW/practica/anuncio.html'
-            ],
-            [
-              'Titulo' => 'Apartamento junto al parque',
-              'FPrincipal' => 'anuncio2.jpg',
-              'FRegistro' => date('Y-m-d'),
-              'Ciudad' => 'Sevilla',
-              'NomPais' => 'España',
-              'Precio' => 120000,
               'link' => '/phpDAW/DAW/practica/anuncio.html'
             ]
           ];
@@ -114,8 +114,20 @@ require_once __DIR__ . '/includes/conexion.php';
           $ciudad = htmlspecialchars($a['Ciudad'] ?? '—');
           $pais = htmlspecialchars($a['NomPais'] ?? '—');
           $precio = isset($a['Precio']) ? number_format((float)$a['Precio'], 2, ',', '.') . ' €' : '—';
-          $link = isset($a['link']) ? $a['link'] : (isset($a['IdAnuncio']) ? "/phpDAW/anuncio/{$a['IdAnuncio']}" : '#');
-          echo "<li><article><a href=\"{$link}\"><img src=\"{$img}\" alt=\"{$titulo}\" width=\"150\"><h3>{$titulo}</h3></a><p>Fecha: {$a['FRegistro']} | Ciudad: {$ciudad} <br>País: {$pais} | Precio: {$precio}</p></article></li>";
+          $link = isset($a['link']) ? $a['link'] : "/phpDAW/anuncio/{$a['IdAnuncio']}";
+
+          echo "<li>
+                  <article>
+                    <a href=\"$link\">
+                      <img src=\"$img\" alt=\"$titulo\" width=\"150\">
+                      <h3>$titulo</h3>
+                    </a>
+                    <p>
+                      Fecha: {$a['FRegistro']} | Ciudad: $ciudad <br>
+                      País: $pais | Precio: $precio
+                    </p>
+                  </article>
+                </li>";
       }
       ?>
     </ul>
@@ -128,6 +140,4 @@ require_once __DIR__ . '/includes/conexion.php';
 
 </main>
 
-<?php
-require_once("pie.inc");
-?>
+<?php require_once("pie.inc"); ?>
