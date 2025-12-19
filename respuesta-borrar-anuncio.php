@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/includes/conexion.php';
+require_once __DIR__ . '/includes/funciones-ficheros.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /phpDAW/mis-anuncios');
@@ -51,6 +52,9 @@ try {
         $rutaFoto = $imagenDir . $nombreFoto;
         if (file_exists($rutaFoto) && is_file($rutaFoto)) {
             @unlink($rutaFoto);
+        }
+        if (function_exists('delete_all_thumbnails')) {
+            delete_all_thumbnails($nombreFoto);
         }
     }
 

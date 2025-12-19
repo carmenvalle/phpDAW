@@ -71,8 +71,12 @@ require_once __DIR__ . '/includes/conexion.php';
     <h2>FOTOGRAFÍAS SUBIDAS EN LOS ÚLTIMOS 7 DÍAS</h2>
 
     <?php
-      include __DIR__ . '/includes/grafico-fotos.inc.php';
-      echo '<img src="' . $graficoBase64 . '" alt="Diagrama de barras de fotografías subidas">';
+      include __DIR__ . '/includes/grafico-fotos-svg.inc.php';
+      if (!empty($graficoSVG)) {
+        echo $graficoSVG; // SVG embebido, sin dependencias GD
+      } else {
+        echo '<p>No hay datos suficientes para el gráfico.</p>';
+      }
     ?>
   </section>
 

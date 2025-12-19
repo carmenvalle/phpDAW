@@ -1,77 +1,78 @@
 <?php
-require_once __DIR__ . '/conexion.php';
+// Grafico últimos 7 días (SVG inline) — sin GD, robusto y autocontenido
 
-/* =========================
-   DATOS
-   ========================= */
-$datos = [];
-
-try {
-    $stmt = $conexion->query("
-        SELECT DATE(FRegistro) AS dia, COUNT(*) AS total
-        FROM Fotos
-        WHERE FRegistro >= CURDATE() - INTERVAL 6 DAY
-        GROUP BY DATE(FRegistro)
-        ORDER BY dia ASC
-    ");
-
-    foreach ($stmt as $fila) {
-        $datos[$fila['dia']] = (int)$fila['total'];
-    }
-} catch (Exception $e) {}
-
-/* Asegurar 7 días */
+// 1) Preparar estructura de fechas (hoy y los 6 días anteriores)
 $fechas = [];
 for ($i = 6; $i >= 0; $i--) {
-    $dia = date('Y-m-d', strtotime("-$i day"));
-    $fechas[$dia] = $datos[$dia] ?? 0;
+    $fechas[date('Y-m-d', strtotime("-{$i} day"))] = 0;
 }
 
-/* =========================
-   CREAR IMAGEN
-   ========================= */
-$img = imagecreatetruecolor(600, 300);
+// 2) Intentar cargar datos desde la BD si existe conexión y columna FRegistro
+$loaded = false;
+try {
+    require_once __DIR__ . '/conexion.php';
+    if (isset($conexion)) {
+        $sql = "SELECT DATE(FRegistro) AS dia, COUNT(*) AS total\n"
+             . "FROM Fotos\n"
+             . "WHERE FRegistro >= CURDATE() - INTERVAL 6 DAY\n"
+             . "GROUP BY DATE(FRegistro)\n"
+             . "ORDER BY dia ASC";
+        $stmt = $conexion->query($sql);
+        foreach ($stmt as $fila) {
+            $d = $fila['dia'] ?? null;
+            if ($d !== null && isset($fechas[$d])) {
+                $fechas[$d] = (int) $fila['total'];
+            }
+        }
+        $loaded = true;
+    }
+} catch (Throwable $e) {
+    $loaded = false;
+}
 
-$blanco = imagecolorallocate($img, 255, 255, 255);
-$negro  = imagecolorallocate($img, 0, 0, 0);
-$azul   = imagecolorallocate($img, 60, 120, 200);
+// 3) Fallback: recorrer carpeta de imágenes y contar por mtime del archivo
+if (!$loaded) {
+    $dir = dirname(__DIR__) . '/DAW/practica/imagenes';
+    $exts = ['jpg','jpeg','png','gif','webp'];
+    if (is_dir($dir)) {
+        foreach (scandir($dir) as $f) {
+            if ($f === '.' || $f === '..') continue;
+            $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+            if (!in_array($ext, $exts, true)) continue;
+            $full = $dir . '/' . $f;
+            if (!is_file($full)) continue;
+            $mtime = @filemtime($full);
+            if ($mtime === false) continue;
+            $d = date('Y-m-d', $mtime);
+            if (isset($fechas[$d])) $fechas[$d]++;
+        }
+    }
+}
 
-imagefill($img, 0, 0, $blanco);
-
-imagestring($img, 5, 150, 10, 'Fotos subidas en los ultimos 7 dias', $negro);
-
-$margen = 50;
-$anchoBarra = 40;
-$espacio = 20;
-
+// 4) Construir SVG
+$width = 600; $height = 300; $padding = 40; $barWidth = 40; $gap = 20;
 $max = max($fechas);
-$max = ($max == 0) ? 1 : $max;
+if ($max <= 0) $max = 1;
 
-/* Barras */
-$i = 0;
+$svg = "<svg width=\"$width\" height=\"$height\" role=\"img\" aria-label=\"Fotos subidas en los últimos 7 días\" xmlns=\"http://www.w3.org/2000/svg\">";
+$svg .= "<rect width=\"100%\" height=\"100%\" fill=\"#fff\"/>";
+$svg .= "<text x=\"20\" y=\"24\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#333\">Fotos subidas en los últimos 7 días</text>";
+
+// Eje X
+$svg .= "<line x1=\"$padding\" y1=\"" . ($height - $padding) . "\" x2=\"" . ($width - $padding) . "\" y2=\"" . ($height - $padding) . "\" stroke=\"#aaa\"/>";
+
+$x = $padding;
 foreach ($fechas as $dia => $valor) {
-
-    $x1 = $margen + ($anchoBarra + $espacio) * $i;
-    $x2 = $x1 + $anchoBarra;
-
-    $altura = ($valor / $max) * 180;
-    $y1 = 250 - $altura;
-    $y2 = 250;
-
-    imagefilledrectangle($img, $x1, $y1, $x2, $y2, $azul);
-    imagestring($img, 3, $x1 + 10, $y1 - 15, (string)$valor, $negro);
-    imagestring($img, 2, $x1, 260, substr($dia, 5), $negro);
-
-    $i++;
+    $h = (int)(($height - 2 * $padding) * ($valor / $max));
+    $y = $height - $padding - $h;
+    $label = substr($dia, 5);
+    $svg .= "<rect x=\"$x\" y=\"$y\" width=\"$barWidth\" height=\"$h\" fill=\"#3c78c8\" rx=\"4\"><title>$dia: $valor</title></rect>";
+    $svg .= "<text x=\"" . ($x + $barWidth/2) . "\" y=\"" . ($height - $padding + 16) . "\" text-anchor=\"middle\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#555\">$label</text>";
+    $svg .= "<text x=\"" . ($x + $barWidth/2) . "\" y=\"" . ($y - 6) . "\" text-anchor=\"middle\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#333\">$valor</text>";
+    $x += $barWidth + $gap;
 }
 
-/* =========================
-   BASE64
-   ========================= */
-ob_start();
-imagepng($img);
-$imgData = base64_encode(ob_get_clean());
-imagedestroy($img);
+$svg .= "</svg>";
 
-$graficoBase64 = 'data:image/png;base64,' . $imgData;
-?>
+// 5) Variable expuesta para la vista
+$graficoSVG = $svg;

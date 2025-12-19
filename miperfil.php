@@ -12,6 +12,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 if (file_exists(__DIR__ . '/includes/precio.php')) {
     require_once __DIR__ . '/includes/precio.php';
 }
+// Thumbnails/helper
+if (file_exists(__DIR__ . '/includes/funciones-ficheros.php')) {
+    require_once __DIR__ . '/includes/funciones-ficheros.php';
+}
 
 // Incluir conexión PDO si existe (define $conexion)
 if (file_exists(__DIR__ . '/includes/conexion.php')) {
@@ -177,7 +181,9 @@ if ($usuario && !empty($usuario['FRegistro'])) {
                         $titulo = htmlspecialchars($an['Titulo'] ?? 'Sin título', ENT_QUOTES, 'UTF-8');
                         $ciudad = htmlspecialchars($an['Ciudad'] ?? '');
                         $precio = isset($an['Precio']) ? number_format((float)$an['Precio'], 2, ',', '.') . ' €' : '—';
-                        $fotoA = (function_exists('resolve_image_url') ? resolve_image_url($an['FPrincipal'] ?? '') : ($an['FPrincipal'] ?? '')) ?: '/phpDAW/DAW/practica/imagenes/default-list.png';
+                        $fotoA = (function_exists('get_thumbnail_url')
+                                    ? get_thumbnail_url($an['FPrincipal'] ?? '', 220, 160)
+                                    : ((function_exists('resolve_image_url') ? resolve_image_url($an['FPrincipal'] ?? '') : ($an['FPrincipal'] ?? '')) ?: '/phpDAW/DAW/practica/imagenes/default-list.png'));
                     ?>
                     <li>
                         <div class="anuncio-card">

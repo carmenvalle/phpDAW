@@ -9,6 +9,7 @@ require_once __DIR__ . '/inicioLog.inc';
 
 // cargar datos comunes
 require_once __DIR__ . '/includes/ver_fotos_common.php';
+require_once __DIR__ . '/includes/funciones-ficheros.php';
 require_once __DIR__ . '/includes/precio.php';
 
 // comprobar propiedad
@@ -28,7 +29,7 @@ if ($usuarioLog !== ($vf_anuncio['Usuario'] ?? null)) {
 ?>
 <main>
     <section class="profile-box">
-        <?php $fotoPrincipal = (function_exists('resolve_image_url') ? resolve_image_url($vf_anuncio['FPrincipal']) : ($vf_anuncio['FPrincipal'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png')); ?>
+        <?php $fotoPrincipal = (function_exists('get_thumbnail_url') ? get_thumbnail_url($vf_anuncio['FPrincipal'], 180, 130) : (function_exists('resolve_image_url') ? resolve_image_url($vf_anuncio['FPrincipal']) : ($vf_anuncio['FPrincipal'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png'))); ?>
         <div style="display:flex;gap:18px;align-items:center;">
             <img src="<?php echo htmlspecialchars($fotoPrincipal, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($vf_anuncio['Titulo']); ?>" style="width:180px;height:130px;object-fit:cover;border-radius:8px;border:1px solid rgba(0,0,0,0.06);">
             <div>
@@ -50,7 +51,7 @@ if ($usuarioLog !== ($vf_anuncio['Usuario'] ?? null)) {
         <?php else: ?>
             <div class="galeria-fotos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
                 <?php foreach ($vf_fotos as $foto):
-                    $ruta = function_exists('resolve_image_url') ? resolve_image_url($foto['Foto']) : ($foto['Foto'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png');
+                    $ruta = function_exists('get_thumbnail_url') ? get_thumbnail_url($foto['Foto'], 400, 260) : (function_exists('resolve_image_url') ? resolve_image_url($foto['Foto']) : ($foto['Foto'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png'));
                 ?>
                     <figure style="margin:0;background:#fff;border-radius:8px;overflow:hidden;border:1px solid rgba(0,0,0,0.04);box-shadow:var(--sombra);">
                         <img src="<?php echo htmlspecialchars($ruta, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($foto['Alternativo'] ?: $foto['Titulo']); ?>" style="width:100%;height:160px;object-fit:cover;display:block;">

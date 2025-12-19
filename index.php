@@ -244,6 +244,18 @@ require_once __DIR__ . '/includes/conexion.php';
     <?php include __DIR__ . '/includes/consejo-widget.php'; ?>
   </section>
 
+  <section class="fotos-estadisticas">
+    <?php 
+      // Genera $graficoSVG (sin GD) desde include limpio
+      include __DIR__ . '/includes/grafico-fotos-svg.inc.php'; 
+      if (!empty($graficoSVG)) {
+        echo $graficoSVG; // ya es SVG completo
+      } else {
+        echo '<p>No hay datos suficientes para mostrar el gráfico.</p>';
+      }
+    ?>
+  </section>
+
   <section class="anuncios">
     <h2>ÚLTIMOS 5 ANUNCIOS PUBLICADOS</h2>
     <ul>

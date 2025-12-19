@@ -12,6 +12,7 @@ require_once("cabecera.inc");
 require_once(__DIR__ . '/privado.inc');
 require_once("inicioLog.inc");
 require_once __DIR__ . '/includes/conexion.php';
+require_once __DIR__ . '/includes/funciones-ficheros.php';
 require_once __DIR__ . '/includes/precio.php';
 require_once __DIR__ . '/includes/config.php';
 
@@ -79,8 +80,8 @@ if ($userId && isset($conexion)) {
             <h2><?= htmlspecialchars($a['Titulo'] ?: 'Sin título') ?></h2>
 
             <a href="anuncio/<?= $a['IdAnuncio'] ?>">
-                <?php $imgPath = resolve_image_url($a['FPrincipal'] ?? ''); ?>
-                <img src="<?= $imgPath ?>" alt="Foto" width="200" height="200">
+                <?php $imgPath = function_exists('get_thumbnail_url') ? get_thumbnail_url($a['FPrincipal'] ?? '', 200, 200) : (function_exists('resolve_image_url') ? resolve_image_url($a['FPrincipal'] ?? '') : '/phpDAW/DAW/practica/imagenes/default-list.png'); ?>
+                <img src="<?= htmlspecialchars($imgPath) ?>" alt="Foto" width="200" height="200" style="object-fit:cover;border-radius:6px;">
             </a>
 
             <p><strong>Ciudad:</strong> <?= htmlspecialchars($a['Ciudad'] ?: '—') ?></p>
@@ -136,6 +137,11 @@ if ($userId && isset($conexion)) {
     <i class="icon-foto"></i>
     <strong>AÑADIR FOTO</strong>
 </a>
+
+<a href="subir_multiples" class="btn" style="margin-left:10px;">
+    <i class="icon-foto"></i>
+    <strong>SUBIDA MASIVA</strong>
+ </a>
 
 <?php require_once("salto.inc"); ?>
 </main>

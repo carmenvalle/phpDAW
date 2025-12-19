@@ -1,9 +1,6 @@
 <?php
-if (!defined('APP_INIT')) {
-    http_response_code(403);
-    echo 'Acceso no autorizado.';
-    exit;
-}
+// Permitir acceso directo y vía include
+if (!defined('APP_INIT')) { define('APP_INIT', true); }
 
 $title = "PI - Ver fotos";
 $cssPagina = "miperfil.css";
@@ -19,6 +16,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/ver_fotos_common.php';
 require_once __DIR__ . '/includes/precio.php';
+require_once __DIR__ . '/includes/funciones-ficheros.php';
 require_once __DIR__ . '/includes/conexion.php';
 
 /* ==========================
@@ -91,9 +89,9 @@ if (isset($_POST['confirmarEliminar']) && $_POST['confirmarEliminar'] == 1) {
 
     <section class="profile-box">
         <?php
-        $fotoPrincipal = function_exists('resolve_image_url')
-            ? resolve_image_url($anuncio['FPrincipal'])
-            : ($anuncio['FPrincipal'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png');
+        $fotoPrincipal = function_exists('get_thumbnail_url')
+            ? get_thumbnail_url($anuncio['FPrincipal'], 180, 130)
+            : (function_exists('resolve_image_url') ? resolve_image_url($anuncio['FPrincipal']) : ($anuncio['FPrincipal'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png'));
         ?>
 
         <div style="display:flex;gap:18px;align-items:center;">
@@ -129,9 +127,9 @@ if (isset($_POST['confirmarEliminar']) && $_POST['confirmarEliminar'] == 1) {
             style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
 
         <?php foreach ($fotos as $foto):
-            $ruta = function_exists('resolve_image_url')
-                ? resolve_image_url($foto['Foto'])
-                : ($foto['Foto'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png');
+            $ruta = function_exists('get_thumbnail_url')
+                ? get_thumbnail_url($foto['Foto'], 400, 260)
+                : (function_exists('resolve_image_url') ? resolve_image_url($foto['Foto']) : ($foto['Foto'] ?: '/phpDAW/DAW/practica/imagenes/default-list.png'));
         ?>
             <figure style="margin:0;background:#fff;border-radius:8px;overflow:hidden;">
                 <img src="<?= htmlspecialchars($ruta) ?>"

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once(__DIR__ . '/includes/conexion.php');
+require_once(__DIR__ . '/includes/funciones-ficheros.php');
 
 $idFoto = filter_input(INPUT_POST, "idFoto", FILTER_VALIDATE_INT);
 $idAnuncio = filter_input(INPUT_POST, "idAnuncio", FILTER_VALIDATE_INT);
@@ -55,10 +56,13 @@ try {
 
     $fotoNombre = $fotoRow['Foto'];
 
-    // Borrar el fichero físico si existe
+    // Borrar el fichero físico y miniaturas si existen
     $rutaFoto = __DIR__ . '/DAW/practica/imagenes/' . $fotoNombre;
     if (file_exists($rutaFoto) && is_file($rutaFoto)) {
         @unlink($rutaFoto);
+    }
+    if (function_exists('delete_all_thumbnails')) {
+        delete_all_thumbnails($fotoNombre);
     }
 
     // Borrar la fila en la BD
