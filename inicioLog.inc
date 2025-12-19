@@ -24,11 +24,10 @@
         <li class="perfil">
             <a href="miperfil">
                 <?php
-                require_once __DIR__ . '/includes/precio.php';
-                $avatar = '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
-                if (isset($_SESSION['foto']) && $_SESSION['foto'] !== '') {
-                    $avatar = resolve_image_url($_SESSION['foto']);
-                }
+                // $_SESSION['foto'] ya está completamente resuelto desde control_acceso o registrado
+                $avatar = !empty($_SESSION['foto']) 
+                    ? $_SESSION['foto'] 
+                    : '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
                 ?>
                 <img src="<?= htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8') ?>" alt="Foto de perfil" class="perfil-foto">
                 <?php

@@ -94,13 +94,13 @@ if (!move_uploaded_file($file['tmp_name'], $rutaFoto)) {
 // Insertar en la base de datos
 try {
     $stmt = $conexion->prepare('INSERT INTO Fotos (Titulo, Foto, Alternativo, Anuncio) VALUES (?, ?, ?, ?)');
-    $stmt->execute([$titulo, $name, $alt, $idAnuncio]);
+    $stmt->execute([$titulo, $nombreFoto, $alt, $idAnuncio]);
 
     // Si el anuncio no tiene foto principal, actualizarla
     $u = $conexion->prepare('UPDATE Anuncios SET FPrincipal = ? WHERE IdAnuncio = ? AND (FPrincipal IS NULL OR FPrincipal = "" )');
-    $u->execute([$name, $idAnuncio]);
+    $u->execute([$nombreFoto, $idAnuncio]);
 
-    $_SESSION['flash']['ok'] = 'Foto añadida correctamente (archivo suministrado manualmente).';
+    $_SESSION['flash']['ok'] = 'Foto añadida correctamente.';
     header('Location: /phpDAW/anuncio/' . $idAnuncio);
     exit();
 } catch (PDOException $e) {

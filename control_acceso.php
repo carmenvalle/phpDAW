@@ -51,9 +51,9 @@ if (isset($conexion)) {
             $_SESSION["estilo"] = $datos['Estilo'] ?? null;
             $_SESSION['style'] = $datos['Estilo'] ?? 'default';
             // Foto de perfil
-            require_once __DIR__ . '/includes/precio.php';
             if (!empty($datos['Foto'])) {
-                $_SESSION['foto'] = resolve_image_url($datos['Foto']);
+                // Guardar directamente la ruta completa en sesión
+                $_SESSION['foto'] = '/phpDAW/DAW/practica/imagenes/' . $datos['Foto'];
             } else {
                 $_SESSION['foto'] = '/phpDAW/DAW/practica/imagenes/default-avatar-profile-icon-vector-260nw-1909596082.webp';
             }
